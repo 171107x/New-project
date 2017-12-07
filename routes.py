@@ -11,6 +11,7 @@ default_app = firebase_admin.initialize_app(cred, {
 })
 fireS = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com')
 
+root = db.reference()
 app = Flask(__name__)
 Bootstrap(app)
 
@@ -38,8 +39,8 @@ def signup():
             password = form.password.data
 
             user = User(first_name, last_name, email, password)
-            user_db = fireS
-            user_db.put('userInfo','userS',{
+            user_db = root.child('userInfo')
+            user_db.push({
                 'first_name': user.get_first_name(),
                 'last_name': user.get_last_name(),
                 'email': user.get_email(),
@@ -47,14 +48,10 @@ def signup():
             })
 
             session['email'] = user.email
+            session['name'] = user.first_name
             return redirect(url_for('home'))
     elif request.method == 'GET':
         return render_template('signup.html', form=form)
-
-
-result = fireS.get('userInfo','userS')
-print(result)
-
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -69,8 +66,19 @@ def login():
             email = form.email.data
             password = form.password.data
 
-            if email == result['email'] and password == result['password']:
+            emailList = []
+            passList = []
+
+            result = root.child('userInfo').get()
+
+            for users in result:
+                emailList.append(result[users]['email'])
+                passList.append(result[users]['password'])
+            attempted_email = request.form['email']
+            attempted_password = request.form['password']
+            if attempted_email in emailList and attempted_password in passList:
                 session['email'] = form.email.data
+                session['name'] = result[users]['first_name']
                 return redirect(url_for('home'))
             else:
                 return redirect(url_for('login'))
@@ -78,10 +86,15 @@ def login():
     elif request.method == "GET":
         return render_template("login.html", form=form)
 
+@app.route('/user')
+def user():
+    if 'email' in session:
+        return render_template('userProfile.html')
 
 @app.route('/logout')
 def logout():
     session.pop('email', None)
+    session.pop('name', None)
     return redirect(url_for('index'))
 
 
@@ -90,7 +103,6 @@ def home():
     if 'email' not in session:
         return redirect(url_for('login'))
     return render_template("home.html")
-
 
 if __name__ == "__main__":
     app.run(debug=True)
