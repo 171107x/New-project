@@ -25,7 +25,7 @@ def index():
 
 @app.route("/signup", methods=['GET', 'POST'])
 def signup():
-    if 'email' in session:
+    if 'username' in session:
         return redirect(url_for('home'))
     form = SignupForm()
 
@@ -33,29 +33,27 @@ def signup():
         if form.validate() == False:
             return render_template('signup.html', form=form)
         else:
-            first_name = form.first_name.data
-            last_name = form.last_name.data
+            username = form.username.data
             email = form.email.data
             password = form.password.data
 
-            user = User(first_name, last_name, email, password)
+            user = User(username, email, password)
             user_db = root.child('userInfo')
             user_db.push({
-                'first_name': user.get_first_name(),
-                'last_name': user.get_last_name(),
+                'username' : user.get_username(),
                 'email': user.get_email(),
                 'password': user.get_password()
             })
 
             session['email'] = user.email
-            session['name'] = user.first_name
+            session['username'] = user.username
             return redirect(url_for('home'))
     elif request.method == 'GET':
         return render_template('signup.html', form=form)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    if 'email' in session:
+    if 'username' in session:
         return redirect(url_for('home'))
     form = LoginForm()
 
@@ -63,22 +61,22 @@ def login():
         if form.validate() == False:
             return render_template("login.html", form=form)
         else:
-            email = form.email.data
+            username = form.username.data
             password = form.password.data
 
-            emailList = []
+            usernameList = []
             passList = []
 
             result = root.child('userInfo').get()
 
             for users in result:
-                emailList.append(result[users]['email'])
+                usernameList.append(result[users]['username'])
                 passList.append(result[users]['password'])
-            attempted_email = request.form['email']
+            attempted_username = request.form['username']
             attempted_password = request.form['password']
-            if attempted_email in emailList and attempted_password in passList:
-                session['email'] = form.email.data
-                session['name'] = result[users]['first_name']
+
+            if attempted_username in usernameList and attempted_password in passList:
+                session['username'] = form.username.data
                 return redirect(url_for('home'))
             else:
                 return redirect(url_for('login'))
@@ -88,19 +86,18 @@ def login():
 
 @app.route('/user')
 def user():
-    if 'email' in session:
+    if 'username' in session:
         return render_template('userProfile.html')
 
 @app.route('/logout')
 def logout():
-    session.pop('email', None)
-    session.pop('name', None)
+    session.pop('username', None)
     return redirect(url_for('index'))
 
 
 @app.route("/home")
 def home():
-    if 'email' not in session:
+    if 'username' not in session:
         return redirect(url_for('login'))
     return render_template("home.html")
 

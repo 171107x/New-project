@@ -1,6 +1,6 @@
 {%  extends "bootstrap/base.html" %}
 
-{% block content %}
+{% block body %}
 
         <div class="container">
             <h2>Create an account</h2>
@@ -9,28 +9,18 @@
                 {{ form.hidden_tag() }}
 
                 <div class="form-group">
-                    {{ form.first_name.label }}
-                    
-                    {% if form.first_name.errors %}
-                        {% for error in form.first_name.errors %}
-                            <p class="error-message">{{ error }}</p>
-                        {% endfor %}
-                    {% endif %}
-                    
-                    {{ form.first_name }}
-                </div>
+                    {{ form.username.label }}
 
-                <div class="form-group">
-                    {{ form.last_name.label }}
-
-                    {% if form.last_name.errors %}
-                        {% for error in form.last_name.errors %}
+                    {% if form.username.errors %}
+                        {% for error in form.username.errors %}
                             <p class="error-message">{{ error }}</p>
                         {% endfor %}
                     {% endif %}
 
-                    {{ form.last_name }}
+                    {{ form.username }}
                 </div>
+
+
 
                 <div class="form-group">
                     {{ form.email.label }}
