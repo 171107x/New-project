@@ -1,4 +1,6 @@
-{%  extends "bootstrap/base.html" %}
+{% extends "bootstrap/base.html" %}
+
+{%  include 'Includes/_messages.html' %}
 
 {% block body %}
 
@@ -13,7 +15,7 @@
 
                     {% if form.username.errors %}
                         {% for error in form.username.errors %}
-                            <p class="error-message">{{ error }}</p>
+                            <p class="error-alert-danger">{{ error }}</p>
                         {% endfor %}
                     {% endif %}
 
@@ -27,7 +29,7 @@
 
                     {% if form.email.errors %}
                         {% for error in form.email.errors %}
-                            <p class="error-message">{{ error }}</p>
+                            <p class="error-alert-danger">{{ error }}</p>
                         {% endfor %}
                     {% endif %}
 
@@ -39,7 +41,7 @@
 
                     {% if form.password.errors %}
                         {% for error in form.password.errors %}
-                            <p class="error-message">{{ error }}</p>
+                            <p class="error-alert-danger">{{ error }}</p>
                         {% endfor %}
                     {% endif %}
 

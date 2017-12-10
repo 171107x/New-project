@@ -30,7 +30,7 @@
 		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
 		<i class="fa fa-bars"></i>
 		</button>
-		<a class="navbar-brand page-scroll" href="index.html">
+		<a class="navbar-brand page-scroll" href="/home">
 		SMART KAMPUNG </a>
 	</div>
 	<!-- Collect the nav links, forms, and other content for toggling -->
@@ -48,6 +48,15 @@
 			<li>
 			<a href="#">Hire me</a>
 			</li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ session.username }}
+                <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                <li><a href="/user">User Profile</a></li>
+                <li><a href="/editProfile">Edit profile</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+            </li>
 		</ul>
 	</div>
 	<!-- /.navbar-collapse -->

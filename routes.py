@@ -1,16 +1,30 @@
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for, flash, g
 from flask_bootstrap import Bootstrap
-from forms import SignupForm, LoginForm
+from forms import SignupForm, LoginForm, EditForm
 from user import User
-from firebase import firebase
+#from firebase import firebase
 import firebase_admin
 from firebase_admin import credentials, db
+import pyrebase
 cred = credentials.Certificate('cred/oopproject-f5214-firebase-adminsdk-vkzv0-5ab9f1da25.json')
 default_app = firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://oopproject-f5214.firebaseio.com/ '
 })
-fireS = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com')
 
+#fireS = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com')
+config = {
+    'apiKey': "AIzaSyCHVUY5JdL1gqZx7juQQlaIAIB8R76A7ZE",
+    'authDomain': "oopproject-f5214.firebaseapp.com",
+    'databaseURL': "https://oopproject-f5214.firebaseio.com",
+    'projectId': "oopproject-f5214",
+    'storageBucket': "oopproject-f5214.appspot.com",
+    'messagingSenderId': "294439860189",
+    "serviceAccount": 'cred/oopproject-f5214-firebase-adminsdk-vkzv0-5ab9f1da25.json'
+  }
+
+firebase = pyrebase.initialize_app(config)
+
+ds = firebase.database()
 root = db.reference()
 app = Flask(__name__)
 Bootstrap(app)
@@ -31,6 +45,7 @@ def signup():
 
     if request.method == 'POST':
         if form.validate() == False:
+
             return render_template('signup.html', form=form)
         else:
             username = form.username.data
@@ -59,6 +74,8 @@ def login():
 
     if request.method == "POST":
         if form.validate() == False:
+            error = 'Invalid Username or Password'
+            flash(error, 'danger')
             return render_template("login.html", form=form)
         else:
             username = form.username.data
@@ -74,12 +91,11 @@ def login():
                 passList.append(result[users]['password'])
             attempted_username = request.form['username']
             attempted_password = request.form['password']
-
             if attempted_username in usernameList and attempted_password in passList:
                 session['username'] = form.username.data
                 return redirect(url_for('home'))
             else:
-                return redirect(url_for('login'))
+                return redirect(url_for('login', form=form))
 
     elif request.method == "GET":
         return render_template("login.html", form=form)
@@ -88,6 +104,35 @@ def login():
 def user():
     if 'username' in session:
         return render_template('userProfile.html')
+
+@app.route('/edit', methods=["GET", "POST"])
+def edit():
+    if 'username' in session:
+        return redirect(url_for('edit'))
+
+    form = EditForm()
+    if request.method == "POST":
+        if form.validate == True:
+            user_db = root.child('userInfo')
+
+            usernameList = []
+            username = form.username.data
+            about_me = form.about_me.data
+
+            result = root.child('userInfo').get()
+
+            for users in result:
+                usernameList.append(result[users]['username'])
+                ds.child("users").child(users).update(username)
+                user_db.push({
+                    'about me' : about_me
+                })
+
+            flash('Your changes have been saved.')
+            return redirect(url_for('edit'))
+
+    elif request.method == "GET":
+        return render_template('edit.html', form=form)
 
 @app.route('/logout')
 def logout():
