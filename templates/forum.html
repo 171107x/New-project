@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<head>
+    <link rel="stylesheet" type="text/css" href="/static/css/forum.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+</head>
+<body>
+{% from "includes/_formhelper.html" import render_field %}
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Aaronists</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+      <li><a href="Main.html">Home</a></li>
+	  <li><a href="contact.html">The Crew</a></li>
+      <li><a href="utility.html">Utilities</a></li>
+      <li><a href="security.html">Security</a></li>
+	  <li><a href="Estimation.html">Utility estimation</a></li>
+	  <li><a href="eco-friendly.html">Eco-friendly</a></li>
+	  <li class="active"><a href="StatsPage.html">Statistics</a></li>
+	  </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="Loginpage.html"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="forum">
+	<h1 id="bigHead">Forum</h1>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="form-group">
+				<form method="POST" action="/forum">
+				<div class="col-lg-1">
+				</div>
+				<div class="col-lg-6">
+					{{ render_field(form.forumText, class_="form-control", id_="Status" )}}
+					{{ render_field(form.forumType, class_="form-control statusType", id_="status-type" )}}
+					<input type="submit" class="btn btn-primary" id="submit" value="Submit" onclick="Beep()"></input>
+				</div>
+                </form>
+				<div class="col-lg-4">
+					<ul>
+						<li class="categories" id="food"><span>Food</span></li>
+						<li class="categories" id="movies"><span>Movies</span></li>
+						<li class="categories" id="childcare"><span>ChildCare</span></li>
+						<li class="categories" id="eldercare"><span>ElderCare</span></li>
+						<li class="categories" id="housekeeping"><span>HouseKeeping</span></li>
+					</ul>
+				</div>
+				<div class="col-lg-1">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-group">
+				<div class="col-lg-1">
+				</div>
+				<div class="col-lg-10">
+					<div class="container">
+						<div class="panel-group">
+							<div class="panel panel-default forum-section">
+								<div class="panel-heading">
+									Welcome to the forum section
+								</div>
+								<div class="panel-body">
+									This is a forum section that allows discussion between users with needs or wants.<br/>
+									Users can also post things that they want to give away to other users.
+								</div>
+								<br/>
+								{% for eachForum in result %}
+									<div class="panel-heading">
+										{{ result[eachForum]['type'] }}
+									</div>
+									<div class="panel-body">
+										{{ result[eachForum]['text'] }}
+									</div>
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-1">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</body>
+</html>

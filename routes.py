@@ -107,32 +107,29 @@ def user():
 
 @app.route('/edit', methods=["GET", "POST"])
 def edit():
-    if 'username' in session:
-        return redirect(url_for('edit'))
-
     form = EditForm()
-    if request.method == "POST":
-        if form.validate == True:
-            user_db = root.child('userInfo')
 
-            usernameList = []
-            username = form.username.data
-            about_me = form.about_me.data
+    if request.method == 'POST':
+        user_db = root.child('userInfo')
 
-            result = root.child('userInfo').get()
+        usernameList = []
+        username = form.username.data
+        about_me = form.about_me.data
 
-            for users in result:
-                usernameList.append(result[users]['username'])
-                ds.child("users").child(users).update(username)
-                user_db.push({
-                    'about me' : about_me
-                })
+        result = root.child('userInfo').get()
 
+        for users in result:
+            usernameList.append(result[users]['username'])
+            ds.child("users").child(users).update(username)
+            user_db.push({
+                'about me' : about_me
+            })
             flash('Your changes have been saved.')
-            return redirect(url_for('edit'))
-
-    elif request.method == "GET":
+            return redirect(url_for('user'))
+    else:
         return render_template('edit.html', form=form)
+
+
 
 @app.route('/logout')
 def logout():

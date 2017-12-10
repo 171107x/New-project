@@ -1,0 +1,52 @@
+#bigHead{
+	text-align:center;
+	}
+
+#submit{
+    float:right;
+    margin-top:5px;
+	}
+
+#Status{
+	float:none;
+	margin-bottom:5px;
+}
+span{
+	color:black;
+}
+
+.categories{
+	list-style-type:square;
+	font-size:20px;
+}
+
+.catogories span{
+	font-size:16px;
+}
+
+#status-type{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 200px;
+	display: block;
+    padding: 6px 12px;
+    height: 34px;
+    float: right;
+	border-radius: 4px;
+}
+
+#food{
+	color:orange;
+}
+#movies{
+	color:red;
+}
+#childcare{
+	color:yellow;
+}
+#eldercare{
+	color:#A29ECD;
+}
+#housekeeping{
+	color:#d3d3d3;
+}
