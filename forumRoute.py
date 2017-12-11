@@ -5,7 +5,7 @@ from firebase_admin import credentials, db
 from firebase import firebase
 from wtforms import Form,StringField, TextAreaField, RadioField, SelectField
 
-cred = credentials.Certificate('cred/oopproject-f5214-firebase-adminsdk-vkzv0-5ab9f1da25.json')
+cred = credentials.Certificate( 'cred/oopproject-f5214-firebase-adminsdk-vkzv0-5ab9f1da25.json' )
 default_app = firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://oopproject-f5214.firebaseio.com/'
 })
@@ -37,11 +37,12 @@ def forum():
 
 
             'text' : newForum.get_text(),
-            'type' : newForum.get_type()
+            'type' : newForum.get_type(),
+            'time' : newForum.get_date()
 
         })
         return redirect(url_for('forum'))
-    return render_template('forum.html',form=formA,result=result)
+    return render_template('forum.html', form=formA ,result=result)
 
 if __name__ == "__main__":
     app.run(debug=True)

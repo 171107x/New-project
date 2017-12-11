@@ -1,11 +1,16 @@
+from datetime import datetime
+
+
 class Forum:
     count = 2
-    def __init__(self,text,type):
+
+
+    def __init__(self, text, type):
         self.__text = text
         self.__type = type
         self.__class__.count += 1
-        # createtime = datetime.now()
-        # currenttime = str(createtime.day) + "-" + str(createtime.month) + "-" + str(createtime.year)  # DD-MM-YYYY format
+        self.createTime = datetime.now()
+        self.currentTime = str(self.createTime.day) + "-" + str(self.createTime.month) + "-" + str(self.createTime.year) # DD-MM-YYYY format
 
 
     def get_text(self):
@@ -19,3 +24,10 @@ class Forum:
 
     def set_type(self,type):
         self.__type = type
+
+    def get_date(self):
+        return self.currentTime
+
+
+testF = Forum('Hi','Bye')
+print(testF.get_date())
