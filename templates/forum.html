@@ -78,7 +78,8 @@
 								<br/>
 								{% for eachForum in result %}
 									<div class="panel-heading">
-										{{ result[eachForum]['type'] }}
+										<p>{{ result[eachForum]['type'] }}</p>
+                                        <p>created on {{ result[eachForum]['time'] }}</p>
 									</div>
 									<div class="panel-body">
 										{{ result[eachForum]['text'] }}
