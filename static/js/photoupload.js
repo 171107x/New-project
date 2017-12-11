@@ -1,11 +1,12 @@
  // Initialize Firebase
   var config = {
-    apiKey: "AIzaSyB1sMTQ-9UT2nrnHhwd2RxYVUAosh1_cdk",
-    authDomain: "smartkampung-e3ec3.firebaseapp.com",
-    databaseURL: "https://smartkampung-e3ec3.firebaseio.com",
-    projectId: "smartkampung-e3ec3",
-    storageBucket: "smartkampung-e3ec3.appspot.com",
-    messagingSenderId: "643996718253"
+    apiKey: "AIzaSyCHVUY5JdL1gqZx7juQQlaIAIB8R76A7ZE",
+    authDomain: "oopproject-f5214.firebaseapp.com",
+    databaseURL: "https://oopproject-f5214.firebaseio.com",
+    projectId: "oopproject-f5214",
+    storageBucket: "oopproject-f5214.appspot.com",
+    messagingSenderId: "294439860189"
+
   };
   firebase.initializeApp(config);
 
