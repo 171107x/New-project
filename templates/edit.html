@@ -3,7 +3,7 @@
 {% block body %}
   <div class="container-fluid">
   <h1>Edit Your Profile</h1>
-  <form action="" method="POST" name="edit">
+  <form action="/edit" method="POST" name="edit">
       {{form.hidden_tag()}}
       <table>
           <tr>
@@ -16,7 +16,7 @@
           </tr>
           <tr>
               <td></td>
-              <td><input type="submit" value="Save Changes"></td>
+              <td>{{ form.submit(class="btn-info") }}</td>
           </tr>
       </table>
   </form>
