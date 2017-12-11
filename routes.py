@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, session, redirect, url_for, flash, g
 from flask_bootstrap import Bootstrap
 from forms import SignupForm, LoginForm, EditForm
-from user import User
+from user import User, Edit
 #from firebase import firebase
 import firebase_admin
 from firebase_admin import credentials, db
@@ -109,24 +109,25 @@ def user():
 def edit():
     form = EditForm()
 
-    if request.method == 'POST':
-        user_db = root.child('userInfo')
+    if request.method == 'POST' and form.validate_on_submit():
+        if request.form == session['username']:
+            username = form.username.data
+            about_me = form.about_me.data
 
-        usernameList = []
-        username = form.username.data
-        about_me = form.about_me.data
+            edit = Edit(username, about_me)
+            all_users = root.child('userInfo').get()
+            for users in all_users:
+                user = all_users[users]
+                current_user = session['username']
+                if user['username'] == current_user:
+                    root.child('userInfo').update({
+                        'username': edit.get_username,
+                        'about_me': edit.get_about_me})
+                    flash('Your changes have been saved')
+                    session['about_me'] = form.about_me.data
+                    return redirect(url_for('userProfile.html'))
 
-        result = root.child('userInfo').get()
-
-        for users in result:
-            usernameList.append(result[users]['username'])
-            ds.child("users").child(users).update(username)
-            user_db.push({
-                'about me' : about_me
-            })
-            flash('Your changes have been saved.')
-            return redirect(url_for('user'))
-    else:
+    elif request.method == 'GET':
         return render_template('edit.html', form=form)
 
 
