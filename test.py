@@ -2,8 +2,8 @@ from flask import Flask, render_template, request, session, redirect, url_for
 from flask_bootstrap import Bootstrap
 from forms import SignupForm, LoginForm
 from user import User
-from firebase import firebase
 import firebase_admin
+from firebase import firebase
 from firebase_admin import credentials, db
 cred = credentials.Certificate('cred/oopproject-f5214-firebase-adminsdk-vkzv0-5ab9f1da25.json')
 default_app = firebase_admin.initialize_app(cred, {

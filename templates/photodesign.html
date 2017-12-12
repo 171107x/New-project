@@ -103,11 +103,9 @@
 <div class="gallery">
 	<ul>
         {% for pics in pictureList %}
-		    <li class="col-md-3">
-            <a href="">
-		    <img class="image" src={{ pics }} >
-            </a>
-            </li>
+        <li class="col-md-3">
+		    <img src={{ pics }} >
+        </li>
         {% endfor %}
 {#		<li class="col-md-3">#}
 {#		<a href="portfolio-item.html">#}
