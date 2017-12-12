@@ -15,5 +15,7 @@ class LoginForm(Form):
 
 class EditForm(Form):
     username = StringField('nickname', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired("Please enter your email address"),Email("Please enter your email address")])
+    password = PasswordField('Password', validators=[DataRequired("Please enter a password")])
     about_me = TextAreaField('About me', validators=[Length(min=0, max=140)])
     submit = SubmitField('Submit')
