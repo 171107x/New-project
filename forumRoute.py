@@ -25,6 +25,15 @@ def forum():
     formA = forumForm(request.form)
     fire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/')
     result = fire.get('Forum', None)
+    forumList = []
+    for key in result:
+        keyList = []
+        keyList.append(result[key]['type'])
+        keyList.append(result[key]['text'])
+        keyList.append(result[key]['time'])
+        forumList.append(keyList)
+    forumList.reverse()
+
     if request.method == 'POST':
         text = formA.forumText.data
         type = formA.forumType.data
@@ -41,8 +50,10 @@ def forum():
             'time' : newForum.get_date()
 
         })
+
+
         return redirect(url_for('forum'))
-    return render_template('forum.html', form=formA ,result=result)
+    return render_template('forum.html', form=formA ,forumList = forumList,)
 
 if __name__ == "__main__":
     app.run(debug=True)
