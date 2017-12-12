@@ -37,23 +37,26 @@
 	<div class="collapse navbar-collapse navbar-right navbar-main-collapse">
 		<ul class="nav navbar-nav">
 			<li>
-			<a href="index.html">Home</a>
+			<a href="/home">Home</a>
 			</li>
 			<li>
-			<a href='forum.html'>Forum</a>
+			<a href='/photowall'>Photo Wall</a>
 			</li>
 			<li>
-			<a href="#">Photo Wall</a>
+			<a href="#">Forum</a>
 			</li>
 			<li>
-			<a href="#">Security</a>
+			<a href="/search">Search</a>
 			</li>
-            <li>
-			<a href="#">The Team</a>
-			</li>
-            <li>
-			<a href="contact.html">Contact Us</a>
-			</li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ session.username }}
+                <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                <li><a href="/user">User Profile</a></li>
+                <li><a href="/edit">Edit profile</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+            </li>
 		</ul>
 	</div>
 	<!-- /.navbar-collapse -->
