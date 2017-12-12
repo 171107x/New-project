@@ -18,7 +18,7 @@ def upload():
         photoLink = ref.get(key)
         pictureList.append(photoLink)
     pictureList.reverse()
-    return render_template('photodesign.html', pictureList = pictureList)
+    return render_template('photodesign.html',pictureList = pictureList)
 
 if __name__ == '__main__':
     app.run()

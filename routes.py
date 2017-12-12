@@ -2,16 +2,16 @@ from flask import Flask, render_template, request, session, redirect, url_for, f
 from flask_bootstrap import Bootstrap
 from forms import SignupForm, LoginForm, EditForm
 from user import User, Edit
-#from firebase import firebase
+from firebase import firebase
 import firebase_admin
 from firebase_admin import credentials, db
 import pyrebase
-cred = credentials.Certificate('cred/oopproject-f5214-firebase-adminsdk-vkzv0-5ab9f1da25.json')
+
+cred = credentials.Certificate('cred\oopproject-f5214-firebase-adminsdk-vkzv0-5ab9f1da25.json')
 default_app = firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://oopproject-f5214.firebaseio.com/ '
 })
 
-#fireS = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com')
 config = {
     'apiKey': "AIzaSyCHVUY5JdL1gqZx7juQQlaIAIB8R76A7ZE",
     'authDomain': "oopproject-f5214.firebaseapp.com",
@@ -22,9 +22,9 @@ config = {
     "serviceAccount": 'cred/oopproject-f5214-firebase-adminsdk-vkzv0-5ab9f1da25.json'
   }
 
-firebase = pyrebase.initialize_app(config)
 
-ds = firebase.database()
+
+
 root = db.reference()
 app = Flask(__name__)
 Bootstrap(app)
@@ -74,8 +74,6 @@ def login():
 
     if request.method == "POST":
         if form.validate() == False:
-            error = 'Invalid Username or Password'
-            flash(error, 'danger')
             return render_template("login.html", form=form)
         else:
             username = form.username.data
@@ -109,26 +107,28 @@ def user():
 def edit():
     form = EditForm()
 
-    if request.method == 'POST' and form.validate_on_submit():
-        if request.form == session['username']:
-            username = form.username.data
-            about_me = form.about_me.data
+    if request.method == 'POST':
+        username = session['username']
+        email = session['email']
+        about_me = form.about_me.data
+        password = form.password.data
 
-            edit = Edit(username, about_me)
-            all_users = root.child('userInfo').get()
-            for users in all_users:
-                user = all_users[users]
-                current_user = session['username']
-                if user['username'] == current_user:
-                    root.child('userInfo').update({
-                        'username': edit.get_username,
-                        'about_me': edit.get_about_me})
-                    flash('Your changes have been saved')
-                    session['about_me'] = form.about_me.data
-                    return redirect(url_for('userProfile.html'))
 
-    elif request.method == 'GET':
-        return render_template('edit.html', form=form)
+        userFire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com')
+        allUser = userFire.get('userInfo',None)
+
+        for key in allUser:
+            if username == allUser[key]['username']:
+                userFire.put('userInfo',key,{
+                'username': username,
+                'email': email,
+                'about_me': about_me,
+                'password': password
+                })
+            session['about_me'] = form.about_me.data
+            return redirect(url_for('user'))
+                
+    return render_template('edit.html', form=form)
 
 
 
