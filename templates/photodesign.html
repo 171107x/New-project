@@ -89,22 +89,25 @@
 		<h2>Upload your latest photo here!</h2>
 		<div class="col-lg-8 col-lg-offset-2">
 			<p>
-				To bond every families in hdb flats harmoniously and to keep the kampung spirit alive!
+				To relive the good ol' kampung memories with hand taken masterpieces.
 			</p>
             <br>
+            <p>“Taking pictures is savoring life intensely, every hundredth of a second.”</p>
+            <p>― Marc Riboud</p>
+            <br>
             <div class="col-lg-8 col-lg-offset-3">
-            <input type='file' value='upload' id='fileButton' a href="#" class="btnghost">
+            <input type='file' value='upload' id='fileButton' a href="#" class="btnghost" onclick="reload()">
             </div>
 		</div>
     </div>
 </div>
 </section>
-<section id="portfolio">
+<section>
 <div class="gallery">
 	<ul>
         {% for pics in pictureList %}
         <li class="col-md-3">
-		    <img src={{ pics }} >
+		    <img style="height:350px;width:300px;padding-bottom:50px;" src={{ pics }} >
         </li>
         {% endfor %}
 {#		<li class="col-md-3">#}
@@ -203,12 +206,16 @@ fileButton.addEventListener('change',function(e) {
     task.on('state_changed', null, null, function () {
         //When the image has successfully uploaded we get its download URL
         var downloadURL = task.snapshot.downloadURL
-        document.querySelector('img').src = downloadURL;
-        var messageText = downloadURL;
+        //This is for profile picture
+        {#        document.querySelector('img').src = downloadURL;#}
+       var messageText = downloadURL;
         firebaseRef.child('Images').push(messageText);
     })
 });
 
+function reload() {
+    alert('Please remember to refresh your page to see latest photo uploaded.')
+}
     </script>
 </body>
 </html>

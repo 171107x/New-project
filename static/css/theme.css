@@ -336,7 +336,8 @@ p.lead {
 	position:relative;
 }
 img {
-	max-width:100%;
+	max-width:300px;
+	max-height:500px;
 }
 .gallery ul {
 	padding:0;
