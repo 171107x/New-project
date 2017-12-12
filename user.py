@@ -3,6 +3,7 @@ class User:
         self.username = username
         self.email = email
         self.password = password
+        self.about_me = ''
 
     def get_username(self):
         return self.username
@@ -38,9 +39,6 @@ class Edit:
 
     def set_about_me(self, about_me):
         self.about_me = about_me
-
-
-
 
 
 

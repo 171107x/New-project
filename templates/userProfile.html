@@ -2,8 +2,7 @@
 
 {% block body %}
 
-<h1>My Profile</h1>
-  <form action="/user" method="POST"></form>
+
 <br><br>
 <div class="container target">
     <div class="row">
@@ -52,7 +51,7 @@
         <div class="col-sm-9" style="" contenteditable="false">
             <div class="panel panel-default">
                 <div class="panel-heading">{{ session.username }}'s Bio</div>
-                <div class="panel-body"> A long description about me.{{ session.about_me }}
+                <div class="panel-body"> {{ session.about_me }}
                 </div>
             </div>
         </div>
