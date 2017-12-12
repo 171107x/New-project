@@ -5,6 +5,8 @@ from user import User, Edit
 from firebase import firebase
 import firebase_admin
 from firebase_admin import credentials, db
+from flask_sqlalchemy import SQLAlchemy
+import flask_whooshalchemy as wa
 import pyrebase
 
 cred = credentials.Certificate('cred\oopproject-f5214-firebase-adminsdk-vkzv0-5ab9f1da25.json')
@@ -32,9 +34,24 @@ Bootstrap(app)
 app.secret_key = "baby123"
 
 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@localhost/texttest'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS']  = True
+app.config['WHOOSH_BASE']='whoosh'
+
+db2 = SQLAlchemy(app)
+
+class Post(db2.Model):
+    __searchable__ = ['title','content']
+
+    id = db2.Column(db2.Integer, primary_key= True)
+    title = db2.Column(db2.String(100))
+    content = db2.Column(db2.String(1000))
+
+wa.whoosh_index(app,Post)
+
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("home.html")
 
 
 @app.route("/signup", methods=['GET', 'POST'])
@@ -143,6 +160,34 @@ def home():
     if 'username' not in session:
         return redirect(url_for('login'))
     return render_template("home.html")
+
+@app.route('/photowall')
+def upload():
+    fire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/')
+    ref = fire.get('/Images',None)
+    pictureList = []
+    for key in ref:
+        photoLink = ref.get(key)
+        pictureList.append(photoLink)
+    pictureList.reverse()
+    return render_template('photodesign.html',pictureList = pictureList)
+
+@app.route('/search')
+def search():
+    posts = Post.query.whoosh_search(request.args.get('query')).all()
+
+    return render_template('search2.html', posts=posts)
+
+@app.route("/add", methods=['GET','POST'])
+def add():
+    if request.method =="POST":
+        post = Post(title = request.form['title'], content = request.form['content'])
+        db2.session.add(post)
+        db2.session.commit()
+
+        return redirect(url_for('search'))
+
+    return render_template("add.html")
 
 if __name__ == "__main__":
     app.run(debug=True)
