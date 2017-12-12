@@ -76,13 +76,13 @@
 									Users can also post things that they want to give away to other users.
 								</div>
 								<br/>
-								{% for eachForum in result %}
+																{% for eachForum in forumList %}
 									<div class="panel-heading">
-										<p>{{ result[eachForum]['type'] }}</p>
-                                        <p>created on {{ result[eachForum]['time'] }}</p>
+										<p>{{ eachForum[0] }}</p>
+                                        <p>created on {{ eachForum[2] }}</p>
 									</div>
 									<div class="panel-body">
-										{{ result[eachForum]['text'] }}
+										{{ eachForum[1] }}
 									</div>
 								{% endfor %}
 							</div>

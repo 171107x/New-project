@@ -38,7 +38,7 @@ def add():
         db.session.add(post)
         db.session.commit()
 
-        return redirect(url_for('search2'))
+        return redirect(url_for('search'))
 
     return render_template("add.html")
 
