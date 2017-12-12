@@ -6,7 +6,8 @@ from firebase import firebase
 import firebase_admin
 from firebase_admin import credentials, db
 import pyrebase
-cred = credentials.Certificate('cred/oopproject-f5214-firebase-adminsdk-vkzv0-5ab9f1da25.json')
+
+cred = credentials.Certificate('cred\oopproject-f5214-firebase-adminsdk-vkzv0-5ab9f1da25.json')
 default_app = firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://oopproject-f5214.firebaseio.com/ '
 })
@@ -117,7 +118,6 @@ def edit():
         allUser = userFire.get('userInfo',None)
 
         for key in allUser:
-            print(allUser[key]['username'])
             if username == allUser[key]['username']:
                 userFire.put('userInfo',key,{
                 'username': username,
@@ -125,7 +125,8 @@ def edit():
                 'about_me': about_me,
                 'password': password
                 })
-
+            session['about_me'] = form.about_me.data
+            return redirect(url_for('user'))
                 
     return render_template('edit.html', form=form)
 

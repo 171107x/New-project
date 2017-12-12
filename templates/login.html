@@ -5,21 +5,25 @@
 {% include 'includes/_messages.html' %}
 <div class="col-md-4">
     <div class="container">
-    <h2>Login</h2>
+    <h2 class="display-3 text-center" >Login</h2>
     <form method="POST" action="/login">
         {{ form.hidden_tag() }}
     <div class="form-group">
-        {{ form.username.label }}
+        <div class="col-4">
+        <p class="lead">{{ form.username.label }}: </p>
+        </div>
         {% if form.username.errors %}
             {% for error in form.username.errors %}
                 <p class="alert alert-danger">{{ error }}</p>
             {% endfor %}
         {% endif %}
 
+        <div class="col-6">
         {{ form.username }}
+        </div>
     </div>
     <div class="form-group">
-        {{ form.password.label }}
+        <p class="lead">{{ form.password.label }}: </p>
         {% if form.password.errors %}
             {% for error in form.password.errors %}
                 <p class="alert alert-danger">{{ error }}</p>
