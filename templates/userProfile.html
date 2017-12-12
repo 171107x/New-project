@@ -2,13 +2,12 @@
 
 {% block body %}
 
-<h1>My Profile</h1>
-  <form action="/user" method="POST"></form>
+
 <br><br>
 <div class="container target">
     <div class="row">
         <div class="col-sm-10">
-             <h1 class="">{{ session.name }}</h1>
+             <h1 class="">{{ session.username }}</h1>
 
           <button type="button" class="btn btn-success">Book me!</button>  <button type="button" class="btn btn-info">Send me a message</button>
 <br>
@@ -52,7 +51,7 @@
         <div class="col-sm-9" style="" contenteditable="false">
             <div class="panel panel-default">
                 <div class="panel-heading">{{ session.username }}'s Bio</div>
-                <div class="panel-body"> A long description about me.{{ session.about_me }}
+                <div class="panel-body"> {{ session.about_me }}
                 </div>
             </div>
         </div>
