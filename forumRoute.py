@@ -120,6 +120,10 @@ def post_forum():
     return render_template('postForum.html',form=form)
 
 
+@app.route('/map')
+def camera():
+    return render_template('map.html')
+
 if __name__ == "__main__":
     app.run(debug=True)
 #inside the parent need to have a child if not the parent will disappear
