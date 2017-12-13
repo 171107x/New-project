@@ -86,6 +86,36 @@ class ForumFilter(Form):
             choices=[('', 'Select'), ('Food', 'Food'), ('Movies', 'Movies'), ('Childcare', 'Childcare'),
                      ('Eldercare', 'Eldercare'), ('Housekeeping', 'Housekeeping')])
 
+class Tipsform(Form):
+    housekeeping_tips = TextAreaField('Tips')
+    name_tips = StringField("name")
+
+class Tips():
+    def __init__(self, name, tips):
+        self.__name = name
+        self.__tips = tips
+        self.__pubid = ''
+
+
+    def get_name(self):
+        return self.__name
+
+    def set_name(self, name):
+        self.__name = name
+
+    def get_tips(self,):
+        return self.__tips
+
+    def set_tips(self,tips):
+        self.__tips=tips
+
+    def get_pubid(self):
+        return self.__pubid
+
+    def set_pubid(self, pubid):
+        self.__pubid = pubid
+
+
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -452,7 +482,39 @@ def post_forum():
         return redirect(url_for('forum'))
     return render_template('postForum.html',form=form)
 
+@app.route('/form' , methods=['POST','GET'])
+def form():
+    form = Tipsform(request.form)
+    if request.method == 'POST' and form.validate():
+        name = form.name_tips.data
+        tips = form.housekeeping_tips.data
 
+        tip = Tips(name,tips)
+
+        tip_db =root.child('Tips')
+        tip_db.push({
+            "name": tip.get_name(),
+            "tips": tip.get_tips()
+        })
+        print(name)
+        return redirect('form')
+    return render_template('form.html', form=form)
+
+@app.route('/tips')
+def retrieveTip():
+    fire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/')
+
+    retrival = root.child('Tips').get()
+    list = []
+    list2=[]
+    for i in fire.get('Tips',None):
+        firedat=fire.get('Tips',i)
+        t=Tips(firedat["name"], firedat["tips"])
+        list.append(t.get_name())
+        list2.append(t.get_tips())
+
+
+    return render_template("viewTip.html", retrival= list,retrival2=list2)
 @app.route('/map')
 def camera():
     return render_template('map.html')
