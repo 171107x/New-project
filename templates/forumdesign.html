@@ -23,6 +23,7 @@
     <![endif]-->
 </head>
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
+{% from "includes/_formhelper.html" import render_field %}
 <!-- Navigation -->
 <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
 <div class="container">
@@ -37,23 +38,29 @@
 	<div class="collapse navbar-collapse navbar-right navbar-main-collapse">
 		<ul class="nav navbar-nav">
 			<li>
-			<a href="index.html">Home</a>
+			<a href="/home">Home</a>
 			</li>
 			<li>
-			<a href='forum.html'>Forum</a>
+			<a href='/photowall'>Photo Wall</a>
 			</li>
 			<li>
-			<a href="#">Photo Wall</a>
+			<a href="/forum">Forum</a>
 			</li>
 			<li>
-			<a href="#">Security</a>
+			<a href="/search">Search</a>
 			</li>
             <li>
-			<a href="#">The Team</a>
+			<a href="/events">Events</a>
 			</li>
-            <li>
-			<a href="contact.html">Contact Us</a>
-			</li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ session.username }}
+                <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                <li><a href="/user">User Profile</a></li>
+                <li><a href="/edit">Edit profile</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+            </li>
 		</ul>
 	</div>
 	<!-- /.navbar-collapse -->
@@ -80,7 +87,51 @@
 </header>
 <!-- Forum Section -->
 <section>
-
+<div class="forum">
+	<h1 id="bigHead">Forum</h1>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="form-group">
+				<div class="col-lg-1">
+				</div>
+				<div class="col-lg-10">
+					<div class="container">
+						<div class="panel-group">
+							<form method="POST" action="/forum">
+							<p>
+								{{ render_field(forumFilter.forumFilter)}}
+								<input type="submit" class="btn btn-primary" value="Submit"></input>
+								<button type="button" style="float:right;" class="btn btn-danger" onclick="window.location.href='/postForum'">Create a forum</button>
+							</p>
+							</form>
+							<div class="panel panel-default forum-section">
+								<div class="panel-heading">
+									Welcome to the forum section
+								</div>
+								<div class="panel-body">
+									This is a forum section that allows discussion between users with needs or wants.<br/>
+									Users can also post things that they want to give away to other users.
+								</div>
+								<br/>
+																{% for eachForum in forumList %}
+									<div class="panel-heading">
+										<p>{{ eachForum[0] }}</p>
+                                        <p>created on {{ eachForum[2] }}</p>
+									</div>
+									<div class="panel-body">
+										{{ eachForum[1] }}
+									</div>
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-1">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 </section>
 <!-- Footer -->
 <footer>

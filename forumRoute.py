@@ -94,7 +94,7 @@ def forum():
     elif choice == 'Housekeeping':
         forumList = housekeepingList
     forumList.reverse()
-    return render_template('forum.html',forumList = forumList ,forumFilter = forumFilter)
+    return render_template('forumdesign.html',forumList = forumList ,forumFilter = forumFilter)
 
 @app.route('/postForum',methods=['POST','GET'])
 def post_forum():
