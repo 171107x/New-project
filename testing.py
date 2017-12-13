@@ -66,7 +66,7 @@ def new():
             #     if key == 'test2':
             #         print(allEvent[key])
             #
-            eventFire.put('Events','test'+str(count),{
+            eventFire.put('Events','number'+str(count),{
                 'title': event.get_title(),
                 'location': event.get_location(),
                 'category': event.get_category(),
@@ -106,7 +106,7 @@ def create_forum():
         except TypeError:
             count = 1
 
-        eventFire.put('Events', 'test'+str(count), {
+        eventFire.put('Events', 'number'+str(count), {
             'title': event.get_title(),
             'location': event.get_location(),
             'category': event.get_category(),
