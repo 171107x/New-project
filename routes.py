@@ -3,10 +3,12 @@ from flask_bootstrap import Bootstrap
 from forms import SignupForm, LoginForm, EditForm, ReviewForm
 from user import User, Edit, Review
 from firebase import firebase
+from Events import Events
 import firebase_admin
 from firebase_admin import credentials, db
 from flask_sqlalchemy import SQLAlchemy
 import flask_whooshalchemy as wa
+from wtforms import Form, StringField, TextAreaField, RadioField, SelectField, validators
 import pyrebase
 
 cred = credentials.Certificate('cred\oopproject-f5214-firebase-adminsdk-vkzv0-5ab9f1da25.json')
@@ -48,6 +50,29 @@ class Post(db2.Model):
     content = db2.Column(db2.String(1000))
 
 wa.whoosh_index(app,Post)
+
+class eventsForm(Form):
+    title = StringField('Title',[validators.Length(min=1, max=150), validators.DataRequired()])
+    category = SelectField('Caterories of Events', choices=[('', 'Select'), ('BRIDAL', 'Bridal events '), ('EDUCATIONAL', 'Educational conferencing'),
+                                                ('COMMEMORATIVE', 'Commemorative events'), ('CHARITY', 'Charity events')],
+                           default='')
+    timeStart = SelectField('Start Time', choices=[('', 'Select'), ('7:00AM', '7:00AM'), ('8:00AM', '8:00AM'),
+                                               ('9:00AM', '9:00AM'), ('10:00AM', '10:00AM'),
+                                               ('11:00AM', '11:00AM'), ('12:00PM', '12:00PM'),
+                                               ('1:00PM', '1:00PM'), ('2:00PM', '2:00PM'), ('3:00PM', '3:00PM'),
+                                               ('4:00PM', '4:00PM'), ('5:00PM', '5:00PM'), ('6:00PM', '6:00PM'),
+                                               ('7:00PM', '7:00PM'), ('8:00PM', '8:00PM'), ('9:00PM', '9:00PM'),
+                                               ('10:00PM', '10:00PM')], default='')
+    timeEnd = SelectField('End Time', choices=[('', 'Select'), ('7:00AM', '7:00AM'), ('8:00AM', '8:00AM'),
+                                               ('9:00AM', '9:00AM'), ('10:00AM', '10:00AM'),
+                                               ('11:00AM', '11:00AM'), ('12:00PM', '12:00PM'),
+                                               ('1:00PM', '1:00PM'), ('2:00PM', '2:00PM'), ('3:00PM', '3:00PM'),
+                                               ('4:00PM', '4:00PM'), ('5:00PM', '5:00PM'), ('6:00PM', '6:00PM'),
+                                               ('7:00PM', '7:00PM'), ('8:00PM', '8:00PM'), ('9:00PM', '9:00PM'),
+                                               ('10:00PM', '10:00PM')], default='')
+    location = StringField('Location of event',[validators.DataRequired()])
+    description = TextAreaField('Description of event',[validators.DataRequired()])
+    date = StringField('Date of event',[validators.DataRequired()])
 
 @app.route("/")
 def index():
@@ -228,6 +253,97 @@ def add():
         return redirect(url_for('search'))
 
     return render_template("add.html")
+
+@app.route('/events',methods=['GET','POST'])
+def new():
+    form = eventsForm(request.form)
+    allE = []
+    eventFire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/ ')
+    allEvent = eventFire.get('Events', None)
+    if request.method == 'POST' and form.validate():
+            title = form.title.data
+            location = form.location.data
+            category = form.category.data
+            timestart = form.timeStart.data
+            timeend = form.timeEnd.data
+            description = form.description.data
+            date = form.date.data
+
+            event = Events(title,location,category,timestart,timeend,description,date)
+            # This is to make the events name +1
+            try:
+                count = len(allEvent) +1
+            except TypeError:
+                count = 1
+
+            # Search from a certain key to print the entire key
+            # for key in allEvent:
+            #     if allEvent[key]['title'] == 'kenneth is hensum':
+            #         print(allEvent[key])
+
+            #If I want to get a certain key(title) from the test2 database
+            # for key in allEvent:
+            #     if key == 'test2':
+            #         print(allEvent[key])
+            #
+            eventFire.put('Events','number'+str(count),{
+                'title': event.get_title(),
+                'location': event.get_location(),
+                'category': event.get_category(),
+                'timeStart': event.get_timestart(),
+                'timeEnd': event.get_timeend(),
+                'description': event.get_description(),
+                'date': event.get_date()
+            })
+    try:
+        for key in allEvent:
+            allE.append(allEvent[key])
+        allE = reversed(allE)
+    except TypeError:
+        allE = []
+
+    return render_template('showEvent.html', form=form, allE=allE)
+
+@app.route('/createEvent',methods=['POST','GET'])
+def create_forum():
+    form = eventsForm(request.form)
+    allE = []
+    eventFire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/ ')
+    allEvent = eventFire.get('Events', None)
+    if request.method == 'POST':
+        title = form.title.data
+        location = form.location.data
+        category = form.category.data
+        timestart = form.timeStart.data
+        timeend = form.timeEnd.data
+        description = form.description.data
+        date = form.date.data
+
+        event = Events(title, location, category, timestart, timeend, description, date)
+
+        try:
+            count = len(allEvent) + 1
+        except TypeError:
+            count = 1
+
+        eventFire.put('Events', 'number'+str(count), {
+            'title': event.get_title(),
+            'location': event.get_location(),
+            'category': event.get_category(),
+            'timeStart': event.get_timestart(),
+            'timeEnd': event.get_timeend(),
+            'description': event.get_description(),
+            'date': event.get_date()
+        })
+
+        try:
+            for key in allEvent:
+                allE.append(allEvent[key])
+            allE = reversed(allE)
+        except TypeError:
+            allE = []
+
+    return render_template('createEvent.html',form=form)
 
 if __name__ == "__main__":
     app.run(debug=True)
