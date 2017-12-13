@@ -36,12 +36,25 @@
 	<!-- Collect the nav links, forms, and other content for toggling -->
 	<div class="collapse navbar-collapse navbar-right navbar-main-collapse">
 		<ul class="nav navbar-nav">
+			<li>
+			<a href="/home">Home</a>
+			</li>
+			<li>
+			<a href='/photowall'>Photo Wall</a>
+			</li>
+			<li>
+			<a href="#">Forum</a>
+			</li>
+			<li>
+			<a href="/search">Search</a>
+			</li>
             <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Register/Login
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ session.username }}
                 <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                <li><a href="/signup">Register</a></li>
-                <li><a href="/login">Login</a></li>
+                <li><a href="/user">User Profile</a></li>
+                <li><a href="/edit">Edit profile</a></li>
+                <li><a href="/logout">Logout</a></li>
             </ul>
             </li>
 		</ul>
@@ -73,83 +86,96 @@
 <section id="about">
 <div class="container content-section text-center">
 	<div class="row">
-		<h2>GROUP OBJECTIVE</h2>
+		<h2>Events</h2>
 		<div class="col-lg-8 col-lg-offset-2">
 			<p>
-				To bond every families in hdb flats harmoniously and to keep the kampung spirit alive!
+                Event forms will be processed and verified by admin.
+            </p>
+            <p>
+				For more details, contact support at smartkampung@gmail.com
 			</p>
-			<p>
-				<a href="#" class="btnghost"><i class="fa fa-download"></i> Curriculum Vitae</a>
-			</p>
+            <br>
+            <div class="col-lg-8 col-lg-offset-3">
+            </div>
 		</div>
-	</div>
+    </div>
 </div>
 </section>
 <section>
-<div class="gallery">
-	<ul>
-		<li class="col-md-3">
-		<a href="portfolio-item.html">
-		<img src="http://unsplash.it/680/380?random=1" alt="">
-		</a>
-		</li>
-		<li class="col-md-3">
-		<a href="portfolio-item.html">
-		<img src="http://unsplash.it/680/380?random=2" alt="">
-		</a>
-		</li>
-		<li class="col-md-3">
-		<a href="portfolio-item.html">
-		<img src="http://unsplash.it/680/380?random=3" alt="">
-		</a>
-		</li>
-		<li class="col-md-3">
-		<a class="image" href="portfolio-item.html">
-		<img src="http://unsplash.it/680/380?random=4" alt="">
-		</a>
-		</li>
-		<li class="col-md-3">
-		<a href="portfolio-item.html">
-		<img src="http://unsplash.it/680/380?random=5" alt="">
-		</a>
-		</li>
-		<li class="col-md-3">
-		<a href="portfolio-item.html">
-		<img src="http://unsplash.it/680/380?random=6" alt="">
-		</a>
-		</li>
-		<li class="col-md-3">
-		<a href="portfolio-item.html">
-		<img src="http://unsplash.it/680/380?random=7" alt="">
-		</a>
-		</li>
-		<li class="col-md-3">
-		<a href="portfolio-item.html">
-		<img src="http://unsplash.it/680/380?random=8" alt="">
-		</a>
-		</li>
-				<li class="col-md-3">
-		<a href="portfolio-item.html">
-		<img src="http://unsplash.it/680/380?random=10" alt="">
-		</a>
-		</li>
-		<li class="col-md-3">
-		<a href="portfolio-item.html">
-		<img src="http://unsplash.it/680/380?random=11" alt="">
-		</a>
-		</li>
-		<li class="col-md-3">
-		<a href="portfolio-item.html">
-		<img src="http://unsplash.it/680/380?random=12" alt="">
-		</a>
-		</li>
-		<li class="col-md-3">
-		<a href="portfolio-item.html">
-		<img src="http://unsplash.it/680/380?random=13" alt="">
-		</a>
-		</li>
-	</ul>
-</div>
+{% from "includes/_formhelper.html" import render_field %}
+{% if form.errors %}
+    <div class="alert alert-danger">
+        <ul>
+            {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+                {% for error in field_errors %}
+                    <li>{{ form[field_name].label }}: {{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+{% block body %}
+{#    <div class="gallery">#}
+{#	<ul>#}
+{#        {% for pics in pictureList %}#}
+{#        <li class="col-md-3">#}
+{#		    <img style="height:350px;width:300px;padding-bottom:50px;" src={{ pics }} >#}
+{#        </li>#}
+{#            </ul>#}
+{#        {% endfor %}#}
+    <form method="POST" action="">
+
+        <div class="form-group">
+        </div>
+        <div class="form-group">
+        <div class="form-row"></div>
+            <div class='col-md-4'>
+        </div>
+        </div>
+        <div class="form-group">
+            <div class="form-row">
+                <div class = 'col-md-5'>
+                <div class="form-group col-md-10">
+                    {{ render_field(form.title, class_="form-control") }}
+                </div>
+                <div class="form-group col-md-5">
+                    {{ render_field(form.category, class_="form-control") }}
+                </div>
+                <div class="form-group col-md-5">
+                    {{ render_field(form.date, class_="form-control") }}
+                </div>
+                <div class="form-group col-md-5">
+                    {{ render_field(form.timeStart, class_="form-control") }}
+                </div>
+                <div class="form-group col-md-5">
+                    {{ render_field(form.timeEnd, class_="form-control") }}
+                </div>
+                <div class="form-group col-md-5">
+                    {{ render_field(form.location, class_="form-control") }}
+                </div>
+                <div class="form-group col-md-5">
+                    {{ render_field(form.description, class_="form-control") }}
+                </div>
+                <div class="form-group col-md-5">
+                <input type="submit" value="Submit" class="btn btn-info"/>
+                </div>
+                    <div class="form-group col-md-5">
+                    <button type="button"  class="btn btn-success" onclick="window.location.href='/events'">Back to events</button>
+                    </div>
+            </div>
+        </div>
+        </div>
+    </form>
+{% endblock body %}
+{#		<li class="col-md-3">#}
+{#		<a href="portfolio-item.html">#}
+{#		<img src="http://unsplash.it/680/380?random=2" alt="">#}
+{#		</a>#}
+{#		</li>#}
+{#		<li class="col-md-3">#}
+{#		<a href="portfolio-item.html">#}
+{#		<img src="http://unsplash.it/680/380?random=3" alt="">#}
+{#		</a>#}
 </section>
 <!-- Contact Section -->
 <section id="contact">
@@ -161,7 +187,7 @@
                 If our website was of any help to you, we would love to hear your <i><a href="contact">feedback</a></i> on how else we can improve the site to your ideal specifications!
 			</p>
 			<p>
-				<i><a href="mailto:smartkampung@gmail.com" style="border-bottom:1px dashed #ccc;">smartkampung@gmail.com</a></i>
+				<i><a href="mailto:smartkumpung@gmail.com" style="border-bottom:1px dashed #ccc;">smartkumpung@gmail.com</a></i>
 			</p>
 			<ul class="list-inline banner-social-buttons">
 				<li>
@@ -195,5 +221,3 @@
 <script src="../static/js/jquery.easing.min.js"></script>
 <!-- Custom Theme JavaScript -->
 <script src="../static/js/theme.js"></script>
-</body>
-</html>

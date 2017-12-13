@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, session, redirect, url_for, flash, g
 from flask_bootstrap import Bootstrap
-from forms import SignupForm, LoginForm, EditForm
-from user import User, Edit
+from forms import SignupForm, LoginForm, EditForm, ReviewForm
+from user import User, Edit, Review
 from firebase import firebase
 import firebase_admin
 from firebase_admin import credentials, db
@@ -51,14 +51,14 @@ wa.whoosh_index(app,Post)
 
 @app.route("/")
 def index():
-    return render_template("home.html")
+    return render_template("index.html")
 
 
 @app.route("/signup", methods=['GET', 'POST'])
 def signup():
     if 'username' in session:
         return redirect(url_for('home'))
-    form = SignupForm()
+    form = SignupForm(request.form)
 
     if request.method == 'POST':
         if form.validate() == False:
@@ -128,7 +128,35 @@ def login():
 @app.route('/user')
 def user():
     if 'username' in session:
-        return render_template('userProfile.html')
+        form = ReviewForm(request.form)
+        if request.method == 'POST' and form.validate():
+            title = form.title.data
+            review = form.review.data
+
+            userFire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com')
+            result = userFire.get('userInfo', None)
+
+
+            review = Review(title, review)
+            review_db = root.child('review')
+            review_db.push({
+                'title' : review.get_title(),
+                'review' : review.get_review(),
+                'time' : review.get_date()
+
+                    })
+            return redirect(url_for('user'))
+        '''
+            titleList = []
+            reviewList = []
+
+            for i in result:
+                if session['username'] == result[key]['username'] and session['email'] == result[key]['email']:
+                    titleList.append(result[i]['title'])
+                    reviewList.append(result[i]['review'])
+            return redirect(url_for('user'))
+        '''
+        return render_template('userProfile.html', form=form)
 
 @app.route('/edit', methods=["GET", "POST"])
 def edit():
