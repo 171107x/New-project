@@ -1,11 +1,12 @@
 class Events():
-    def __init__(self, title,location,category,timestart,timeend,description):
+    def __init__(self, title,location,category,timestart,timeend,description,date):
         self.__title = title
         self.__location = location
         self.__category = category
         self.__timestart = timestart
         self.__timeend = timeend
         self.__description = description
+        self.__date = date
 
     def get_title(self):
         return self.__title
@@ -25,6 +26,9 @@ class Events():
     def get_description(self):
         return self.__description
 
+    def get_date(self):
+        return self.__date
+
     def set_title(self, title):
         self.__title = title
 
@@ -42,4 +46,7 @@ class Events():
 
     def set_description(self, description):
         self.__description = description
+
+    def set_date(self,date):
+        self.__date = date
 

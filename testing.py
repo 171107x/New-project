@@ -31,7 +31,8 @@ class eventsForm(Form):
                                                ('7:00PM', '7:00PM'), ('8:00PM', '8:00PM'), ('9:00PM', '9:00PM'),
                                                ('10:00PM', '10:00PM')], default='')
     location = StringField('Location of event',[validators.DataRequired()])
-    description = StringField('Description of event',[validators.DataRequired()])
+    description = TextAreaField('Description of event',[validators.DataRequired()])
+    date = StringField('Date of event',[validators.DataRequired()])
 
 @app.route('/events',methods=['GET','POST'])
 def new():
@@ -44,8 +45,9 @@ def new():
             timestart = form.timeStart.data
             timeend = form.timeEnd.data
             description = form.description.data
+            date = form.date.data
 
-            event = Events(title,location,category,timestart,timeend,description)
+            event = Events(title,location,category,timestart,timeend,description,date)
             eventFire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/ ')
             allEvent = eventFire.get('Events', None)
             # This is to make the events name +1
@@ -71,13 +73,15 @@ def new():
                 'category': event.get_category(),
                 'timeStart': event.get_timestart(),
                 'timeEnd': event.get_timeend(),
-                'description': event.get_description()
+                'description': event.get_description(),
+                'date': event.get_date()
             })
 
             for key in allEvent:
                 allE.append(allEvent[key])
 
-    return render_template('event.html', form=form, allE=allE)
+    return render_template('eventdesign.html', form=form, allE=allE)
+
 
 
 if __name__ == '__main__':
