@@ -1,3 +1,5 @@
+from datetime import datetime
+
 class User:
     def __init__(self, username, email, password, about_me):
         self.username = username
@@ -28,6 +30,7 @@ class User:
 
     def set_about_me(self, about_me):
         self.about_me = about_me
+
 class Edit:
     def __init__(self, password, about_me):
         self.password = password
@@ -45,6 +48,24 @@ class Edit:
     def set_about_me(self, about_me):
         self.about_me = about_me
 
+class Review:
+    def __init__(self, title, review):
+        self.title = title
+        self.review = review
+        self.createTime = datetime.now()
+        self.currentTime = str(self.createTime.day) + "-" + str(self.createTime.month) + "-" + str(self.createTime.year)  # DD-MM-YYYY format
 
+    def get_title(self):
+        return self.title
 
+    def get_review(self):
+        return self.review
 
+    def set_title(self, title):
+        self.title = title
+
+    def set_review(self, review):
+        self.review = review
+
+    def get_date(self):
+        return self.currentTime

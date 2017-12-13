@@ -1,5 +1,5 @@
 {% extends "template.html" %}
-
+{% from 'Includes/_formhelper.html' import render_field %}
 {% block body %}
   <div class="container-fluid">
   <h1>Edit Your Profile</h1>
@@ -8,12 +8,12 @@
       <table>
           <tr>
               <td>Change password:</td>
-              <td>{{ form.password(size=24) }}</td>
+              <td>{{ render_field(form.password, class="form-control") }}</td>
           </tr>
 
           <tr>
               <td>About yourself:</td>
-              <td>{{ form.about_me(cols=32, rows=4) }}</td>
+              <td>{{ render_field(form.about_me,class="form-control") }}</td>
           </tr>
           <tr>
               <td></td>

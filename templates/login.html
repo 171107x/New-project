@@ -1,54 +1,52 @@
 {% extends "bootstrap/base.html" %}
 
 {% block content %}
+{% from 'Includes/_formhelper.html' import render_field %}
+{% include 'Includes/_messages.html' %}
+<nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+<div class="container">
+	<div class="navbar-header">
+		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
+		<i class="fa fa-bars"></i>
+		</button>
+		<a class="navbar-brand page-scroll" href="/home">
+		SMART KAMPUNG </a>
+	</div>
+	<!-- Collect the nav links, forms, and other content for toggling -->
+	<div class="collapse navbar-collapse navbar-right navbar-main-collapse">
+		<ul class="nav navbar-nav">
 
-{% include 'includes/_messages.html' %}
-<div class="col-md-4">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Register/Login
+                <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                <li><a href="/signup">Register</a></li>
+                <li><a href="/login">Log In</a></li>
+            </ul>
+            </li>
+		</ul>
+	</div>
+	<!-- /.navbar-collapse -->
+</div>
+<!-- /.container -->
+</nav>
+<br><br><br><br>
     <div class="container">
     <h2 class="display-3 text-center" >Login</h2>
     <form method="POST" action="/login">
         {{ form.hidden_tag() }}
     <div class="form-group">
-        <div class="col-4">
-        <p class="lead">{{ form.email.label }}: </p>
-        </div>
-        {% if form.email.errors %}
-            {% for error in form.email.errors %}
-                <p class="alert alert-danger">{{ error }}</p>
-            {% endfor %}
-        {% endif %}
-
-        <div class="col-6">
-        {{ form.email }}
-        </div>
+        {{ render_field(form.username, class="form-control") }}
     </div>
     <div class="form-group">
-        <div class="col-4">
-        <p class="lead">{{ form.username.label }}: </p>
-        </div>
-        {% if form.username.errors %}
-            {% for error in form.username.errors %}
-                <p class="alert alert-danger">{{ error }}</p>
-            {% endfor %}
-        {% endif %}
-
-        <div class="col-6">
-        {{ form.username }}
-        </div>
+        {{ render_field(form.email, class="form-control") }}
     </div>
     <div class="form-group">
-        <p class="lead">{{ form.password.label }}: </p>
-        {% if form.password.errors %}
-            {% for error in form.password.errors %}
-                <p class="alert alert-danger">{{ error }}</p>
-            {% endfor %}
-        {% endif %}
-
-        {{ form.password }}
+        {{ render_field(form.password, class="form-control") }}
     </div>
         {{ form.submit(class="btn-primary") }}
     </form>
     </div>
-</div>
+
 
 {% endblock %}
