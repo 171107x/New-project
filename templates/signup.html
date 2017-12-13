@@ -1,62 +1,57 @@
 {% extends "bootstrap/base.html" %}
 
 {%  include 'Includes/_messages.html' %}
-
+{% from "Includes/_formhelper.html" import render_field %}
 {% block body %}
+<nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+<div class="container">
+	<div class="navbar-header">
+		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
+		<i class="fa fa-bars"></i>
+		</button>
+		<a class="navbar-brand page-scroll" href="/home">
+		SMART KAMPUNG </a>
+	</div>
+	<!-- Collect the nav links, forms, and other content for toggling -->
+	<div class="collapse navbar-collapse navbar-right navbar-main-collapse">
+		<ul class="nav navbar-nav">
 
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Register/Login
+                <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                <li><a href="/signup">Register</a></li>
+                <li><a href="/login">Log In</a></li>
+            </ul>
+            </li>
+		</ul>
+	</div>
+	<!-- /.navbar-collapse -->
+</div>
+<!-- /.container -->
+</nav>
+<br><br><br><br>
         <div class="container">
-            <h2>Create an account</h2>
+            <h2 class="display-3 text-center">Create an account</h2>
 
             <form method="POST" action="/signup">
                 {{ form.hidden_tag() }}
 
                 <div class="form-group">
-                    {{ form.username.label }}
-
-                    {% if form.username.errors %}
-                        {% for error in form.username.errors %}
-                            <p class="alert alert-danger">{{ error }}</p>
-                        {% endfor %}
-                    {% endif %}
-
-                    {{ form.username }}
+                    {{ render_field(form.username, class="form-control") }}
                 </div>
 
 
 
                 <div class="form-group">
-                    {{ form.email.label }}
-
-                    {% if form.email.errors %}
-                        {% for error in form.email.errors %}
-                            <p class="alert alert-danger">{{ error }}</p>
-                        {% endfor %}
-                    {% endif %}
-
-                    {{ form.email }}
+                    {{ render_field(form.email, class="form-control") }}
                 </div>
 
                 <div class="form-group">
-                    {{ form.password.label }}
-
-                    {% if form.password.errors %}
-                        {% for error in form.password.errors %}
-                            <p class="alert alert-danger">{{ error }}</p>
-                        {% endfor %}
-                    {% endif %}
-
-                    {{ form.password }}
+                    {{ render_field(form.password, class="form-control") }}
                 </div>
                 <div class="form-group">
-                    {{ form.about_me.label }}
-
-                    {% if form.about_me.errors %}
-                        {% for error in form.about_me.errors %}
-                            <p class="alert alert-danger">{{ error }}</p>
-                        {% endfor %}
-                    {% endif %}
-
-                    {{ form.about_me }}
+                    {{ render_field(form.about_me, class="form-control") }}
                 </div>
 
                 {{ form.submit(class="btn btn-success") }}
@@ -64,5 +59,11 @@
 
         </div>
 
-
+<script src="../static/js/jquery.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="../static/js/bootstrap.min.js"></script>
+<!-- Plugin JavaScript -->
+<script src="../static/js/jquery.easing.min.js"></script>
+<!-- Custom Theme JavaScript -->
+<script src="../static/js/theme.js"></script>
 {% endblock %}
