@@ -19,10 +19,9 @@
 {% endif %}
 {% block body %}
     <div class="jumbotron text-center">
-        <h1>Welcome To Library Loan System</h1>
+        <h1>Welcome to Events page</h1>
     </div>
 {% endblock %}
-    <h1>New Publication</h1>
     <script>
         $(document).ready(function () {
             $('#book').show();
@@ -66,12 +65,33 @@
                 </div>
             </div>
         </div>
-                        <div class="form-group col-md-1">
-                    <input type="submit" value="Submit" class="btn btn-info"/>
-                </div>
+        <div class="form-group col-md-1">
+            <input type="submit" value="Submit" class="btn btn-info"/>
+        </div>
+    </form>
+        {% for i in allE %}
+        <p>Title:
+        {{ i['title'] }}
+        </p>
+        <p>Category:
+        {{ i['category'] }}
+        </p>
+        <p>Description:
+        {{ i['description'] }}
+        </p>
+        <p>Location:
+        {{ i['location'] }}
+        </p>
+        <p>Time start:
+        {{ i['timeStart'] }}
+        </p>
+        <p>Time end:
+        {{ i['timeEnd'] }}
+        </p>
+        {% endfor %}
             </div>
         </div>
 
-    </form>
+
 </body>
 </html>

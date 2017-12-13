@@ -27,7 +27,3 @@ class Forum:
 
     def get_date(self):
         return self.currentTime
-
-
-testF = Forum('Hi','Bye')
-print(testF.get_date())

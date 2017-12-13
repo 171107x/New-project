@@ -38,35 +38,18 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="form-group">
-				<form method="POST" action="/forum">
-				<div class="col-lg-1">
-				</div>
-				<div class="col-lg-6">
-					{{ render_field(form.forumText, class_="form-control", id_="Status" )}}
-					{{ render_field(form.forumType, class_="form-control statusType", id_="status-type" )}}
-					<input type="submit" class="btn btn-primary" id="submit" value="Submit" onclick="Beep()"></input>
-				</div>
-                </form>
-				<div class="col-lg-4">
-					<ul>
-						<li class="categories" id="food"><span>Food</span></li>
-						<li class="categories" id="movies"><span>Movies</span></li>
-						<li class="categories" id="childcare"><span>ChildCare</span></li>
-						<li class="categories" id="eldercare"><span>ElderCare</span></li>
-						<li class="categories" id="housekeeping"><span>HouseKeeping</span></li>
-					</ul>
-				</div>
-				<div class="col-lg-1">
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="form-group">
 				<div class="col-lg-1">
 				</div>
 				<div class="col-lg-10">
 					<div class="container">
 						<div class="panel-group">
+							<form method="POST" action="/forum">
+							<p>
+								{{ render_field(forumFilter.forumFilter)}}
+								<input type="submit" class="btn btn-primary" value="Submit"></input>
+								<button type="button" style="float:right;" class="btn btn-danger" onclick="window.location.href='/postForum'">Create a forum</button>
+							</p>
+							</form>
 							<div class="panel panel-default forum-section">
 								<div class="panel-heading">
 									Welcome to the forum section
