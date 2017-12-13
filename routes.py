@@ -154,7 +154,7 @@ def edit():
                 'about_me': about_me,
                 'password': password
                 })
-                
+
             return redirect(url_for('user'))
     return render_template('edit.html', form=form)
 
