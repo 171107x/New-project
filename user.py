@@ -1,9 +1,12 @@
 class User:
-    def __init__(self, username, email, password):
+    def __init__(self, username, email, password, about_me):
         self.username = username
         self.email = email
         self.password = password
-        self.about_me = ''
+        self.about_me = about_me
+
+    def get_about_me(self):
+        return self.about_me
 
     def get_username(self):
         return self.username
@@ -23,19 +26,21 @@ class User:
     def set_password(self, password):
         self.password = password
 
+    def set_about_me(self, about_me):
+        self.about_me = about_me
 class Edit:
-    def __init__(self, username, about_me):
-        self.username = username
+    def __init__(self, password, about_me):
+        self.password = password
         self.about_me = about_me
 
-    def get_username(self):
-        return self.username
+    def get_password(self):
+        return self.password
 
     def get_about_me(self):
         return self.about_me
 
-    def set_username(self, username):
-        self.username = username
+    def set_password(self, password):
+        self.username = password
 
     def set_about_me(self, about_me):
         self.about_me = about_me

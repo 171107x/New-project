@@ -6,10 +6,12 @@ class SignupForm(Form):
     username = StringField('Username', validators=[DataRequired("Please enter your username.")])
     email = StringField('Email', validators=[DataRequired("Please enter your email address"), Email("Please enter your email address")])
     password = PasswordField('Password', validators=[DataRequired("Please enter your passwords"),Length(min=6, message="Passwords must be 6 characters or more")])
+    about_me = TextAreaField('About me', validators=[Length(min=0, max=140)])
     submit = SubmitField('Sign up')
 
 class LoginForm(Form):
     username = StringField('Username', validators=[DataRequired("Please enter your username")])
+    email = StringField('Email', validators=[DataRequired("Please enter your email address"),Email("Please enter your email address")])
     password = PasswordField('Password', validators=[DataRequired("Please enter a password")])
     submit = SubmitField('Sign in')
 
