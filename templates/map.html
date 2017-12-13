@@ -1,0 +1,93 @@
+<html>
+<body>
+ <h1 id="view">GPS of user</h1>
+    <div id="map"></div>
+
+    <script>
+    var map, infoWindow;
+      function initMap() {
+          var nyp = {lat:1.380186 , lng:103.849042};
+          var amkhub = {lat:1.369404500, lng:103.848792000};
+
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: -34.397, lng: 150.644},
+          zoom: 13
+        });
+
+        infoWindow = new google.maps.InfoWindow;
+
+        // Try HTML5 geolocation.
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+
+            infoWindow.setPosition(pos);
+            infoWindow.setContent('Location found.');
+            infoWindow.open(map);
+            map.setCenter(pos);
+          }, function() {
+            handleLocationError(true, infoWindow, map.getCenter());
+          });
+        } else {
+          // Browser doesn't support Geolocation
+          handleLocationError(false, infoWindow, map.getCenter());
+        }
+            // {#Add Markers#}
+          var nyp_marker = new google.maps.Marker({
+          position: nyp,
+          map: map,
+          title: 'NYP'
+        });
+
+          var location_Marker = new google.maps.Marker({
+          position: pos,
+          map: map,
+          title: 'You are here'
+        });
+
+          var amkhub_Marker = new google.maps.Marker({
+          position: amkhub,
+          map: map,
+          title: 'Ang Mo Kio Hub'
+        });
+      }
+
+        // {#Location Error#}
+      function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(browserHasGeolocation ?
+                              'Error: The Geolocation service failed.' :
+                              'Error: Your browser doesn\'t support geolocation.');
+        infoWindow.open(map);
+      }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1VFPDUTlcWoT2-D68hyWVuQ8zDRblVKo&callback=initMap" async defer></script>
+<style>
+      #map {
+        height: 50%;
+        width: 40%;
+        margin:auto;
+      }
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #view{
+          text-align:center;
+        font-weight: bold;
+        font-style: italic;
+        border-bottom: 2px solid darkred;
+        margin-bottom: 20px;
+        font-size: 15px;
+        padding-bottom: 3px;
+        font-size:200%;
+      }
+        a { color:black !important; }
+        a:hover { color:red !important;}
+    </style>
+</body>
+</html>
