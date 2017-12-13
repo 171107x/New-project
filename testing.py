@@ -38,6 +38,8 @@ class eventsForm(Form):
 def new():
     form = eventsForm(request.form)
     allE = []
+    eventFire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/ ')
+    allEvent = eventFire.get('Events', None)
     if request.method == 'POST' and form.validate():
             title = form.title.data
             location = form.location.data
@@ -48,11 +50,8 @@ def new():
             date = form.date.data
 
             event = Events(title,location,category,timestart,timeend,description,date)
-            eventFire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/ ')
-            allEvent = eventFire.get('Events', None)
             # This is to make the events name +1
             try:
-
                 count = len(allEvent) +1
             except TypeError:
                 count = 1
@@ -66,7 +65,7 @@ def new():
             # for key in allEvent:
             #     if key == 'test2':
             #         print(allEvent[key])
-
+            #
             eventFire.put('Events','test'+str(count),{
                 'title': event.get_title(),
                 'location': event.get_location(),
@@ -76,14 +75,55 @@ def new():
                 'description': event.get_description(),
                 'date': event.get_date()
             })
+    try:
+        for key in allEvent:
+            allE.append(allEvent[key])
+        allE = reversed(allE)
+    except TypeError:
+        allE = []
 
+    return render_template('showEvent.html', form=form, allE=allE)
+
+@app.route('/createEvent',methods=['POST','GET'])
+def create_forum():
+    form = eventsForm(request.form)
+    allE = []
+    eventFire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/ ')
+    allEvent = eventFire.get('Events', None)
+    if request.method == 'POST':
+        title = form.title.data
+        location = form.location.data
+        category = form.category.data
+        timestart = form.timeStart.data
+        timeend = form.timeEnd.data
+        description = form.description.data
+        date = form.date.data
+
+        event = Events(title, location, category, timestart, timeend, description, date)
+
+        try:
+            count = len(allEvent) + 1
+        except TypeError:
+            count = 1
+
+        eventFire.put('Events', 'test'+str(count), {
+            'title': event.get_title(),
+            'location': event.get_location(),
+            'category': event.get_category(),
+            'timeStart': event.get_timestart(),
+            'timeEnd': event.get_timeend(),
+            'description': event.get_description(),
+            'date': event.get_date()
+        })
+
+        try:
             for key in allEvent:
                 allE.append(allEvent[key])
+            allE = reversed(allE)
+        except TypeError:
+            allE = []
 
-    return render_template('eventdesign.html', form=form, allE=allE)
-
-
-
+    return render_template('createEvent.html',form=form)
 if __name__ == '__main__':
     app.secret_key = 'secret123'
     app.run(debug=True)
