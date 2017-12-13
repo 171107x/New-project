@@ -10,6 +10,20 @@
         {{ form.hidden_tag() }}
     <div class="form-group">
         <div class="col-4">
+        <p class="lead">{{ form.email.label }}: </p>
+        </div>
+        {% if form.email.errors %}
+            {% for error in form.email.errors %}
+                <p class="alert alert-danger">{{ error }}</p>
+            {% endfor %}
+        {% endif %}
+
+        <div class="col-6">
+        {{ form.email }}
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-4">
         <p class="lead">{{ form.username.label }}: </p>
         </div>
         {% if form.username.errors %}
