@@ -21,6 +21,15 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+     <style>
+                .container{
+                    text-align: center;
+                }
+                .tip {
+                    width: 100%;
+                }
+                th {text-align: center}
+            </style>
 </head>
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
 <!-- Navigation -->
@@ -88,7 +97,7 @@
 <section>
 <div class="container">
 
-            <table style="width:100%">
+    <table style="width:100%">
                  <thead>
                   <tr>
                     <th>name</th>
@@ -97,16 +106,13 @@
                 </thead>
 
                 <tr>
-                    {% for retrieval in retrival %}
-                <td>{{ retrieval }}</td>
-                    {% endfor %}
-                </tr>
-                    <br />
-                <tr>
-                    {% for retrieval2 in retrival2 %}
-                <td>{{ retrieval2 }}</td>
-                    {% endfor %}<br>
-                </tr>
+                {% for i in range(retrival | length) %}
+                <td>{{ retrival[i] }}</td>
+                <td>{{ retrival2[i] }}</td>
+                    </tr>
+                    <br>
+                 {% endfor %}
+
             </table>
 
         </div>

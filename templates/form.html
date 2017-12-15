@@ -49,7 +49,7 @@ div {
             {% from "formhelper.html" import render_field%}
                 <div class="form-group">
 
-                    {{ render_field(form.name_tips, class_="form-control") }}
+                    {{ render_field(session.username, class_="form-control") }}
 
                 </div>
 
