@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, session, redirect, url_for, flash, g
 from flask_bootstrap import Bootstrap
+from flask_mail import Mail, Message
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from forms import SignupForm, LoginForm, EditForm, ReviewForm
 from user import User, Edit, Review
 from firebase import firebase
@@ -32,6 +34,11 @@ config = {
 
 root = db.reference()
 app = Flask(__name__)
+app.config.from_pyfile('config.cfg')
+
+mail = Mail(app)
+
+s = URLSafeTimedSerializer('Thisisasecret!')
 Bootstrap(app)
 
 app.secret_key = "baby123"
@@ -145,13 +152,33 @@ def signup():
                 'password': user.get_password(),
                 'about_me': about_me
             })
+            token = s.dumps(email, salt='email-confirm')
+
+            msg = Message('Confirm Email', sender='nypsmartkampung@gmail.com', recipients=[email])
+
+            link = url_for('confirm_email', token=token, _external=True)
+
+            msg.body = 'Your link is {}'.format(link)
+
+            mail.send(msg)
+
+
 
             session['email'] = user.email
             session['username'] = user.username
             session['about_me'] = user.about_me
-            return redirect(url_for('home'))
+            return '<h1>The email you entered is {}. The token is {}</h1>'.format(email, token)
+
     elif request.method == 'GET':
         return render_template('signup.html', form=form)
+
+@app.route('/confirm_email/<token>')
+def confirm_email(token):
+    try:
+        email = s.loads(token, salt='email-confirm', max_age=3600)
+    except SignatureExpired:
+        return '<h1>The token is expired!</h1>'
+    return '<h1>The token works!</h1>'
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -192,67 +219,91 @@ def login():
     elif request.method == "GET":
         return render_template("login.html", form=form)
 
-@app.route('/user')
-def user():
+@app.route('/user/<username>')
+def user(username):
     if 'username' in session:
         form = ReviewForm(request.form)
+        userFire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com')
+        allUser = userFire.get('userInfo', None)
+
+        bioList = []
+        titleList = []
+        timeList = []
+        reviewList = []
+        posterList = []
+
+        bio = root.child('userInfo').get()
+        for key in bio:
+            if username == bio[key]['username']:
+                bioList.append(bio[key]['about_me'])
+
+                print(bioList)
+        review = root.child('review').get()
+        if review != None:
+            for reviews in review:
+                if username == review[reviews]['username']:
+                    titleList.append(review[reviews]['title'])
+                    timeList.append(review[reviews]['time'])
+                    reviewList.append(review[reviews]['review'])
+                    posterList.append(review[reviews]['poster'])
+        allList = [titleList, timeList, reviewList, posterList]
+
         if request.method == 'POST' and form.validate():
             title = form.title.data
             review = form.review.data
 
-            userFire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com')
-            result = userFire.get('userInfo', None)
-
-
             review = Review(title, review)
             review_db = root.child('review')
             review_db.push({
+                'username' : username,
                 'title' : review.get_title(),
                 'review' : review.get_review(),
-                'time' : review.get_date()
+                'time' : review.get_date(),
+                'poster' : session['username']
 
                     })
-            return redirect(url_for('user'))
+            return redirect(url_for('user',username=username))
         '''
             titleList = []
             reviewList = []
 
-            for i in result:
-                if session['username'] == result[key]['username'] and session['email'] == result[key]['email']:
-                    titleList.append(result[i]['title'])
-                    reviewList.append(result[i]['review'])
+            bio = root.child('userInfo').get()
+                for key in bio:
+                    print(allUser[key]['about_me'])
+                    if username == bio[key]['username']:
+                        bioList.append(bio[key]['review'])
+                        usernameList.append((bio[key])[''])
             return redirect(url_for('user'))
         '''
-        return render_template('userProfile.html', form=form)
+        return render_template('userProfile.html', form=form, username=username, bioList=bioList,allList=allList)
 
 @app.route('/edit', methods=["GET", "POST"])
 def edit():
     form = EditForm(request.form)
 
     if request.method == 'POST':
+        '''
         userFire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com')
         allUser = userFire.get('userInfo',None)
-
+        '''
         username = session['username']
         email = session['email']
 
         about_me = form.about_me.data
         password = form.password.data
 
-
+        allUser = root.child('userInfo').get()
         for key in allUser:
             print(allUser[key]['username'])
             if username == allUser[key]['username'] and email == allUser[key]['email']:
-                userFire.put('userInfo',key,{
-                'username': username,
-                'email': email,
+                user_db = root.child('userInfo/'+key)
+                user_db.update({
                 'about_me': about_me,
                 'password': password
                 })
 
-            return redirect(url_for('user'))
+            return redirect(url_for('user',username=username))
     return render_template('edit.html', form=form)
-
 
 
 @app.route('/logout')

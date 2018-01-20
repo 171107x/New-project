@@ -7,7 +7,7 @@
 <div class="container target">
     <div class="row">
         <div class="col-sm-10">
-             <h1 class="">{{ session.username }}</h1>
+             <h1 class="">{{ username }}</h1>
 
           <button type="button" class="btn btn-success">Book me!</button>  <button type="button" class="btn btn-info">Send me a message</button>
 <br>
@@ -23,7 +23,7 @@
             <ul class="list-group">
                 <li class="list-group-item text-muted" contenteditable="false">Profile</li>
                 <li class="list-group-item text-right"><span class="pull-left"><strong class="">Last seen</strong></span> Yesterday</li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Name</strong></span> {{ session.username }}
+                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Name</strong></span> {{ username }}
                     </li>
               <li class="list-group-item text-right"><span class="pull-left"><strong class="">Role: </strong></span> Pet Sitter
 
@@ -50,14 +50,24 @@
         <!--/col-3-->
         <div class="col-sm-9" style="" contenteditable="false">
             <div class="panel panel-default">
-                <div class="panel-heading">{{ session.username }}'s Bio</div>
-                <div class="panel-body">Description about me
+                <div class="panel-heading">{{ username }}'s Bio</div>
+                <div class="panel-body">
+
+                    {{ bioList[0] }}
                 </div>
             </div>
         </div>
         <div class="col-sm-9" style="" contenteditable="false">
+            {% for i in allList %}
+            {{ i[0] }}
+            {% endfor %}
+        </div>
+
+        {% if username != session['username'] %}
+        <div class="col-sm-9" style="" contenteditable="false">
             <div class="container">
               <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add a review</button>
+
 
               <!-- Modal -->
               <div class="modal fade" id="myModal" role="dialog">
@@ -69,25 +79,27 @@
                       <button type="button" class="close" data-dismiss="modal">&times;</button>
                       <h4 class="modal-title">Review</h4>
                     </div>
+                      <form id="review" method="POST">
                         <div class="modal-body">
-                        <form id="review" method="POST" action="/user">
+
                             {{ form.hidden_tag() }}
                           {{ render_field(form.title, class="form-control") }}
                           {{ render_field(form.review, class="form-control") }}
-                        </form>
                         </div>
+                          <div class="modal-footer">
+                            {{ form.submit(class="btn btn-success")}}
+                          </div>
+                      </form>
 
-                    <div class="modal-footer">
-                      {{ form.submit(class="btn btn-info")}}
-                    </div>
                   </div>
 
                 </div>
               </div>
 
+
             </div>
         </div>
-
+        {% endif %}
 </div>
 </div>
 
