@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, session, redirect, url_for, f
 from flask_bootstrap import Bootstrap
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
-from forms import SignupForm, LoginForm, EditForm, ReviewForm
+from forms import SignupForm, LoginForm, EditForm, ReviewForm, EmailForm, PasswordForm
 from user import User, Edit, Review
 from firebase import firebase
 from Events import Events
@@ -12,7 +12,7 @@ from firebase_admin import credentials, db
 from flask_sqlalchemy import SQLAlchemy
 import flask_whooshalchemy as wa
 from wtforms import Form, StringField, TextAreaField, RadioField, SelectField, validators
-import pyrebase
+import random
 
 cred = credentials.Certificate('cred\oopproject-f5214-firebase-adminsdk-vkzv0-5ab9f1da25.json')
 default_app = firebase_admin.initialize_app(cred, {
@@ -143,6 +143,7 @@ def signup():
             email = form.email.data
             password = form.password.data
             about_me = form.about_me.data
+            region = form.region.data
 
             user = User(username, email, password, about_me)
             user_db = root.child('userInfo')
@@ -150,7 +151,8 @@ def signup():
                 'username' : user.get_username(),
                 'email': user.get_email(),
                 'password': user.get_password(),
-                'about_me': about_me
+                'about_me': user.get_about_me(),
+                'region' : region
             })
             token = s.dumps(email, salt='email-confirm')
 
@@ -158,15 +160,13 @@ def signup():
 
             link = url_for('confirm_email', token=token, _external=True)
 
-            msg.body = 'Your link is {}'.format(link)
+            msg.body = 'You have successfully register. Please click on this link to continue {}'.format(link)
 
             mail.send(msg)
 
 
-
             session['email'] = user.email
             session['username'] = user.username
-            session['about_me'] = user.about_me
             return '<h1>The email you entered is {}. The token is {}</h1>'.format(email, token)
 
     elif request.method == 'GET':
@@ -178,7 +178,7 @@ def confirm_email(token):
         email = s.loads(token, salt='email-confirm', max_age=3600)
     except SignatureExpired:
         return '<h1>The token is expired!</h1>'
-    return '<h1>The token works!</h1>'
+    return render_template('confirm-email.html')
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -192,25 +192,22 @@ def login():
             flash(error, 'danger')
             return render_template("login.html", form=form)
         else:
-            email = form.email.data
+
             username = form.username.data
             password = form.password.data
 
-            emailList = []
+
             usernameList = []
             passList = []
 
             result = root.child('userInfo').get()
 
             for users in result:
-                emailList.append(result[users]['email'])
                 usernameList.append(result[users]['username'])
                 passList.append(result[users]['password'])
-            attempted_email = request.form['email']
             attempted_username = request.form['username']
             attempted_password = request.form['password']
-            if attempted_email in emailList and attempted_username in usernameList and attempted_password in passList:
-                session['email'] = form.email.data
+            if attempted_username in usernameList and attempted_password in passList:
                 session['username'] = form.username.data
                 return redirect(url_for('home'))
             else:
@@ -218,6 +215,63 @@ def login():
 
     elif request.method == "GET":
         return render_template("login.html", form=form)
+
+@app.route('/reset', methods=["GET", "POST"])
+def reset():
+    form = EmailForm()
+    if request.method == 'POST':
+        users = root.child('userInfo').get()
+        for user in users:
+            if users[user]['email'] == form.email.data:
+                email = users[user]['email']
+
+                token = s.dumps(email, salt='password')
+
+                msg = Message('Reset Password', sender='nypsmartkampung@gmail.com', recipients=[email])
+
+                link = url_for('reset', token=token, _external=True)
+
+                msg.body = 'Hi ' + users[user]['username'] + '\n Your reset link is {} and expires in 1 day'.format(link)
+
+                mail.send(msg)
+
+                return '<h1>The email you entered is {}. The token is {}</h1>'.format(email, token)
+    return render_template('reset.html', form=form)
+
+@app.route('/reset/<token>')
+def resetpass(token):
+    try:
+        email = s.loads(token, salt='password', max_age=3600)
+    except SignatureExpired:
+        return '<h1>The token is expired!</h1>'
+
+    def generate():
+        alphabet = 'abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        length  = 12
+        password = ''
+
+        for i in range(length):
+            char = random.randrange(len(alphabet))
+            password += alphabet[char]
+        return password
+    password = generate()
+    print(password)
+    users = root.child('userInfo').get()
+    tempuser = ''
+    for user in users:
+        if users[user]['email'] == email:
+            user_db = root.child('userInfo/' + user)
+            user_db.update({
+                'password': password
+
+            })
+            tempuser = user
+            break
+
+    message = Message('Reset Password', sender='nypsmartkampung@gmail.com', recipients='email')
+    message.body = 'Hi ' + users[tempuser]['username'] + '\n Your new temporary password is {}'.format(password)
+    mail.send(message)
+    return '<p> check your email</p>'
 
 @app.route('/user/<username>')
 def user(username):
@@ -231,6 +285,7 @@ def user(username):
         timeList = []
         reviewList = []
         posterList = []
+        allList = []
 
         bio = root.child('userInfo').get()
         for key in bio:
@@ -246,7 +301,10 @@ def user(username):
                     timeList.append(review[reviews]['time'])
                     reviewList.append(review[reviews]['review'])
                     posterList.append(review[reviews]['poster'])
-        allList = [titleList, timeList, reviewList, posterList]
+        allList.append(titleList)
+        allList.append(timeList)
+        allList.append(reviewList)
+        allList.append(posterList)
 
         if request.method == 'POST' and form.validate():
             title = form.title.data

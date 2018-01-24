@@ -58,9 +58,13 @@
             </div>
         </div>
         <div class="col-sm-9" style="" contenteditable="false">
-            {% for i in allList %}
-            {{ i[0] }}
+            {% for i in allList[0] %}
+            <p>{{ i }}</p>
+            <p>{{ allList[1] }}</p>
+            <p>{{ allList[2] }}</p>
+            <p>{{ allList[3] }}</p>
             {% endfor %}
+
         </div>
 
         {% if username != session['username'] %}

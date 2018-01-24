@@ -30,24 +30,23 @@
 </div>
 <!-- /.container -->
 </nav>
+
 <br><br><br><br>
-    <div class="container">
-    <h2 class="display-3 text-center" >Login</h2>
-    <form method="POST" action="/login">
-        {{ form.hidden_tag() }}
-    <div class="form-group">
-        {{ render_field(form.username, class="form-control") }}
-    </div>
-    <div class="form-group">
-        {{ render_field(form.password, class="form-control") }}
-    </div>
-        {{ form.submit(class="btn-primary") }}
-    </form>
-        <span class="psw"><a href={{ url_for('reset') }}>Forgot password?</a></span>
+<div class="container">
+    <div class="jumbotron" style="text-align: center;">
+        <p>You will be redirected to the homepage soon!</p>
     </div>
 
+</div>
 
 {% include 'Includes/_footer.html' %}
 
+<script type="text/javascript">
+function RedirectHome()
+{
+window.location="/login";
+}
 
+setTimeout('RedirectHome()', 3000);
+</script>
 {% endblock %}
