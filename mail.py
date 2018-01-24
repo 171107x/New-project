@@ -15,9 +15,9 @@ def index():
 
     msg = Message('Confirm Email', sender='nypsmartkampung@gmail.com', recipients=['dummygaranguni@hotmail.com'])
 
-    link = url_for('confirm_email', token=token, external=True)
+    link = url_for('confirm_email', token=token)
 
-    msg.body = 'Your link is {}'.format(link)
+    msg.body = 'Your link is http://127.0.0.1:5000{} . Click here to confirm'.format(link)
 
     mail.send(msg)
 

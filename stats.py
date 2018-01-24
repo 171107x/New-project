@@ -1,8 +1,16 @@
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, make_response, render_template
+app = Flask(__name__)
 import firebase_admin
 from firebase import firebase
 from firebase_admin import credentials, db
-import plotly
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from io import StringIO
+import random
+from matplotlib.figure import Figure
+from matplotlib.dates import DateFormatter
+# import plotly
 import plotly.plotly as py
 import plotly.graph_objs as go
 #fB creds
@@ -13,8 +21,9 @@ default_app = firebase_admin.initialize_app(cred, {
 fireS = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/')
 root = db.reference()
 #plotly creds
-plotly.tools.set_credentials_file(username='kinnif', api_key='J19CuzqRnpFYYD1SBEiK')
+# plotly.tools.set_credentials_file(username='kinnif', api_key='J19CuzqRnpFYYD1SBEiK')
 
+@app.route('/graphStats.png')
 def printStats():
     northCount = 0
     westCount = 0
@@ -32,11 +41,41 @@ def printStats():
         elif stats[i]['region'] == 'South':
              southCount += 1
 
-        data = [go.Bar(
-                x = ['North','South','East','West'],
-                y = [northCount,southCount,eastCount,westCount]
-            )]
+    label = ['North','East','South','West']
+    statsCount = [
+        northCount,
+        westCount,
+        eastCount,
+        southCount
+    ]
 
-    py.iplot(data,filename='basic-bar')
+    index = np.arange(len(label))
 
-printStats()
+    def plot_bargraph():
+        plt.bar(index,statsCount)
+        plt.xlabel('Number of users',fontsize = 5)
+        plt.ylabel('Location of users',fontsize = 5)
+        plt.xticks(index,label,fontsize=5,rotation=30)
+        plt.title('Numbers of users in Smart Kampung')
+        plt.savefig('graphStats.png')
+
+
+
+    plot_bargraph()
+    # fig = plot_bargraph()
+    # canvas = FigureCanvas(fig)
+    # png_output = StringIO()
+    # canvas.print_png(png_output)
+    # response = make_response(png_output.getvalue())
+    # response.headers['Content-Type'] = 'image/png'
+    # return response
+    #     data = [go.Bar(
+    #             x = ['North','South','East','West'],
+    #             y = [northCount,southCount,eastCount,westCount]
+    #         )]
+    #
+    # py.iplot(data,filename='basic-bar')
+
+
+if __name__ == "__main__":
+    app.run()
