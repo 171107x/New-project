@@ -205,9 +205,9 @@ def signup():
             mail.send(msg)
 
 
-            session['email'] = user.email
+
             session['username'] = user.username
-            return '<h1>The email you entered is {}. The token is {}</h1>'.format(email, token)
+            return render_template('register.html', email=email)
 
     elif request.method == 'GET':
         return render_template('signup.html', form=form)
@@ -269,13 +269,13 @@ def reset():
 
                 msg = Message('Reset Password', sender='nypsmartkampung@gmail.com', recipients=[email])
 
-                link = url_for('reset', token=token, _external=True)
+                link = url_for('reset', token=token)
 
                 msg.body = 'Hi ' + users[user]['username'] + '\n Your reset link is {} and expires in 1 day'.format(link)
 
                 mail.send(msg)
 
-                return '<h1>The email you entered is {}. The token is {}</h1>'.format(email, token)
+                return '{}'.format(link)
     return render_template('reset.html', form=form)
 
 @app.route('/reset/<token>')
