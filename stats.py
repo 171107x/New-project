@@ -11,8 +11,8 @@ import random
 from matplotlib.figure import Figure
 from matplotlib.dates import DateFormatter
 # import plotly
-import plotly.plotly as py
-import plotly.graph_objs as go
+# import plotly.plotly as py
+# import plotly.graph_objs as go
 #fB creds
 cred = credentials.Certificate('cred/oopproject-f5214-firebase-adminsdk-vkzv0-5ab9f1da25.json')
 default_app = firebase_admin.initialize_app(cred, {
@@ -23,7 +23,7 @@ root = db.reference()
 #plotly creds
 # plotly.tools.set_credentials_file(username='kinnif', api_key='J19CuzqRnpFYYD1SBEiK')
 
-@app.route('/graphStats.png')
+@app.route('/graphStats')
 def printStats():
     northCount = 0
     westCount = 0
@@ -76,6 +76,7 @@ def printStats():
     #
     # py.iplot(data,filename='basic-bar')
 
+    return render_template("home.html")
 
 if __name__ == "__main__":
     app.run()
