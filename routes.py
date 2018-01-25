@@ -342,10 +342,9 @@ def user(username):
                     reviewList.append(review[reviews]['review'])
                     posterList.append(review[reviews]['poster'])
         allList.append(titleList)
-        allList.append(timeList)
         allList.append(reviewList)
         allList.append(posterList)
-
+        allList.append(timeList)
         if request.method == 'POST' and form.validate():
             title = form.title.data
             review = form.review.data

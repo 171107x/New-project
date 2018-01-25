@@ -58,10 +58,10 @@
     <form method="POST" action="/login">
         {{ form.hidden_tag() }}
     <div class="form-group">
-        {{ render_field(form.username, class="form-control") }}
+        {{ render_field(form.username, class="form-control",placeholder="Username") }}
     </div>
     <div class="form-group">
-        {{ render_field(form.password, class="form-control") }}
+        {{ render_field(form.password, class="form-control",placeholder="Password") }}
     </div>
         {{ form.submit(class="btn-primary") }}
     </form>

@@ -13,8 +13,8 @@ class SignupForm(Form):
     submit = SubmitField('Sign up')
 
 class LoginForm(Form):
-    username = StringField('Username', validators=[DataRequired("Please enter your username")])
-    password = PasswordField('Password', validators=[DataRequired("Please enter a password")])
+    username = StringField('', validators=[DataRequired("Please enter your username")])
+    password = PasswordField('', validators=[DataRequired("Please enter a password")])
     submit = SubmitField('Sign in')
 
 class EditForm(Form):

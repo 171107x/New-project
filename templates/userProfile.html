@@ -125,17 +125,19 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-9" style="" contenteditable="false">
-            {% for i in allList[0] %}
-            <p>{{ i }}</p>
-            <p>{{ allList[1] }}</p>
-            <p>{{ allList[2] }}</p>
-            <p>{{ allList[3] }}</p>
-            {% endfor %}
+        {% if username != session['username'] %}
+        {% for i in range(allList[0] | length) %}
+        <div class="col-sm-4" style="text-align: center;" contenteditable="false">
+            <div class="panel panel-default">
+            <div class="panel-heading">By: {{ allList[2][i] }} On: {{ allList[3][i] }}</div>
+
+            <p>{{ allList[1][i] }}</p>
+
 
         </div>
+        </div>
+        {% endfor %}
 
-        {% if username != session['username'] %}
         <div class="col-sm-9" style="" contenteditable="false">
             <div class="container">
               <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add a review</button>
