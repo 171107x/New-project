@@ -17,12 +17,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 from io import StringIO
 import random
+import stats
 
 fireS = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/')
 cred = credentials.Certificate('cred\oopproject-f5214-firebase-adminsdk-vkzv0-5ab9f1da25.json')
-default_app = firebase_admin.initialize_app(cred, {
-    'databaseURL': 'https://oopproject-f5214.firebaseio.com/ '
-})
+# default_app = firebase_admin.initialize_app(cred, {
+#     'databaseURL': 'https://oopproject-f5214.firebaseio.com/ '
+# })
 
 config = {
     'apiKey': "AIzaSyCHVUY5JdL1gqZx7juQQlaIAIB8R76A7ZE",
@@ -130,6 +131,40 @@ class Tips():
 
 @app.route("/")
 def index():
+    def printStats():
+        northCount = 0
+        westCount = 0
+        eastCount = 0
+        southCount = 0
+        stats = fireS.get('userInfo', None)
+        print(stats)
+        for i in stats:
+            if stats[i]['region'] == 'North':
+                northCount += 1
+            elif stats[i]['region'] == 'West':
+                westCount += 1
+            elif stats[i]['region'] == 'East':
+                eastCount += 1
+            elif stats[i]['region'] == 'South':
+                southCount += 1
+
+        label = ['North', 'East', 'South', 'West']
+        statsCount = [
+            northCount,
+            westCount,
+            eastCount,
+            southCount
+        ]
+
+        index = np.arange(len(label))
+
+        def plot_bargraph():
+            plt.bar(index, statsCount)
+            plt.xlabel('Number of users', fontsize=5)
+            plt.ylabel('Location of users', fontsize=5)
+            plt.xticks(index, label, fontsize=5, rotation=30)
+            plt.title('Numbers of users in Smart Kampung')
+            plt.savefig('graphStats.png')
     return render_template("index.html")
 
 
@@ -380,6 +415,42 @@ def logout():
 def home():
     if 'username' not in session:
         return redirect(url_for('login'))
+
+    def printStats():
+        northCount = 0
+        westCount = 0
+        eastCount = 0
+        southCount = 0
+        stats = fireS.get('userInfo', None)
+        print(stats)
+        for i in stats:
+            if stats[i]['region'] == 'North':
+                northCount += 1
+            elif stats[i]['region'] == 'West':
+                westCount += 1
+            elif stats[i]['region'] == 'East':
+                eastCount += 1
+            elif stats[i]['region'] == 'South':
+                southCount += 1
+
+        label = ['North', 'East', 'South', 'West']
+        statsCount = [
+            northCount,
+            westCount,
+            eastCount,
+            southCount
+        ]
+
+        index = np.arange(len(label))
+
+        def plot_bargraph():
+            plt.bar(index, statsCount)
+            plt.xlabel('Number of users', fontsize=5)
+            plt.ylabel('Location of users', fontsize=5)
+            plt.xticks(index, label, fontsize=5, rotation=30)
+            plt.title('Numbers of users in Smart Kampung')
+            plt.savefig('graphStats.png')
+
     return render_template("home.html")
 
 @app.route('/photowall')
@@ -613,43 +684,6 @@ def form():
         print(name)
         return redirect('form')
     return render_template('form.html', form=form)
-
-@app.route('/graphStats.png')
-def printStats():
-    northCount = 0
-    westCount = 0
-    eastCount = 0
-    southCount = 0
-    stats = fireS.get('userInfo', None)
-    print(stats)
-    for i in stats:
-        if stats[i]['region']== 'North':
-             northCount += 1
-        elif stats[i]['region'] == 'West':
-             westCount += 1
-        elif stats[i]['region'] == 'East':
-             eastCount += 1
-        elif stats[i]['region'] == 'South':
-             southCount += 1
-
-    label = ['North','East','South','West']
-    statsCount = [
-        northCount,
-        westCount,
-        eastCount,
-        southCount
-    ]
-
-    index = np.arange(len(label))
-
-    def plot_bargraph():
-        plt.bar(index,statsCount)
-        plt.xlabel('Number of users',fontsize = 5)
-        plt.ylabel('Location of users',fontsize = 5)
-        plt.xticks(index,label,fontsize=5,rotation=30)
-        plt.title('Numbers of users in Smart Kampung')
-        plt.savefig('graphStats.png')
-
 
 @app.route('/tips')
 def retrieveTip():
