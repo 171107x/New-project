@@ -589,6 +589,7 @@ def forum():
             foodPlaceholder.append(result[i]['type'])
             foodPlaceholder.append(result[i]['text'])
             foodPlaceholder.append(result[i]['time'])
+            foodPlaceholder.append(result[i]['username'])
             foodList.append(foodPlaceholder)
 
     for i in result:
@@ -629,6 +630,7 @@ def forum():
         keyList.append(result[key]['type'])
         keyList.append(result[key]['text'])
         keyList.append(result[key]['time'])
+        keyList.append(result[key]['username'])
         forumList.append(keyList)
     if choice == 'Food':
         forumList = foodList
@@ -659,7 +661,8 @@ def post_forum():
 
             'text' : newForum.get_text(),
             'type' : newForum.get_type(),
-            'time' : newForum.get_date()
+            'time' : newForum.get_date(),
+            'username' : session['username']
 
         })
 
