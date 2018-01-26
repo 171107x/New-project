@@ -598,6 +598,7 @@ def forum():
             moviePlaceholder.append(result[i]['type'])
             moviePlaceholder.append(result[i]['text'])
             moviePlaceholder.append(result[i]['time'])
+            moviePlaceholder.append(result[i]['username'])
             movieList.append(moviePlaceholder)
 
     for i in result:
@@ -606,6 +607,7 @@ def forum():
             elderPlaceholder.append(result[i]['type'])
             elderPlaceholder.append(result[i]['text'])
             elderPlaceholder.append(result[i]['time'])
+            elderPlaceholder.append(result[i]['username'])
             elderList.append(elderPlaceholder)
 
     for i in result:
@@ -614,6 +616,7 @@ def forum():
             housePlaceholder.append(result[i]['type'])
             housePlaceholder.append(result[i]['text'])
             housePlaceholder.append(result[i]['time'])
+            housePlaceholder.append(result[i]['username'])
             housekeepingList.append(housePlaceholder)
 
     for i in result:
@@ -622,6 +625,7 @@ def forum():
             childPlaceholder.append(result[i]['type'])
             childPlaceholder.append(result[i]['text'])
             childPlaceholder.append(result[i]['time'])
+            childPlaceholder.append(result[i]['username'])
             childList.append(childPlaceholder)
 
     forumList = []
