@@ -365,14 +365,13 @@ def user(username):
         '''
         return render_template('userProfile.html', form=form, username=username, bioList=bioList,allList=allList)
 
-@app.route('/edit', methods=["GET", "POST"])
-def edit():
+@app.route('/settings/password', methods=["GET", "POST"])
+def password():
     form = EditForm(request.form)
 
     if request.method == 'POST':
         username = session['username']
 
-        about_me = form.about_me.data
         password = form.password.data
 
         allUser = root.child('userInfo').get()
@@ -381,7 +380,32 @@ def edit():
             if username == allUser[key]['username']:
                 user_db = root.child('userInfo/'+key)
                 user_db.update({
-                'about_me': about_me,
+                'password': password
+                })
+
+            return redirect(url_for('user', username=username))
+    return render_template('password.html', form=form)
+
+@app.route('/settings/account', methods=["GET", "POST"])
+def account():
+    form = EditForm(request.form)
+
+    if request.method == 'POST':
+        username = session['username']
+
+        username2 = form.username.data
+        email = form.email.data
+        about_me = form.about_me.data
+
+
+        allUser = root.child('userInfo').get()
+        for key in allUser:
+            print(allUser[key]['username'])
+            if username == allUser[key]['username']:
+                user_db = root.child('userInfo/'+key)
+                user_db.update({
+                'username': username2,
+                'email': email,
                 'password': password
                 })
 
