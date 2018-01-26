@@ -265,53 +265,44 @@ def reset():
             if users[user]['email'] == form.email.data:
                 email = users[user]['email']
 
-                token = s.dumps(email, salt='password')
+                token = s.dumps(email, salt='recover-key')
 
                 msg = Message('Reset Password', sender='nypsmartkampung@gmail.com', recipients=[email])
 
-                link = url_for('reset', token=token)
+                link = url_for('resetpass', token=token, _external=True)
 
-                msg.body = 'Hi ' + users[user]['username'] + '\n Your reset link is {} and expires in 1 day'.format(link)
+                msg.body = 'Hi ' + users[user]['username'] + ' Your reset link is {} and expires in 1 day'.format(link)
 
                 mail.send(msg)
 
-                return '{}'.format(link)
+                return '<h1>The email you entered is {}. The token is {}</h1>'.format(email, token)
     return render_template('reset.html', form=form)
 
-@app.route('/reset/<token>')
+@app.route('/resetpass/<token>', methods=['GET', 'POST'])
 def resetpass(token):
     try:
-        email = s.loads(token, salt='password', max_age=3600)
-    except SignatureExpired:
-        return '<h1>The token is expired!</h1>'
+        email = s.loads(token, salt='recover-key', max_age=3600)
+    except:
+        return render_template('404.html')
 
-    def generate():
-        alphabet = 'abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-        length  = 12
-        password = ''
+    form = PasswordForm()
+    if request.method == 'POST':
 
-        for i in range(length):
-            char = random.randrange(len(alphabet))
-            password += alphabet[char]
-        return password
-    password = generate()
-    print(password)
-    users = root.child('userInfo').get()
-    tempuser = ''
-    for user in users:
-        if users[user]['email'] == email:
-            user_db = root.child('userInfo/' + user)
-            user_db.update({
-                'password': password
+        password = form.password.data
 
-            })
-            tempuser = user
-            break
+        users = root.child('userInfo').get()
+        for key in users:
+            if email == users[key]['email']:
+                user_db = root.child('userInfo/'+key)
+                user_db.update({
+                    'password': password
+                })
 
-    message = Message('Reset Password', sender='nypsmartkampung@gmail.com', recipients='email')
-    message.body = 'Hi ' + users[tempuser]['username'] + '\n Your new temporary password is {}'.format(password)
-    mail.send(message)
-    return '<p> check your email</p>'
+                return redirect(url_for('login'))
+
+        return render_template('reset_with_token.html', form=form, token=token)
+
+
 
 @app.route('/user/<username>')
 def user(username):
@@ -379,12 +370,7 @@ def edit():
     form = EditForm(request.form)
 
     if request.method == 'POST':
-        '''
-        userFire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com')
-        allUser = userFire.get('userInfo',None)
-        '''
         username = session['username']
-        email = session['email']
 
         about_me = form.about_me.data
         password = form.password.data
@@ -392,14 +378,14 @@ def edit():
         allUser = root.child('userInfo').get()
         for key in allUser:
             print(allUser[key]['username'])
-            if username == allUser[key]['username'] and email == allUser[key]['email']:
+            if username == allUser[key]['username']:
                 user_db = root.child('userInfo/'+key)
                 user_db.update({
                 'about_me': about_me,
                 'password': password
                 })
 
-            return redirect(url_for('user',username=username))
+            return redirect(url_for('user', username=username))
     return render_template('edit.html', form=form)
 
 

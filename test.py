@@ -1,26 +1,29 @@
-@app.route('/edit', methods=["GET", "POST"])
-def edit():
-    form = EditForm(request.form)
+def generate():
+    alphabet = 'abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    length = 12
+    password = ''
 
-    if request.method == 'POST':
-        userFire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com')
-        allUser = userFire.get('userInfo',None)
-
-        username = session['username']
-        email = session['email']
-
-        about_me = form.about_me.data
-        password = form.password.data
+    for i in range(length):
+        char = random.randrange(len(alphabet))
+        password += alphabet[char]
+    return password
 
 
-        for key in allUser:
-            print(allUser[key]['username'])
-            if username == allUser[key]['username'] and email == allUser[key]['email']:
-                user_db = root.child('userInfo',key)
-                user_db.update({
-                'about_me': about_me,
-                'password': password
-                })
+password = generate()
+print(password)
+users = root.child('userInfo').get()
+tempuser = ''
+for user in users:
+    if users[user]['email'] == email:
+        user_db = root.child('userInfo/' + user)
+        user_db.update({
+            'password': password
 
-            return redirect(url_for('user/<username>'))
-    return render_template('edit.html', form=form)
+        })
+        tempuser = user
+        break
+
+msg = Message('Reset Password', sender='nypsmartkampung@gmail.com', recipients='email')
+msg.body = 'Hi ' + users[tempuser]['username'] + '\n Your new temporary password is {}'.format(password)
+mail.send(msg)
+return '<p> check your email</p>'
