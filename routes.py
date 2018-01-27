@@ -13,7 +13,6 @@ from flask_sqlalchemy import SQLAlchemy
 import flask_whooshalchemy as wa
 from wtforms import Form, StringField, TextAreaField, RadioField, SelectField, validators
 import pygal
-from flask_socketio import SocketIO, emit
 import random
 import stats
 
@@ -46,8 +45,6 @@ s = URLSafeTimedSerializer('Thisisasecret!')
 Bootstrap(app)
 
 app.secret_key = "baby123"
-app.config['SECRET_KEY'] = 'asdxswedfrcswqsax12redsx'
-socketio = SocketIO( app )
 
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@localhost/texttest'
@@ -701,19 +698,6 @@ def camera():
 @app.errorhandler(404)
 def error404(error):
     return render_template('404.html'), 404
-
-@app.route('/chat')
-def hello():
-  return render_template( '/chat.html' )
-
-
-def messagereceived():
-  print( 'message was received!!!' )
-
-@socketio.on( 'my event' )
-def handle_my_custom_event( json ):
-  print( 'recived my event: ' + str( json ) )
-  socketio.emit( 'my response', json, callback=messagereceived())
 
 if __name__ == "__main__":
     app.run(debug=True)
