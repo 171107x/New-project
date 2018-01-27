@@ -12,10 +12,7 @@ from firebase_admin import credentials, db
 from flask_sqlalchemy import SQLAlchemy
 import flask_whooshalchemy as wa
 from wtforms import Form, StringField, TextAreaField, RadioField, SelectField, validators
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-import matplotlib.pyplot as plt
-import numpy as np
-from io import StringIO
+import pygal
 import random
 import stats
 
@@ -131,41 +128,30 @@ class Tips():
 
 @app.route("/")
 def index():
-    def printStats():
-        northCount = 0
-        westCount = 0
-        eastCount = 0
-        southCount = 0
-        stats = fireS.get('userInfo', None)
-        print(stats)
-        for i in stats:
-            if stats[i]['region'] == 'North':
-                northCount += 1
-            elif stats[i]['region'] == 'West':
-                westCount += 1
-            elif stats[i]['region'] == 'East':
-                eastCount += 1
-            elif stats[i]['region'] == 'South':
-                southCount += 1
+    northCount = 0
+    westCount = 0
+    eastCount = 0
+    southCount = 0
+    stats = fireS.get('userInfo', None)
+    print(stats)
+    for i in stats:
+        if stats[i]['region'] == 'North':
+            northCount += 1
+        elif stats[i]['region'] == 'West':
+            westCount += 1
+        elif stats[i]['region'] == 'East':
+            eastCount += 1
+        elif stats[i]['region'] == 'South':
+            southCount += 1
 
-        label = ['North', 'East', 'South', 'West']
-        statsCount = [
-            northCount,
-            westCount,
-            eastCount,
-            southCount
-        ]
-
-        index = np.arange(len(label))
-
-        def plot_bargraph():
-            plt.bar(index, statsCount)
-            plt.xlabel('Number of users', fontsize=5)
-            plt.ylabel('Location of users', fontsize=5)
-            plt.xticks(index, label, fontsize=5, rotation=30)
-            plt.title('Numbers of users in Smart Kampung')
-            plt.savefig('graphStats.png')
-    return render_template("index.html")
+    line_chart = pygal.HorizontalBar()
+    line_chart.title = 'Numbers of users in Smart Kampung'
+    line_chart.add('North', northCount)
+    line_chart.add('East', eastCount)
+    line_chart.add('West', westCount)
+    line_chart.add('South', southCount)
+    graph_data = line_chart.render_data_uri()
+    return render_template("index.html",line_chart=graph_data)
 
 
 @app.route("/signup", methods=['GET', 'POST'])
@@ -425,42 +411,30 @@ def home():
     if 'username' not in session:
         return redirect(url_for('login'))
 
-    def printStats():
-        northCount = 0
-        westCount = 0
-        eastCount = 0
-        southCount = 0
-        stats = fireS.get('userInfo', None)
-        print(stats)
-        for i in stats:
-            if stats[i]['region'] == 'North':
-                northCount += 1
-            elif stats[i]['region'] == 'West':
-                westCount += 1
-            elif stats[i]['region'] == 'East':
-                eastCount += 1
-            elif stats[i]['region'] == 'South':
-                southCount += 1
+    northCount = 0
+    westCount = 0
+    eastCount = 0
+    southCount = 0
+    stats = fireS.get('userInfo', None)
+    print(stats)
+    for i in stats:
+        if stats[i]['region'] == 'North':
+            northCount += 1
+        elif stats[i]['region'] == 'West':
+            westCount += 1
+        elif stats[i]['region'] == 'East':
+            eastCount += 1
+        elif stats[i]['region'] == 'South':
+            southCount += 1
 
-        label = ['North', 'East', 'South', 'West']
-        statsCount = [
-            northCount,
-            westCount,
-            eastCount,
-            southCount
-        ]
-
-        index = np.arange(len(label))
-
-        def plot_bargraph():
-            plt.bar(index, statsCount)
-            plt.xlabel('Number of users', fontsize=5)
-            plt.ylabel('Location of users', fontsize=5)
-            plt.xticks(index, label, fontsize=5, rotation=30)
-            plt.title('Numbers of users in Smart Kampung')
-            plt.savefig('graphStats.png')
-
-    return render_template("home.html")
+    line_chart = pygal.HorizontalBar()
+    line_chart.title = 'Numbers of users in Smart Kampung'
+    line_chart.add('North', northCount)
+    line_chart.add('East', eastCount)
+    line_chart.add('West', westCount)
+    line_chart.add('South', southCount)
+    graph_data = line_chart.render_data_uri()
+    return render_template("home.html",line_chart=graph_data)
 
 @app.route('/photowall')
 def upload():

@@ -86,12 +86,25 @@
 </div>
 </section>
 <section>
+<div class="page-header text-center">
+    <div class="container tab-content text-center">
+        <h2>Statistics</h2>
+    </div>
+</div>
+</section>
+<section>
 <div class="gallery">
 	<ul>
-        <li class="col-md-3">
-            <img src="../static/images/graphStats.png"/>
+        <li class="col-md-5">
+<!-- Don't forget the "|safe"! -->
+<div id="chart">
+    <embed type="image/svg+xml" src= {{ line_chart|safe }} ></embed>
+</div>
         </li>
-
+<li class="col-md-5">
+    <p>We are proud to have {{ users }} using our website!</p>
+    <p>{{ numberOfServices }} services we provide |  {{ servicesUsed }} services used daily</p>
+</li>
 	</ul>
 </div>
 </section>

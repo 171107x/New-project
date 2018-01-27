@@ -107,9 +107,10 @@
 <section>
 <div class="gallery">
 	<ul>
-      <ul>
         <li class="col-md-3">
-            <img src="../static/images/graphStats.png"/>
+            <div id="chart">
+    <embed type="image/svg+xml" src= {{ line_chart|safe }} ></embed>
+</div>
         </li>
 	</ul>
 </div>

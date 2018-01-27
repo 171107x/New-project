@@ -3,6 +3,7 @@ app = Flask(__name__)
 import firebase_admin
 from firebase import firebase
 from firebase_admin import credentials, db
+import pygal
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
@@ -41,25 +42,32 @@ def printStats():
         elif stats[i]['region'] == 'South':
              southCount += 1
 
-    label = ['North','East','South','West']
-    statsCount = [
-        northCount,
-        westCount,
-        eastCount,
-        southCount
-    ]
-
-    index = np.arange(len(label))
+    # label = ['North','East','South','West']
+    # statsCount = [
+    #     northCount,
+    #     westCount,
+    #     eastCount,
+    #     southCount
+    # ]
+    #
+    # index = np.arange(len(label))
 
     def plot_bargraph():
-        plt.bar(index,statsCount)
-        plt.xlabel('Number of users',fontsize = 5)
-        plt.ylabel('Location of users',fontsize = 5)
-        plt.xticks(index,label,fontsize=5,rotation=30)
-        plt.title('Numbers of users in Smart Kampung')
-        plt.savefig('graphStats.png')
-
-
+        line_chart = pygal.HorizontalBar()
+        line_chart.title = 'Browser usage in February 2012 (in %)'
+        line_chart.add('IE', 19.5)
+        line_chart.add('Firefox', 36.6)
+        line_chart.add('Chrome', 36.3)
+        line_chart.add('Safari', 4.5)
+        line_chart.add('Opera', 2.3)
+        line_chart.render_data_uri()
+        return render_template('index.html',line_chart=line_chart)
+        # plt.bar(index,statsCount)
+        # plt.xlabel('Number of users',fontsize = 5)
+        # plt.ylabel('Location of users',fontsize = 5)
+        # plt.xticks(index,label,fontsize=5,rotation=30)
+        # plt.title('Numbers of users in Smart Kampung')
+        # plt.savefig('graphStats.png')
 
     plot_bargraph()
     # fig = plot_bargraph()
@@ -76,7 +84,7 @@ def printStats():
     #
     # py.iplot(data,filename='basic-bar')
 
-    return render_template("home.html")
+    return render_template("index.html")
 
 if __name__ == "__main__":
     app.run()
