@@ -32,21 +32,16 @@ class User:
         self.about_me = about_me
 
 class Edit:
-    def __init__(self, password, about_me):
+    def __init__(self, password):
         self.password = password
-        self.about_me = about_me
 
     def get_password(self):
         return self.password
 
-    def get_about_me(self):
-        return self.about_me
-
     def set_password(self, password):
         self.username = password
 
-    def set_about_me(self, about_me):
-        self.about_me = about_me
+
 
 class Review:
     def __init__(self, title, review):

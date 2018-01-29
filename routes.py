@@ -355,20 +355,20 @@ def user(username):
 
 @app.route('/settings/password', methods=["GET", "POST"])
 def password():
-    form = EditForm(request.form)
+    form = EditForm()
 
     if request.method == 'POST':
         username = session['username']
-
         password = form.password.data
 
         allUser = root.child('userInfo').get()
+        user = Edit(password)
         for key in allUser:
             print(allUser[key]['username'])
             if username == allUser[key]['username']:
                 user_db = root.child('userInfo/'+key)
                 user_db.update({
-                'password': password
+                'password': user.get_password()
                 })
 
             return redirect(url_for('user', username=username))
@@ -381,7 +381,6 @@ def account():
     if request.method == 'POST':
         username = session['username']
 
-        username2 = form.username.data
         email = form.email.data
         about_me = form.about_me.data
 
@@ -392,9 +391,8 @@ def account():
             if username == allUser[key]['username']:
                 user_db = root.child('userInfo/'+key)
                 user_db.update({
-                'username': username2,
                 'email': email,
-                'password': password
+                'password': about_me
                 })
 
             return redirect(url_for('user', username=username))
