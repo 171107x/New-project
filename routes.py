@@ -7,7 +7,6 @@ from user import User, Edit, Review
 from firebase import firebase
 from Events import Events
 from forum import Forum
-import firebase_admin
 from firebase_admin import credentials, db
 from flask_sqlalchemy import SQLAlchemy
 import flask_whooshalchemy as wa
@@ -15,7 +14,6 @@ from wtforms import Form, StringField, TextAreaField, RadioField, SelectField, v
 import pygal
 from flask_socketio import SocketIO, emit
 import random
-import stats
 import jwt
 
 fireS = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/')
@@ -47,7 +45,6 @@ s = URLSafeTimedSerializer('Thisisasecret!')
 Bootstrap(app)
 
 app.secret_key = "baby123"
-app.config['SECRET_KEY'] = 'asdxswedfrcswqsax12redsx'
 socketio = SocketIO( app )
 
 
@@ -763,6 +760,9 @@ def messagereceived():
 def handle_my_custom_event( json ):
   print( 'recived my event: ' + str( json ) )
   socketio.emit( 'my response', json, callback=messagereceived())
+
+if __name__ == '__main__':
+    socketio.run(app, debug=True)
 
 if __name__ == "__main__":
     app.run(port='80')
