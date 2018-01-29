@@ -1,1 +1,1 @@
-web: gunicorn whoosh.routes:app--log-file -
+web: gunicorn routes:app--log-file -
