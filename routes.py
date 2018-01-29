@@ -224,8 +224,8 @@ def login():
     form = LoginForm()
 
     if request.method == "POST":
-        username = form.username.data
-        password = form.password.data
+        # username = form.username.data
+        # password = form.password.data
 
 
         usernameList = []
