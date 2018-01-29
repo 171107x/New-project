@@ -16,6 +16,7 @@ import pygal
 from flask_socketio import SocketIO, emit
 import random
 import stats
+import jwt
 
 fireS = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/')
 cred = credentials.Certificate('cred\oopproject-f5214-firebase-adminsdk-vkzv0-5ab9f1da25.json')
@@ -711,6 +712,48 @@ def error404(error):
 @app.route('/chat')
 def hello():
   return render_template( '/chat.html' )
+
+@app.route('/recycle',methods=['POST','GET'])
+def recycle():
+    form = forumForm(request.form)
+    if request.method == 'POST':
+        tokenChange_db = root.child('token')
+        tokenChange_db.set({
+            'token':1,
+            })
+        from twilio.rest import Client
+        account_sid = 'AC798a929fa5a8424d5b82eab38819d3a5'  # Found on Twilio Console Dashboard
+        auth_token = 'ab795e9a119792b38a02fd96c597cce7'  # Found on Twilio Console Dashboard
+        #'+6592351480
+        #'+6591783904
+        phoneList = ['+6592351480'] #'+6592351480' add sol's number laaaater,
+        myPhone = random.choice(phoneList)# Phone number you used to verify your Twilio account+
+        myToken = jwt.encode({'Request': myPhone}, 'thisismysecret')
+        TwilioNumber = '12169301225'  # Phone number given to you by Twilio
+        print(myToken)
+        link = url_for('confirm_request', myToken=myToken)
+        client = Client(account_sid, auth_token)
+
+        client.messages.create(
+            to=myPhone,
+            from_=TwilioNumber,
+            body='Block 649 has requested a recycle request." ' + u'\U0001f680' + 'to accept the request, click this link {}'.format(link))
+
+
+
+        return render_template('recycle.html')
+    return render_template('recycle.html' ,form=form)
+#
+@app.route('/confirm/<myToken>')
+def confirm_request(myToken):
+    check_dict = jwt.decode(myToken,'thisismysecret')
+    print(check_dict)
+    if check_dict['Request'] == 'Test':
+        tokenChange_db = root.child('token')
+        tokenChange_db.set({
+            'token': 0,
+        })
+    return render_template('map.html')#change to model for phone
 
 
 def messagereceived():
