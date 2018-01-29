@@ -6,6 +6,7 @@ class User:
         self.email = email
         self.password = password
         self.about_me = about_me
+        self.email_confirmed = False
 
     def get_about_me(self):
         return self.about_me

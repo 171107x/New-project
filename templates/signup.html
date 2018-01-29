@@ -23,8 +23,6 @@
     <![endif]-->
 </head>
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
-{%  include 'Includes/_messages.html' %}
-{% from "Includes/_formhelper.html" import render_field %}
 <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
 <div class="container">
 	<div class="navbar-header">
@@ -53,6 +51,8 @@
 <!-- /.container -->
 </nav>
 <br><br><br><br><br><br>
+{% include 'Includes/_messages.html' %}
+{% from "Includes/_formhelper.html" import render_field %}
         <div class="container">
             <h2 class="display-3 text-center">Create an account</h2>
 

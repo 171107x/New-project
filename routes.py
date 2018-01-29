@@ -165,7 +165,6 @@ def signup():
 
     if request.method == 'POST':
         if form.validate() == False:
-
             return render_template('signup.html', form=form)
         else:
             username = form.username.data
@@ -174,29 +173,38 @@ def signup():
             about_me = form.about_me.data
             region = form.region.data
 
-            user = User(username, email, password, about_me)
-            user_db = root.child('userInfo')
-            user_db.push({
-                'username' : user.get_username(),
-                'email': user.get_email(),
-                'password': user.get_password(),
-                'about_me': user.get_about_me(),
-                'region' : region
-            })
-            token = s.dumps(email, salt='email-confirm')
+            usernameList = []
+            result = root.child('userInfo').get()
 
-            msg = Message('Confirm Email', sender='nypsmartkampung@gmail.com', recipients=[email])
+            for users in result:
+                usernameList.append(result[users]['username'])
 
-            link = url_for('confirm_email', token=token, _external=True)
+            if username not in usernameList:
+                user = User(username, email, password, about_me)
+                user_db = root.child('userInfo')
+                user_db.push({
+                    'username' : user.get_username(),
+                    'email': user.get_email(),
+                    'password': user.get_password(),
+                    'about_me': user.get_about_me(),
+                    'region' : region
+                })
+                token = s.dumps(email, salt='email-confirm')
 
-            msg.body = 'You have successfully register. Please click on this link to continue {}'.format(link)
+                msg = Message('Confirm Email', sender='nypsmartkampung@gmail.com', recipients=[email])
 
-            mail.send(msg)
+                link = url_for('confirm_email', token=token, _external=True)
 
+                msg.body = 'You have successfully register. Please click on this link to continue {}'.format(link)
 
+                mail.send(msg)
 
-            session['username'] = user.username
-            return render_template('register.html', email=email)
+                session['username'] = user.username
+                return render_template('register.html', email=email)
+            else:
+                error = 'Username already exists'
+                flash(error, 'danger')
+                return redirect(url_for('signup', form=form, error=error))
 
     elif request.method == 'GET':
         return render_template('signup.html', form=form)

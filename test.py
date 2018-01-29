@@ -12,10 +12,8 @@ from firebase_admin import credentials, db
 from flask_sqlalchemy import SQLAlchemy
 import flask_whooshalchemy as wa
 from wtforms import Form, StringField, TextAreaField, RadioField, SelectField, validators
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-import matplotlib.pyplot as plt
-import numpy as np
-from io import StringIO
+import pygal
+from flask_socketio import SocketIO, emit
 import random
 import stats
 
@@ -48,6 +46,8 @@ s = URLSafeTimedSerializer('Thisisasecret!')
 Bootstrap(app)
 
 app.secret_key = "baby123"
+app.config['SECRET_KEY'] = 'asdxswedfrcswqsax12redsx'
+socketio = SocketIO( app )
 
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@localhost/texttest'
@@ -131,41 +131,30 @@ class Tips():
 
 @app.route("/")
 def index():
-    def printStats():
-        northCount = 0
-        westCount = 0
-        eastCount = 0
-        southCount = 0
-        stats = fireS.get('userInfo', None)
-        print(stats)
-        for i in stats:
-            if stats[i]['region'] == 'North':
-                northCount += 1
-            elif stats[i]['region'] == 'West':
-                westCount += 1
-            elif stats[i]['region'] == 'East':
-                eastCount += 1
-            elif stats[i]['region'] == 'South':
-                southCount += 1
+    northCount = 0
+    westCount = 0
+    eastCount = 0
+    southCount = 0
+    stats = fireS.get('userInfo', None)
+    print(stats)
+    for i in stats:
+        if stats[i]['region'] == 'North':
+            northCount += 1
+        elif stats[i]['region'] == 'West':
+            westCount += 1
+        elif stats[i]['region'] == 'East':
+            eastCount += 1
+        elif stats[i]['region'] == 'South':
+            southCount += 1
 
-        label = ['North', 'East', 'South', 'West']
-        statsCount = [
-            northCount,
-            westCount,
-            eastCount,
-            southCount
-        ]
-
-        index = np.arange(len(label))
-
-        def plot_bargraph():
-            plt.bar(index, statsCount)
-            plt.xlabel('Number of users', fontsize=5)
-            plt.ylabel('Location of users', fontsize=5)
-            plt.xticks(index, label, fontsize=5, rotation=30)
-            plt.title('Numbers of users in Smart Kampung')
-            plt.savefig('graphStats.png')
-    return render_template("index.html")
+    line_chart = pygal.HorizontalBar()
+    line_chart.title = 'Numbers of users in Smart Kampung'
+    line_chart.add('North', northCount)
+    line_chart.add('East', eastCount)
+    line_chart.add('West', westCount)
+    line_chart.add('South', southCount)
+    graph_data = line_chart.render_data_uri()
+    return render_template("index.html",line_chart=graph_data)
 
 
 @app.route("/signup", methods=['GET', 'POST'])
@@ -176,7 +165,6 @@ def signup():
 
     if request.method == 'POST':
         if form.validate() == False:
-
             return render_template('signup.html', form=form)
         else:
             username = form.username.data
@@ -185,29 +173,38 @@ def signup():
             about_me = form.about_me.data
             region = form.region.data
 
-            user = User(username, email, password, about_me)
-            user_db = root.child('userInfo')
-            user_db.push({
-                'username' : user.get_username(),
-                'email': user.get_email(),
-                'password': user.get_password(),
-                'about_me': user.get_about_me(),
-                'region' : region
-            })
-            token = s.dumps(email, salt='email-confirm')
+            usernameList = []
+            result = root.child('userInfo').get()
 
-            msg = Message('Confirm Email', sender='nypsmartkampung@gmail.com', recipients=[email])
+            for users in result:
+                usernameList.append(result[users]['username'])
 
-            link = url_for('confirm_email', token=token, _external=True)
+            if username not in usernameList:
+                user = User(username, email, password, about_me)
+                user_db = root.child('userInfo')
+                user_db.push({
+                    'username' : user.get_username(),
+                    'email': user.get_email(),
+                    'password': user.get_password(),
+                    'about_me': user.get_about_me(),
+                    'region' : region
+                })
+                token = s.dumps(email, salt='email-confirm')
 
-            msg.body = 'You have successfully register. Please click on this link to continue {}'.format(link)
+                msg = Message('Confirm Email', sender='nypsmartkampung@gmail.com', recipients=[email])
 
-            mail.send(msg)
+                link = url_for('confirm_email', token=token, _external=True)
 
+                msg.body = 'You have successfully register. Please click on this link to continue {}'.format(link)
 
+                mail.send(msg)
 
-            session['username'] = user.username
-            return render_template('register.html', email=email)
+                session['username'] = user.username
+                return render_template('register.html', email=email)
+            else:
+                error = 'Username already exists'
+                flash(error, 'danger')
+                return redirect(url_for('signup', form=form, error=error))
 
     elif request.method == 'GET':
         return render_template('signup.html', form=form)
@@ -248,6 +245,9 @@ def login():
             error = 'Invalid login'
             flash(error, 'danger')
             return redirect(url_for('login', form=form,error=error))
+
+    elif request.method == "GET":
+        return render_template("login.html", form=form)
 
     elif request.method == "GET":
         return render_template("login.html", form=form)
@@ -363,20 +363,20 @@ def user(username):
 
 @app.route('/settings/password', methods=["GET", "POST"])
 def password():
-    form = EditForm(request.form)
+    form = EditForm()
 
     if request.method == 'POST':
         username = session['username']
-
         password = form.password.data
 
         allUser = root.child('userInfo').get()
+        user = Edit(password)
         for key in allUser:
             print(allUser[key]['username'])
             if username == allUser[key]['username']:
                 user_db = root.child('userInfo/'+key)
                 user_db.update({
-                'password': password
+                'password': user.get_password()
                 })
 
             return redirect(url_for('user', username=username))
@@ -389,7 +389,6 @@ def account():
     if request.method == 'POST':
         username = session['username']
 
-        username2 = form.username.data
         email = form.email.data
         about_me = form.about_me.data
 
@@ -400,9 +399,8 @@ def account():
             if username == allUser[key]['username']:
                 user_db = root.child('userInfo/'+key)
                 user_db.update({
-                'username': username2,
                 'email': email,
-                'password': password
+                'password': about_me
                 })
 
             return redirect(url_for('user', username=username))
@@ -421,42 +419,30 @@ def home():
     if 'username' not in session:
         return redirect(url_for('login'))
 
-    def printStats():
-        northCount = 0
-        westCount = 0
-        eastCount = 0
-        southCount = 0
-        stats = fireS.get('userInfo', None)
-        print(stats)
-        for i in stats:
-            if stats[i]['region'] == 'North':
-                northCount += 1
-            elif stats[i]['region'] == 'West':
-                westCount += 1
-            elif stats[i]['region'] == 'East':
-                eastCount += 1
-            elif stats[i]['region'] == 'South':
-                southCount += 1
+    northCount = 0
+    westCount = 0
+    eastCount = 0
+    southCount = 0
+    stats = fireS.get('userInfo', None)
+    print(stats)
+    for i in stats:
+        if stats[i]['region'] == 'North':
+            northCount += 1
+        elif stats[i]['region'] == 'West':
+            westCount += 1
+        elif stats[i]['region'] == 'East':
+            eastCount += 1
+        elif stats[i]['region'] == 'South':
+            southCount += 1
 
-        label = ['North', 'East', 'South', 'West']
-        statsCount = [
-            northCount,
-            westCount,
-            eastCount,
-            southCount
-        ]
-
-        index = np.arange(len(label))
-
-        def plot_bargraph():
-            plt.bar(index, statsCount)
-            plt.xlabel('Number of users', fontsize=5)
-            plt.ylabel('Location of users', fontsize=5)
-            plt.xticks(index, label, fontsize=5, rotation=30)
-            plt.title('Numbers of users in Smart Kampung')
-            plt.savefig('graphStats.png')
-
-    return render_template("home.html")
+    line_chart = pygal.HorizontalBar()
+    line_chart.title = 'Numbers of users in Smart Kampung'
+    line_chart.add('North', northCount)
+    line_chart.add('East', eastCount)
+    line_chart.add('West', westCount)
+    line_chart.add('South', southCount)
+    graph_data = line_chart.render_data_uri()
+    return render_template("home.html",line_chart=graph_data)
 
 @app.route('/photowall')
 def upload():
@@ -720,6 +706,19 @@ def camera():
 @app.errorhandler(404)
 def error404(error):
     return render_template('404.html'), 404
+
+@app.route('/chat')
+def hello():
+  return render_template( '/chat.html' )
+
+
+def messagereceived():
+  print( 'message was received!!!' )
+
+@socketio.on( 'my event' )
+def handle_my_custom_event( json ):
+  print( 'recived my event: ' + str( json ) )
+  socketio.emit( 'my response', json, callback=messagereceived())
 
 if __name__ == "__main__":
     app.run(debug=True)
