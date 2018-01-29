@@ -1,1 +1,1 @@
-web: gunicorn smartkampung:app
+web: gunicorn routes:app--log-file -
