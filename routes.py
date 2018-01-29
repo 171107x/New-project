@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, redirect, url_for, flash, g
+from flask import Flask, render_template, request, session, redirect, url_for, flash
 from flask_bootstrap import Bootstrap
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
@@ -7,6 +7,7 @@ from user import User, Edit, Review
 from firebase import firebase
 from Events import Events
 from forum import Forum
+import firebase_admin
 from firebase_admin import credentials, db
 from flask_sqlalchemy import SQLAlchemy
 import flask_whooshalchemy as wa
@@ -18,9 +19,9 @@ import jwt
 
 fireS = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/')
 cred = credentials.Certificate('cred\oopproject-f5214-firebase-adminsdk-vkzv0-5ab9f1da25.json')
-# default_app = firebase_admin.initialize_app(cred, {
-#     'databaseURL': 'https://oopproject-f5214.firebaseio.com/ '
-# })
+default_app = firebase_admin.initialize_app(cred, {
+    'databaseURL': 'https://oopproject-f5214.firebaseio.com/ '
+})
 
 config = {
     'apiKey': "AIzaSyCHVUY5JdL1gqZx7juQQlaIAIB8R76A7ZE",
@@ -31,7 +32,6 @@ config = {
     'messagingSenderId': "294439860189",
     "serviceAccount": 'cred/oopproject-f5214-firebase-adminsdk-vkzv0-5ab9f1da25.json'
   }
-
 
 
 
@@ -761,8 +761,8 @@ def handle_my_custom_event( json ):
   print( 'recived my event: ' + str( json ) )
   socketio.emit( 'my response', json, callback=messagereceived())
 
-if __name__ == '__main__':
-    socketio.run(app, debug=True)
+# if __name__ == '__main__':
+#     socketio.run(app, debug=True)
 
 if __name__ == "__main__":
     app.run(port='80')
