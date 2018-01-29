@@ -216,31 +216,30 @@ def login():
     form = LoginForm()
 
     if request.method == "POST":
-        if form.validate() == False:
-            error = 'Invalid Username or Password'
-            flash(error, 'danger')
-            return render_template("login.html", form=form)
+        username = form.username.data
+        password = form.password.data
+
+
+        usernameList = []
+        passList = []
+
+        result = root.child('userInfo').get()
+
+        for users in result:
+            usernameList.append(result[users]['username'])
+            passList.append(result[users]['password'])
+        attempted_username = request.form['username']
+        attempted_password = request.form['password']
+        if attempted_username in usernameList and attempted_password in passList:
+            session['username'] = form.username.data
+            return redirect(url_for('home'))
         else:
+            error = 'Invalid login'
+            flash(error, 'danger')
+            return redirect(url_for('login', form=form,error=error))
 
-            username = form.username.data
-            password = form.password.data
-
-
-            usernameList = []
-            passList = []
-
-            result = root.child('userInfo').get()
-
-            for users in result:
-                usernameList.append(result[users]['username'])
-                passList.append(result[users]['password'])
-            attempted_username = request.form['username']
-            attempted_password = request.form['password']
-            if attempted_username in usernameList and attempted_password in passList:
-                session['username'] = form.username.data
-                return redirect(url_for('home'))
-            else:
-                return redirect(url_for('login', form=form))
+    elif request.method == "GET":
+        return render_template("login.html", form=form)
 
     elif request.method == "GET":
         return render_template("login.html", form=form)
@@ -264,7 +263,7 @@ def reset():
 
                 mail.send(msg)
 
-                return '<h1>The email you entered is {}. The token is {}</h1>'.format(email, token)
+                return render_template('reset2.html')
     return render_template('reset.html', form=form)
 
 @app.route('/resetpass/<token>', methods=['GET', 'POST'])
