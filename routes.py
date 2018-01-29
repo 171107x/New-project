@@ -225,8 +225,8 @@ def login():
     form = LoginForm()
 
     if request.method == "POST":
-        username = form.username.data
-        password = form.password.data
+        # username = form.username.data
+        # password = form.password.data
 
 
         usernameList = []
@@ -765,4 +765,4 @@ def handle_my_custom_event( json ):
   socketio.emit( 'my response', json, callback=messagereceived())
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(port='80')
