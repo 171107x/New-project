@@ -515,43 +515,44 @@ def new():
     return render_template('showEvent.html', form=form, allE=allE)
 
 @app.route('/createEvent',methods=['POST','GET'])
-def create_forum():
+def create_event():
     form = eventsForm(request.form)
-    allE = []
-    eventFire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/ ')
-    allEvent = eventFire.get('Events', None)
-    if request.method == 'POST':
-        title = form.title.data
-        location = form.location.data
-        category = form.category.data
-        timestart = form.timeStart.data
-        timeend = form.timeEnd.data
-        description = form.description.data
-        date = form.date.data
+    if request.method == 'POST' and form.validate():
+        allE = []
+        eventFire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/ ')
+        allEvent = eventFire.get('Events', None)
+        if request.method == 'POST':
+            title = form.title.data
+            location = form.location.data
+            category = form.category.data
+            timestart = form.timeStart.data
+            timeend = form.timeEnd.data
+            description = form.description.data
+            date = form.date.data
 
-        event = Events(title, location, category, timestart, timeend, description, date)
+            event = Events(title, location, category, timestart, timeend, description, date)
 
-        try:
-            count = len(allEvent) + 1
-        except TypeError:
-            count = 1
+            try:
+                count = len(allEvent) + 1
+            except TypeError:
+                count = 1
 
-        eventFire.put('Events', 'number'+str(count), {
-            'title': event.get_title(),
-            'location': event.get_location(),
-            'category': event.get_category(),
-            'timeStart': event.get_timestart(),
-            'timeEnd': event.get_timeend(),
-            'description': event.get_description(),
-            'date': event.get_date()
-        })
+            eventFire.put('Events', 'number'+str(count), {
+                'title': event.get_title(),
+                'location': event.get_location(),
+                'category': event.get_category(),
+                'timeStart': event.get_timestart(),
+                'timeEnd': event.get_timeend(),
+                'description': event.get_description(),
+                'date': event.get_date()
+            })
 
-        try:
-            for key in allEvent:
-                allE.append(allEvent[key])
-            allE = reversed(allE)
-        except TypeError:
-            allE = []
+            try:
+                for key in allEvent:
+                    allE.append(allEvent[key])
+                allE = reversed(allE)
+            except TypeError:
+                allE = []
 
     return render_template('createEvent.html',form=form)
 
