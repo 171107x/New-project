@@ -761,8 +761,6 @@ def handle_my_custom_event( json ):
   print( 'recived my event: ' + str( json ) )
   socketio.emit( 'my response', json, callback=messagereceived())
 
-if __name__ == '__main__':
-     socketio.run(app, debug=True)
-
 if __name__ == "__main__":
     app.run(port='80')
+    socketio.run(app, debug=True)
