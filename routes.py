@@ -18,7 +18,7 @@ import random
 import jwt
 
 fireS = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/')
-cred = credentials.Certificate('cred\oopproject-f5214-firebase-adminsdk-vkzv0-5ab9f1da25.json')
+cred = credentials.Certificate('./cred/oopproject-f5214-firebase-adminsdk-vkzv0-5ab9f1da25.json')
 default_app = firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://oopproject-f5214.firebaseio.com/ '
 })
