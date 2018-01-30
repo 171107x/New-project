@@ -1,1 +1,1 @@
-web: gunicorn New-project.routes:app
+web: gunicorn routes:app --log-file -
