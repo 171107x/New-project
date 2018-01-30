@@ -712,8 +712,13 @@ def hello():
 
 @app.route('/recycle',methods=['POST','GET'])
 def recycle():
+    retrieveCount = fireS.get('recycleCount',None)
+    retrieveToken = fireS.get('token',None)
     form = forumForm(request.form)
     if request.method == 'POST':
+        recycleCount = int(retrieveCount['recycleCount']) + 1
+        recycleCount_db = root.child('recycleCount')
+        recycleCount_db.set({'recycleCount': recycleCount})
         tokenChange_db = root.child('token')
         tokenChange_db.set({
             'token':1,
@@ -723,7 +728,7 @@ def recycle():
         auth_token = 'ab795e9a119792b38a02fd96c597cce7'  # Found on Twilio Console Dashboard
         #'+6592351480
         #'+6591783904
-        phoneList = ['+6592351480'] #'+6592351480' add sol's number laaaater,
+        phoneList = ['+6591783904'] #'+6592351480' add sol's number laaaater,
         myPhone = random.choice(phoneList)# Phone number you used to verify your Twilio account+
         myToken = jwt.encode({'Request': myPhone}, 'thisismysecret')
         TwilioNumber = '12169301225'  # Phone number given to you by Twilio
@@ -737,9 +742,8 @@ def recycle():
             body='Block 649 has requested a recycle request." ' + u'\U0001f680' + 'to accept the request, click this link {}'.format(link))
 
 
-
-        return render_template('recycle.html')
-    return render_template('recycle.html' ,form=form)
+        return redirect(url_for('recycle'))
+    return render_template('recycle.html',form=form, retrieveToken = retrieveToken)
 #
 @app.route('/confirm/<myToken>')
 def confirm_request(myToken):
