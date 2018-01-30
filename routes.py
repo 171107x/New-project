@@ -129,12 +129,17 @@ class Tips():
 
 @app.route("/")
 def index():
+    retrieveCount = fireS.get('recycleCount', None)
+    recyclecount = int(retrieveCount['recycleCount'])
+    retrieveUser = fireS.get('userInfo',None)
+    userCount = 0
+    for key in retrieveUser:
+        userCount += 1
     northCount = 0
     westCount = 0
     eastCount = 0
     southCount = 0
     stats = fireS.get('userInfo', None)
-    print(stats)
     for i in stats:
         if stats[i]['region'] == 'North':
             northCount += 1
@@ -152,7 +157,7 @@ def index():
     line_chart.add('West', westCount)
     line_chart.add('South', southCount)
     graph_data = line_chart.render_data_uri()
-    return render_template("index.html",line_chart=graph_data)
+    return render_template("index.html",line_chart=graph_data,recyclecount=recyclecount,userCount=userCount)
 
 
 @app.route("/signup", methods=['GET', 'POST'])
@@ -416,7 +421,14 @@ def logout():
 def home():
     if 'username' not in session:
         return redirect(url_for('login'))
-
+    retrieveCount = fireS.get('recycleCount',None)
+    recyclecount = int(retrieveCount['recycleCount'])
+    retrieveUser = fireS.get('userInfo',None)
+    userCount = 0
+    for key in retrieveUser:
+        userCount += 1
+    print(retrieveUser)
+    print(recyclecount)
     northCount = 0
     westCount = 0
     eastCount = 0
@@ -440,7 +452,7 @@ def home():
     line_chart.add('West', westCount)
     line_chart.add('South', southCount)
     graph_data = line_chart.render_data_uri()
-    return render_template("home.html",line_chart=graph_data)
+    return render_template("home.html",line_chart=graph_data,recyclecount=recyclecount,userCount=userCount)
 
 @app.route('/photowall')
 def upload():

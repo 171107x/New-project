@@ -107,11 +107,16 @@
 <section>
 <div class="gallery">
 	<ul>
-        <li class="col-md-3">
-            <div id="chart">
+        <li class="col-md-5">
+<!-- Don't forget the "|safe"! -->
+<div id="chart">
     <embed type="image/svg+xml" src= {{ line_chart|safe }} ></embed>
 </div>
         </li>
+<li class="col-md-5">
+    <p>We are proud to have {{ userCount }} users using our website!</p>
+    <p>{{ numberOfServices }} services we provide |  {{ recyclecount }} services used daily</p>
+</li>
 	</ul>
 </div>
 </section>
