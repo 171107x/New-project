@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="a914ba9c-5227-497d-a26d-1827686a23a6" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/forumdesign.html" afterPath="$PROJECT_DIR$/templates/forumdesign.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/recycle.html" afterPath="$PROJECT_DIR$/templates/recycle.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -21,7 +21,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="forumdesign.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="forumdesign.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/forumdesign.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="345">
@@ -43,6 +43,16 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="recycle.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/templates/recycle.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="135">
+              <caret line="24" column="70" lean-forward="false" selection-start-line="24" selection-start-column="70" selection-end-line="24" selection-end-column="70" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="Procfile" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Procfile">
           <provider selected="true" editor-type-id="text-editor">
@@ -58,16 +68,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="210">
               <caret line="49" column="5" lean-forward="false" selection-start-line="49" selection-start-column="2" selection-end-line="49" selection-end-column="5" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="photodesign.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/photodesign.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-455">
-              <caret line="115" column="8" lean-forward="false" selection-start-line="115" selection-start-column="8" selection-end-line="115" selection-end-column="8" />
               <folding />
             </state>
           </provider>
@@ -150,6 +150,7 @@
       <find>jwt</find>
       <find>recycle</find>
       <find>class</find>
+      <find>formhelper</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -169,7 +170,6 @@
         <option value="$PROJECT_DIR$/templates/photodesign.html" />
         <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/templates/reset_with_token.html" />
-        <option value="$PROJECT_DIR$/templates/recycle.html" />
         <option value="$PROJECT_DIR$/static/css/recycle.css" />
         <option value="$PROJECT_DIR$/templates/index.html" />
         <option value="$PROJECT_DIR$/templates/home.html" />
@@ -177,6 +177,7 @@
         <option value="$PROJECT_DIR$/requirements.txt" />
         <option value="$PROJECT_DIR$/routes.py" />
         <option value="$PROJECT_DIR$/templates/forumdesign.html" />
+        <option value="$PROJECT_DIR$/templates/recycle.html" />
       </list>
     </option>
   </component>
@@ -448,7 +449,14 @@
       <option name="project" value="LOCAL" />
       <updated>1517299876050</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Procfile">
+      <created>1517300001600</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1517300001600</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -787,18 +795,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/recycle.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1222">
-          <caret line="91" column="26" lean-forward="true" selection-start-line="91" selection-start-column="26" selection-end-line="91" selection-end-column="26" />
-          <folding>
-            <element signature="n#style#0;n#button#0;n#form#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#header#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#button#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#header#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="e#3898#3904#0#HTML" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/photodesign.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-455">
@@ -865,6 +861,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/templates/forumdesign.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="34" column="25" lean-forward="true" selection-start-line="34" selection-start-column="25" selection-end-line="34" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/routes.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="156">
@@ -875,10 +879,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/forumdesign.html">
+    <entry file="file://$PROJECT_DIR$/templates/recycle.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="34" column="25" lean-forward="true" selection-start-line="34" selection-start-column="25" selection-end-line="34" selection-end-column="25" />
+        <state relative-caret-position="135">
+          <caret line="24" column="70" lean-forward="false" selection-start-line="24" selection-start-column="70" selection-end-line="24" selection-end-column="70" />
           <folding />
         </state>
       </provider>
