@@ -134,6 +134,10 @@ def index():
     retrieveCount = fireS.get('recycleCount', None)
     recyclecount = int(retrieveCount['recycleCount'])
     retrieveUser = fireS.get('userInfo',None)
+    retrieveEvent = fireS.get('Events',None)
+    eventCount = 0
+    for key in retrieveEvent:
+        eventCount += 1
     userCount = 0
     for key in retrieveUser:
         userCount += 1
@@ -159,7 +163,7 @@ def index():
     line_chart.add('West', westCount)
     line_chart.add('South', southCount)
     graph_data = line_chart.render_data_uri()
-    return render_template("index.html",line_chart=graph_data,recyclecount=recyclecount,userCount=userCount)
+    return render_template("index.html",line_chart=graph_data,recyclecount=recyclecount,userCount=userCount,eventCount=eventCount)
 
 
 @app.route("/signup", methods=['GET', 'POST'])
@@ -422,40 +426,43 @@ def logout():
 @app.route("/home")
 def home():
     if 'username' not in session:
-        return redirect(url_for('login'))
-    retrieveCount = fireS.get('recycleCount',None)
-    recyclecount = int(retrieveCount['recycleCount'])
-    retrieveUser = fireS.get('userInfo',None)
-    userCount = 0
-    for key in retrieveUser:
-        userCount += 1
-    print(retrieveUser)
-    print(recyclecount)
-    northCount = 0
-    westCount = 0
-    eastCount = 0
-    southCount = 0
-    stats = fireS.get('userInfo', None)
-    print(stats)
-    for i in stats:
-        if stats[i]['region'] == 'North':
-            northCount += 1
-        elif stats[i]['region'] == 'West':
-            westCount += 1
-        elif stats[i]['region'] == 'East':
-            eastCount += 1
-        elif stats[i]['region'] == 'South':
-            southCount += 1
+        retrieveCount = fireS.get('recycleCount', None)
+        recyclecount = int(retrieveCount['recycleCount'])
+        retrieveUser = fireS.get('userInfo',None)
+        retrieveEvent = fireS.get('Events',None)
+        eventCount = 0
+        userCount = 0
+        for key in retrieveEvent:
+            eventCount += 1
 
-    line_chart = pygal.HorizontalBar()
-    line_chart.title = 'Numbers of users in Smart Kampung'
-    line_chart.add('North', northCount)
-    line_chart.add('East', eastCount)
-    line_chart.add('West', westCount)
-    line_chart.add('South', southCount)
-    graph_data = line_chart.render_data_uri()
-    return render_template("home.html",line_chart=graph_data,recyclecount=recyclecount,userCount=userCount)
+        for key in retrieveUser:
+            userCount += 1
+        print(retrieveUser)
+        northCount = 0
+        westCount = 0
+        eastCount = 0
+        southCount = 0
+        stats = fireS.get('userInfo', None)
+        print(stats)
+        for i in stats:
+            if stats[i]['region'] == 'North':
+                northCount += 1
+            elif stats[i]['region'] == 'West':
+                westCount += 1
+            elif stats[i]['region'] == 'East':
+                eastCount += 1
+            elif stats[i]['region'] == 'South':
+                southCount += 1
 
+        line_chart = pygal.HorizontalBar()
+        line_chart.title = 'Numbers of users in Smart Kampung'
+        line_chart.add('North', northCount)
+        line_chart.add('East', eastCount)
+        line_chart.add('West', westCount)
+        line_chart.add('South', southCount)
+        graph_data = line_chart.render_data_uri()
+        return render_template("home.html",line_chart=graph_data,userCount=userCount,eventCount=eventCount,recyclecount=recyclecount)
+    return redirect(url_for('login'))
 @app.route('/photowall')
 def upload():
     if 'username' in session:
@@ -533,12 +540,12 @@ def asdasd(eventName):
             intEventr = root.child('Events/'+ key)
             intEventg = intEventr.get()
             people = intEventg['going']
-            intEventr.update({
-                    'going': session['username']
+            intEventr.push({
+                    people: session['username']
                 })
 
 
-            return redirect(url_for('new'))
+            return redirect(url_for('showEvent'))
     return render_template('showInterest.html/')
 
 @app.route('/createEvent',methods=['POST','GET'])
