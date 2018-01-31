@@ -16,6 +16,8 @@ import pygal
 from flask_socketio import SocketIO, emit
 import random
 import jwt
+import datetime
+from werkzeug.utils import secure_filename
 
 fireS = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/')
 cred = credentials.Certificate('./cred/oopproject-f5214-firebase-adminsdk-vkzv0-5ab9f1da25.json')
@@ -456,14 +458,17 @@ def home():
 
 @app.route('/photowall')
 def upload():
-    fire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/')
-    ref = fire.get('/Images',None)
-    pictureList = []
-    for key in ref:
-        photoLink = ref.get(key)
-        pictureList.append(photoLink)
-    pictureList.reverse()
-    return render_template('photodesign.html',pictureList = pictureList)
+    if 'username' in session:
+        fire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/')
+        ref = fire.get('/Images',None)
+        pictureList = []
+        for key in ref:
+            photoLink = ref.get(key)
+            pictureList.append(photoLink)
+        pictureList.reverse()
+
+        return render_template('photodesign.html',pictureList = pictureList)
+    return redirect(url_for('index'))
 
 @app.route('/search')
 def search():
@@ -484,95 +489,106 @@ def add():
 
 @app.route('/events',methods=['GET','POST'])
 def new():
-    form = eventsForm(request.form)
-    allE = []
-    eventFire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/ ')
-    allEvent = eventFire.get('Events', None)
-    if request.method == 'POST' and form.validate():
-            title = form.title.data
-            location = form.location.data
-            category = form.category.data
-            timestart = form.timeStart.data
-            timeend = form.timeEnd.data
-            description = form.description.data
-            date = form.date.data
-
-            event = Events(title,location,category,timestart,timeend,description,date)
-            # This is to make the events name +1
-            try:
-                count = len(allEvent) +1
-            except TypeError:
-                count = 1
-
-            # Search from a certain key to print the entire key
-            # for key in allEvent:
-            #     if allEvent[key]['title'] == 'kenneth is hensum':
-            #         print(allEvent[key])
-
-            #If I want to get a certain key(title) from the test2 database
-            # for key in allEvent:
-            #     if key == 'test2':
-            #         print(allEvent[key])
-            #
-            eventFire.put('Events','number'+str(count),{
-                'title': event.get_title(),
-                'location': event.get_location(),
-                'category': event.get_category(),
-                'timeStart': event.get_timestart(),
-                'timeEnd': event.get_timeend(),
-                'description': event.get_description(),
-                'date': event.get_date()
-            })
-    try:
-        for key in allEvent:
-            allE.append(allEvent[key])
-        allE = reversed(allE)
-    except TypeError:
-        allE = []
-
-    return render_template('showEvent.html', form=form, allE=allE)
-
-@app.route('/createEvent',methods=['POST','GET'])
-def create_event():
-    form = eventsForm(request.form)
-    if request.method == 'POST' and form.validate():
+    if 'username' in session:
+        form = eventsForm(request.form)
         allE = []
         eventFire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/ ')
         allEvent = eventFire.get('Events', None)
-        if request.method == 'POST':
-            title = form.title.data
-            location = form.location.data
-            category = form.category.data
-            timestart = form.timeStart.data
-            timeend = form.timeEnd.data
-            description = form.description.data
-            date = form.date.data
+        # if request.method == 'POST':
 
-            event = Events(title, location, category, timestart, timeend, description, date)
+            # for key in allEvent:
+            #     xd = allEvent[key]['interested'] + 1
+            #     root.child('Events/' + key).update({'interested': xd})
 
-            try:
-                count = len(allEvent) + 1
-            except TypeError:
-                count = 1
+        try:
+            for key in allEvent:
+                allE.append(allEvent[key])
+            allE = reversed(allE)
+        except TypeError:
+            allE = []
 
-            eventFire.put('Events', 'number'+str(count), {
-                'title': event.get_title(),
-                'location': event.get_location(),
-                'category': event.get_category(),
-                'timeStart': event.get_timestart(),
-                'timeEnd': event.get_timeend(),
-                'description': event.get_description(),
-                'date': event.get_date()
+        try:
+            count = len(allEvent) + 1
+        except TypeError:
+            count = 1
+        return render_template('showEvent.html', form=form, allE=allE,count=count)
+    return redirect(url_for('index'))
+
+@app.route('/showInterest/<eventName>')
+def asdasd(eventName):
+    eventName = eventName
+    currEventr = root.child('Events')
+    currEventg = currEventr.get()
+    for key in currEventg:
+        if currEventg[key]['title'] == eventName:
+            intEventr = root.child('Events/'+ key)
+            intEventg = intEventr.get()
+            count = intEventg['interested']
+            intEventr.update({
+                'interested': count+1
             })
 
-            try:
-                for key in allEvent:
-                    allE.append(allEvent[key])
-                allE = reversed(allE)
-            except TypeError:
-                allE = []
+    for key in currEventg:
+        if currEventg[key]['going'] == session['username']:
+            intEventr = root.child('Events/'+ key)
+            intEventg = intEventr.get()
+            people = intEventg['going']
+            intEventr.update({
+                    'going': session['username']
+                })
 
-    return render_template('createEvent.html',form=form)
+
+            return redirect(url_for('new'))
+    return render_template('showInterest.html/')
+
+@app.route('/createEvent',methods=['POST','GET'])
+def create_event():
+    if 'username' in session:
+        form = eventsForm(request.form)
+        if request.method == 'POST' and form.validate():
+            allE = []
+            eventFire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/ ')
+            allEvent = eventFire.get('Events', None)
+            if request.method == 'POST':
+
+                title = form.title.data
+                location = form.location.data
+                category = form.category.data
+                timestart = form.timeStart.data
+                timeend = form.timeEnd.data
+                description = form.description.data
+                date = form.date.data
+
+                event = Events(title, location, category, timestart, timeend, description, date)
+
+                try:
+                    count = len(allEvent) + 1
+                except TypeError:
+                    count = 1
+
+                eventFire.put('Events', 'number'+str(count), {
+                    'title': event.get_title(),
+                    'location': event.get_location(),
+                    'category': event.get_category(),
+                    'timeStart': event.get_timestart(),
+                    'timeEnd': event.get_timeend(),
+                    'description': event.get_description(),
+                    'date': event.get_date(),
+                    'username': session['username'],
+                    'datetime':event.get_currenttime(),
+                    'interested': 0,
+                    'going': session['username']
+
+                })
+
+                try:
+                    for key in allEvent:
+                        allE.append(allEvent[key])
+                    allE = reversed(allE)
+                except TypeError:
+                    allE = []
+        return render_template('createEvent.html',form=form,username='username')
+    return redirect(url_for('index'))
 
 @app.route('/forum', methods=['POST','GET'])
 def forum():

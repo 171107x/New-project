@@ -1,3 +1,6 @@
+import time
+import datetime
+
 class Events():
     def __init__(self, title,location,category,timestart,timeend,description,date):
         self.__title = title
@@ -7,6 +10,8 @@ class Events():
         self.__timeend = timeend
         self.__description = description
         self.__date = date
+        self.createTime = datetime.datetime.now()
+        self.currentTime = str(self.createTime.day) + "-" + str(self.createTime.month) + "-" + str(self.createTime.year)  # DD-MM-YYYY format
 
     def get_title(self):
         return self.__title
@@ -49,4 +54,7 @@ class Events():
 
     def set_date(self,date):
         self.__date = date
+
+    def get_currenttime(self):
+        return self.currentTime
 

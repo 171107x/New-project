@@ -88,85 +88,15 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-8 col-md-offset-2">
-				<h1 class="brand-heading">THIS IS THE EVENT PAGE</h1>
+				<h1 class="brand-heading">THANK YOU</h1>
 				<p class="intro-text">
-					This is where to find out about the latest events and add your own!
+					Thank you for showing your interest. We will be redirecting you back to the event page
 				</p>
-				<a href="#about" class="btn btn-circle page-scroll">
-				<i class="fa fa-angle-double-down animated"></i>
-				</a>
 			</div>
 		</div>
 	</div>
 </div>
 </header>
-
-<!-- About Section -->
-<section id="about">
-<div class="container content-section text-center">
-	<div class="row">
-		<h2>Events</h2>
-		<div class="col-lg-8 col-lg-offset-2">
-			<p>
-                To bond with each other, to celebrate joyous occasions.
-            </p>
-            <p>
-				For more details, contact support at smartkampung@gmail.com
-			</p>
-            <br>
-            <div class="col-lg-8 col-lg-offset-3">
-            </div>
-		</div>
-    </div>
-</div>
-</section>
-<section>
-<div class="col-lg-1 col-sm-offset-9">
-<button type="button" style="margin-right:10px;" class="btn btn-success btn-sm " onclick="window.location.href='/createEvent'">Create event</button>
-</div>
-<br>
-<br>
-    <div class="container">
-        <div class="row">
-        {% for events in allE %}
-        <div class="col-md-6">
-            <div class="well well-sm">
-                <div class="row">
-                    <div class="col-xs-9 col-md-9 section-box">
-                        <h2>
-                            {{ events['title'] }}
-                        </h2>
-                        <p> Event category:<br>
-                            {{events['category']}}
-                        </p>
-                        <br>
-                        <p>Event summary:<br>
-                            {{ events['description'] }}</p>
-                        <p>Event location:<br>
-                            {{ events['location'] }}</p>
-                        <hr />
-                        <div class="row rating-desc">
-                            <div class="col-md-12">
-                                <p>Date of event: {{ events['date'] }}<br>Time of event: {{ events['timeStart'] }} to {{ events['timeEnd'] }}</p>
-{#                                <form action=/events method="POST">#}
-                                {% if session['username'] not in events['going'] %}
-                                    <button class="btn btn-info btn-lg" ><span class="glyphicon glyphicon-ok-sign"></span><a href="/showInterest/{{ events['title'] }}">Show interest</a></button>
-                                    <p> {{ events['interested'] }} users have shown interest in the event!</p>
-                                {%  elif session['username'] in events['going'] %}
-                                    <button class="btn btn-info btn-lg disabled" ><span class="glyphicon glyphicon-ok-sign disabled"></span><a class='disabled'>Show interest</a></button>
-                                <p> {{ events['interested'] }} users have shown interest in the event!</p>
-                                {% endif %}
-                                <p style="font-size:16px">Posted by {{ events['username'] }} at {{ events['datetime'] }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-    </div>
-</section>
 <section id="contact">
 <div class="container content-section text-center">
 	<div class="row">
