@@ -120,11 +120,22 @@
 									Users can also post things that they want to give away to other users.
 								</div>
 								<br/>
-																{% for eachForum in forumList %}
+                                {% for eachForum in forumList %}
 									<div class="panel-heading">
-										<p>{{ eachForum[0] }}</p>
+										<p style="display:inline">{{ eachForum[0] }}</p>
+                                        <div class='dropdown' style='display:inline;float:right;'>
+                                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown">
+                                                &#9661
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class='dropdown-item' href='#'>Edit</a></li>
+                                                <li><a class='dropdown-item' href='#'>Delete</a></li>
+                                            </ul>
+                                        </div>
+                                        <br>
+                                        <br>
                                         <p style="display:inline">created on {{ eachForum[2] }}</p>
-                                        <p style="display:inline;float:right;">created by <a href="/user/{{ eachForum[3] }}"  >{{ eachForum[3] }}</a></p>
+                                        <p style="display:inline;float:right;">created by <a href="http://127.0.0.1/user/{{ eachForum[3] }}">{{ eachForum[3] }}</a></p>
 									</div>
 									<div class="panel-body">
 										{{ eachForum[1] }}
