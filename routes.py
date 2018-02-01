@@ -183,12 +183,13 @@ def signup():
             region = form.region.data
 
             usernameList = []
+            emailList = []
             result = root.child('userInfo').get()
 
             for users in result:
                 usernameList.append(result[users]['username'])
-
-            if username not in usernameList:
+                emailList.append(result[users]['email'])
+            if username not in usernameList and email not in emailList:
                 user = User(username, email, password, about_me)
                 user_db = root.child('userInfo')
                 user_db.push({
@@ -233,13 +234,13 @@ def login():
     form = LoginForm()
 
     if request.method == "POST":
-        # username = form.username.data
-        # password = form.password.data
+        username = form.username.data
+        password = form.password.data
 
 
         usernameList = []
         passList = []
-
+        confPass = []
         result = root.child('userInfo').get()
 
         for users in result:
@@ -247,7 +248,10 @@ def login():
             passList.append(result[users]['password'])
         attempted_username = request.form['username']
         attempted_password = request.form['password']
-        if attempted_username in usernameList and attempted_password in passList:
+        for key in result:
+            if username == result[key]['username']:
+                confPass.append(result[key]['password'])
+        if attempted_username in usernameList and attempted_password in confPass:
             session['username'] = form.username.data
             return redirect(url_for('home'))
         else:
@@ -307,7 +311,7 @@ def resetpass(token):
 
 
 
-@app.route('/user/<username>')
+@app.route('/user/<username>', methods=['GET', 'POST'])
 def user(username):
     if 'username' in session:
         form = ReviewForm(request.form)
