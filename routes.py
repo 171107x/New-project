@@ -755,10 +755,19 @@ def recycle():
         recycleCount = int(retrieveCount['recycleCount']) + 1
         recycleCount_db = root.child('recycleCount')
         recycleCount_db.set({'recycleCount': recycleCount})
-        tokenChange_db = root.child('token')
-        tokenChange_db.set({
-            'token':1,
-            })
+        tokenChange_db = root.child('userInfo')
+        tokenChange_db2 = tokenChange_db.get()
+        for i in tokenChange_db2:
+            if tokenChange_db2[i]['username'] == session['username']:
+                tokenGet = root.child('userInfo/'+i)
+                tokenGet.update({'token':1})
+        print(tokenChange_db.get())
+        # for i in tokenChange_db:
+
+
+        # tokenChange_db.set({
+        #     'token':1,
+        #     })
         from twilio.rest import Client
         account_sid = 'AC798a929fa5a8424d5b82eab38819d3a5'  # Found on Twilio Console Dashboard
         auth_token = 'ab795e9a119792b38a02fd96c597cce7'  # Found on Twilio Console Dashboard
@@ -772,10 +781,10 @@ def recycle():
         link = url_for('confirm_request', myToken=myToken)
         client = Client(account_sid, auth_token)
 
-        client.messages.create(
-            to=myPhone,
-            from_=TwilioNumber,
-            body='Block 649 has requested a recycle request." ' + u'\U0001f680' + 'to accept the request, click this link "smartkampung.herokuapp.com{}'.format(link))
+        # client.messages.create(
+        #     to=myPhone,
+        #     from_=TwilioNumber,
+        #     body='Block 649 has requested a recycle request." ' + u'\U0001f680' + 'to accept the request, click this link "smartkampung.herokuapp.com{}'.format(link))
 
 
         return redirect(url_for('recycle'))
