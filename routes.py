@@ -533,17 +533,16 @@ def asdasd(eventName):
                 'interested': count+1
             })
 
+
     for key in currEventg:
-        if currEventg[key]['going'] == session['username']:
-            intEventr = root.child('Events/'+ key)
-            intEventg = intEventr.get()
-            people = intEventg['going']
-            intEventr.push({
-                    people: session['username']
-                })
+        intEventr = currEventg[key]
+        print(intEventr)
+        peopleList = []
+        peopleList.append(session['username'])
+        root.child('Events/' + key).update({'going': peopleList})
 
 
-            return redirect(url_for('showEvent'))
+        return redirect(url_for('showEvent'))
     return render_template('showInterest.html/')
 
 @app.route('/createEvent',methods=['POST','GET'])
