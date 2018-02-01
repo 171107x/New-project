@@ -258,8 +258,6 @@ def login():
     elif request.method == "GET":
         return render_template("login.html", form=form)
 
-    elif request.method == "GET":
-        return render_template("login.html", form=form)
 
 @app.route('/reset', methods=["GET", "POST"])
 def reset():
@@ -425,7 +423,7 @@ def logout():
 
 @app.route("/home")
 def home():
-    if 'username' not in session:
+    if 'username' in session:
         retrieveCount = fireS.get('recycleCount', None)
         recyclecount = int(retrieveCount['recycleCount'])
         retrieveUser = fireS.get('userInfo',None)
@@ -800,8 +798,8 @@ def handle_my_custom_event( json ):
   print( 'recived my event: ' + str( json ) )
   socketio.emit( 'my response', json, callback=messagereceived())
 
-if __name__ == "__main__":
-    socketio.run(app, debug=True)
+# if __name__ == "__main__":
+#     socketio.run(app, debug=True)
 
 if __name__ == "__main__":
     app.run(port='80')
