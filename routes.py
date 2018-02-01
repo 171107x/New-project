@@ -766,7 +766,7 @@ def recycle():
         #'+6591783904
         phoneList = ['+6591783904'] #'+6592351480' add sol's number laaaater,
         myPhone = random.choice(phoneList)# Phone number you used to verify your Twilio account+
-        myToken = jwt.encode({'Request': myPhone}, 'thisismysecret')
+        myToken = jwt.encode({'Request': 'Test'}, 'thisismysecret')
         TwilioNumber = '12169301225'  # Phone number given to you by Twilio
         print(myToken)
         link = url_for('confirm_request', myToken=myToken)
@@ -775,7 +775,7 @@ def recycle():
         client.messages.create(
             to=myPhone,
             from_=TwilioNumber,
-            body='Block 649 has requested a recycle request." ' + u'\U0001f680' + 'to accept the request, click this link {}'.format(link))
+            body='Block 649 has requested a recycle request." ' + u'\U0001f680' + 'to accept the request, click this link "smartkampung.herokuapp.com{}'.format(link))
 
 
         return redirect(url_for('recycle'))
@@ -785,6 +785,7 @@ def recycle():
 def confirm_request(myToken):
     check_dict = jwt.decode(myToken,'thisismysecret')
     print(check_dict)
+    print(myToken)
     if check_dict['Request'] == 'Test':
         tokenChange_db = root.child('token')
         tokenChange_db.set({
