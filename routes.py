@@ -547,7 +547,6 @@ def new():
         return render_template('showEvent.html', form=form, allE=allE,count=count)
     return redirect(url_for('index'))
 
-
 @app.route('/showInterest/<eventName>')
 def asdasd(eventName):
     eventName = eventName
@@ -574,6 +573,7 @@ def asdasd(eventName):
 
 
     return render_template('showInterest.html/')
+
 
 @app.route('/createEvent',methods=['POST','GET'])
 def create_event():
