@@ -489,6 +489,20 @@ def upload():
         return render_template('photodesign.html',pictureList = pictureList)
     return redirect(url_for('index'))
 
+@app.route('/photoupload')
+def uploads():
+    if 'username' in session:
+        fire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/')
+        ref = fire.get('/Images',None)
+        pictureList = []
+        for key in ref:
+            photoLink = ref.get(key)
+            pictureList.append(photoLink)
+        pictureList.reverse()
+
+        return render_template('photoupload.html',pictureList = pictureList)
+    return redirect(url_for('index'))
+
 @app.route('/search')
 def search():
     posts = Post.query.whoosh_search(request.args.get('query')).all()
@@ -550,14 +564,15 @@ def asdasd(eventName):
 
 
     for key in currEventg:
-        intEventr = currEventg[key]
-        print(intEventr)
-        peopleList = []
-        peopleList.append(session['username'])
-        root.child('Events/' + key).update({'going': peopleList})
+        if currEventg[key]['title'] == eventName:
+            intEventr = root.child('Events/'+ key)
+            intEventg = intEventr.get()
+            xd = intEventg['going']
+            xd.append(session['username'])
+            intEventr.update({'going': xd})
 
 
-        return redirect(url_for('showEvent'))
+
     return render_template('showInterest.html/')
 
 @app.route('/createEvent',methods=['POST','GET'])

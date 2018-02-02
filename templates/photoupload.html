@@ -97,7 +97,7 @@
 <section id="about">
 <div class="container content-section text-center">
 	<div class="row">
-		<h2>Photo Wall</h2>
+		<h2>Upload your latest photo here!</h2>
 		<div class="col-lg-8 col-lg-offset-2">
 			<p>
 				To relive the good ol' kampung memories with hand taken masterpieces.
@@ -106,26 +106,16 @@
             <p>“Taking pictures is savoring life intensely, every hundredth of a second.”</p>
             <p>― Marc Riboud</p>
             <br>
-            <div class="col-lg-8 col-lg-offset-2">
-                <p> To upload your picture click here:</p>
-                <button type="button" style="margin-right:10px;" class="btn btn-success btn-sm " onclick="window.location.href='/photoupload'">Upload images</button>
+            <div class="col-lg-8 col-lg-offset-3">
+                <form onsubmit="return Validate(this);">
+                <input type='file' value='upload' id='fileButton' a href="#" class="btnghost" onclick="reload()" />
+                </form>
             </div>
 		</div>
     </div>
 </div>
 </section>
 <section>
-<div class="gallery">
-	<ul>
-    <div class="container text-center">
-        <div class="row">
-        <div class="col-lg-8 col-lg-offset-2">
-        {% for pics in pictureList %}
-		    <img style="height:700px;width:700px;padding-bottom:50px;box-shadow: 8px 8px 10px #aaa; class:'centered" ; src={{ pics }} >
-                <br>
-        {% endfor %}
-        </div>
-        </div>
 {#		<li class="col-md-3">#}
 {#		<a href="portfolio-item.html">#}
 {#		<img src="http://unsplash.it/680/380?random=2" alt="">#}
