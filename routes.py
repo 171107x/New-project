@@ -759,7 +759,11 @@ def hello():
 @app.route('/recycle',methods=['POST','GET'])
 def recycle():
     retrieveCount = fireS.get('recycleCount',None)
-    retrieveToken = fireS.get('token',None)
+    retrieveToken = root.child('userInfo')
+    retrieveToken2 = retrieveToken.get()
+    for i in retrieveToken2:
+        if retrieveToken2[i]['username'] == session['username']:
+            newToken = retrieveToken2[i]
     form = forumForm(request.form)
     if request.method == 'POST':
         recycleCount = int(retrieveCount['recycleCount']) + 1
@@ -798,7 +802,7 @@ def recycle():
 
 
         return redirect(url_for('recycle'))
-    return render_template('recycle.html',form=form, retrieveToken = retrieveToken)
+    return render_template('recycle.html',form=form, newToken = newToken)
 #
 @app.route('/confirm/<myToken>')
 def confirm_request(myToken):
@@ -814,7 +818,6 @@ def confirm_request(myToken):
                 'token': 0,
             })
     return render_template('map.html')#change to model for phone
-
 
 
 def messagereceived():

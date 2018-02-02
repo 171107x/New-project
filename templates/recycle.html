@@ -83,13 +83,13 @@
 				<p class="intro-text">
 					Clicking the button below will alert cleaners to come over and help you throw your recycle bags for you
 				</p>
-                {% if retrieveToken['token'] == 0 %}
+                {% if newToken['token'] == 0 %}
                 <div class="container tab-content text-center">
 				    <form action=/recycle method="POST">
                         <button id="home" type="submit" class="btn btn-success" style="width:200px;">Request</button>
                     </form>
                 </div>
-                    {% elif retrieveToken['token'] == 1 %}
+                    {% elif newToken['token'] == 1 %}
                     <div class="container tab-content text-center">
                         <button id="home2" type="submit" class="btn btn-success disabled" style="width:200px;">Requested</button>
                     </div>
