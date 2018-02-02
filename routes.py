@@ -796,10 +796,13 @@ def confirm_request(myToken):
     print(check_dict)
     print(myToken)
     if check_dict['Request'] == 'Test':
-        tokenChange_db = root.child('token')
-        tokenChange_db.set({
-            'token': 0,
-        })
+        tokenChange_db = root.child('userInfo')
+        tokenCheck = tokenChange_db.get()
+        for i in tokenCheck:
+            tokenValue = root.child('userInfo/'+i)
+            tokenValue.update({
+                'token': 0,
+            })
     return render_template('map.html')#change to model for phone
 
 
