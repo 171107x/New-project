@@ -97,7 +97,7 @@
 <section id="about">
 <div class="container content-section text-center">
 	<div class="row">
-		<h2>Photo Wall</h2>
+		<h2>Upload your latest photo here!</h2>
 		<div class="col-lg-8 col-lg-offset-2">
 			<p>
 				To relive the good ol' kampung memories with hand taken masterpieces.
@@ -106,9 +106,10 @@
             <p>“Taking pictures is savoring life intensely, every hundredth of a second.”</p>
             <p>― Marc Riboud</p>
             <br>
-            <div class="col-lg-8 col-lg-offset-2">
-                <p> To upload your picture click here:</p>
-                <button type="button" style="margin-right:10px;" class="btn btn-success btn-sm " onclick="window.location.href='/photoupload'">Upload images</button>
+            <div class="col-lg-8 col-lg-offset-3">
+                <form onsubmit="return Validate(this);">
+                <input type='file' value='upload' id='fileButton' a href="#" class="btnghost" onclick="reload()" />
+                </form>
             </div>
 		</div>
     </div>
@@ -235,12 +236,14 @@ fileButton.addEventListener('change',function(e) {
         {#        document.querySelector('img').src = downloadURL;#}
        var messageText = downloadURL;
         firebaseRef.child('Images').push(messageText);
-        window.location.reload();
     })
 
     }
         });
 
+function reload() {
+    alert('Please remember to refresh your page to see latest photo uploaded.')
+}
 
 
 
