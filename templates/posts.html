@@ -10,7 +10,7 @@
 <!-- Bootstrap Core CSS -->
 <link href="../static/css/bootstrap.min.css" rel="stylesheet">
 <!-- Custom CSS -->
-<link href="../static/css/edit.css" rel="stylesheet">
+<link href="../static/css/theme.css" rel="stylesheet">
 <!-- Custom Fonts -->
 <link href="../static/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700,400italic,700italic" rel="stylesheet" type="text/css">
@@ -22,16 +22,17 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-{% from 'Includes/_formhelper.html' import render_field %}
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
+{% from "Includes/_formhelper.html" import render_field %}
+<!-- Navigation -->
 <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
 <div class="container">
 	<div class="navbar-header">
 		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
 		<i class="fa fa-bars"></i>
 		</button>
-		<a class="navbar-brand page-scroll" href="/home">
-		SMART KAMPUNG </a>
+		<a class="navbar-brand page-scroll" href="index.html">
+		SMART LIVING </a>
 	</div>
 	<!-- Collect the nav links, forms, and other content for toggling -->
 	<div class="collapse navbar-collapse navbar-right navbar-main-collapse">
@@ -61,7 +62,7 @@
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ session.username }}
                 <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                <li><a href="/user/username=session['username']">User Profile</a></li>
+                <li><a href="{{ url_for('user', username=session['username']) }}">User Profile</a></li>
                 <li><a href="/settings/account">Edit profile</a></li>
                 <li><a href="/chat">Chatroom</a></li>
                 <li><a href="/logout">Logout</a></li>
@@ -72,59 +73,78 @@
 	<!-- /.navbar-collapse -->
 </div>
 <!-- /.container -->
-
 </nav>
-<br /><br /><br /><br />
-<h1 style="text-align: center;">Edit Your Profile</h1>
-    <div class="container">
-    <div class="row profile">
-		<div class="col-md-3">
-			<div class="profile-sidebar">
-				<!-- SIDEBAR USERPIC -->
-				<div class="profile-userpic">
-					<img src="http://keenthemes.com/preview/metronic/theme/assets/admin/pages/media/profile/profile_user.jpg" class="img-responsive" alt="">
+<!-- Intro Header -->
+<header class="intro">
+<div class="intro-body">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2">
+				<h1 class="brand-heading">THIS IS THE FORUM</h1>
+				<p class="intro-text">
+					Write about any topics on your mind.
+				</p>
+				<a href="#about" class="btn btn-circle page-scroll">
+				<i class="fa fa-angle-double-down animated"></i>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+</header>
+<!-- Forum Section -->
+<section>
+<div class="forum">
+	<h1 id="bigHead">Forum</h1>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="form-group">
+				<div class="col-lg-1">
 				</div>
-				<!-- END SIDEBAR USERPIC -->
-				<!-- SIDEBAR USER TITLE -->
-				<div class="profile-usertitle">
-					<div class="profile-usertitle-name">
-						{{ session.username }}
+				<div class="col-lg-10">
+					<div class="container">
+						<div class="panel-group">
+							<div class="panel panel-default forum-section">
+								<div class="panel-heading">
+									Welcome to the forum section
+								</div>
+								<div class="panel-body">
+									This is a forum section that allows discussion between users with needs or wants.<br/>
+									Users can also post things that they want to give away to other users.
+								</div>
+								<br/>
+                                {% for eachForum in postList %}
+									<div class="panel-heading">
+										<p style="display:inline">{{ eachForum[0] }}</p>
+                                        <br>
+                                        <br>
+                                        <p style="display:inline">created on {{ eachForum[2] }}</p>
+                                        <p style="display:inline;float:right;">created by <a href="http://127.0.0.1/user/{{ eachForum[3] }}">{{ eachForum[3] }}</a></p>
+									</div>
+									<div class="panel-body">
+										{{ eachForum[1] }}
+									</div>
+								{% endfor %}
+							</div>
+						</div>
 					</div>
-					<div class="profile-usertitle-job">
-						Developer
-					</div>
 				</div>
-                <div class="profile-usermenu">
-					<ul class="nav">
-						<li>
-							<a href="/settings/account">
-							<i class="glyphicon glyphicon-home"></i>
-							Account </a>
-						</li>
-						<li class="active">
-							<a href="/settings/password">
-							<i class="glyphicon glyphicon-user"></i>
-							Password Settings </a>
-						</li>
-					</ul>
+				<div class="col-lg-1">
 				</div>
-            </div>
-            </div>
-        <div class="col-md-9">
-            <div class="profile-content">
-                <div class="container-fluid">
-                    <form action="/settings/password" method="POST">
-                    {{ form.hidden_tag() }}
-                    <div class="form-group">
-                      {{ render_field(form.password, class="form-control", placeholder="password") }}
-                    </div>
-                    {{ form.submit(class="btn btn-success") }}
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    </div>
+			</div>
+		</div>
+	</div>
+</div>
+</section>
+<!-- Footer -->
+<footer>
+<div class="container text-center">
+	<p class="credits">
+		Copyright &copy; SmartKampung 2018<br/>
+	</p>
+</div>
+</footer>
+<!-- jQuery -->
 <script src="../static/js/jquery.js"></script>
 <!-- Bootstrap Core JavaScript -->
 <script src="../static/js/bootstrap.min.js"></script>

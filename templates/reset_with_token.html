@@ -23,8 +23,8 @@
     <![endif]-->
 </head>
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
-{% from 'Includes/_formhelper.html' import render_field %}
-{% include 'Includes/_messages.html' %}
+{%  include 'Includes/_messages.html' %}
+{% from "Includes/_formhelper.html" import render_field %}
 <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
 <div class="container">
 	<div class="navbar-header">
@@ -52,19 +52,15 @@
 </div>
 <!-- /.container -->
 </nav>
-<br><br><br><br><br><br><br>
+<br><br><br><br><br><br>
+
 <div class="container">
-    <div class="jumbotron">
-    <form action="{{ url_for('resetpass', token=token) }}" method="POST">
-        <div class="form-group">
-        {{ render_field(form.password, class="form-control") }}
-        </div>
-        {{ form.submit(class="btn btn-success")}}
-    </form>
-    </div>
+    <div class="jumbotron" style="text-align: center;">
+        <h1>Check your email</h1>
+        <p>We've sent an email to {{ email }}. Check your email to see your temporary password</p>
+   </div>
 
 </div>
-
 <script src="../static/js/jquery.js"></script>
 <!-- Bootstrap Core JavaScript -->
 <script src="../static/js/bootstrap.min.js"></script>
@@ -74,4 +70,3 @@
 <script src="../static/js/theme.js"></script>
 </body>
 </html>
-

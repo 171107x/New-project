@@ -102,8 +102,8 @@
 
                 </li>
                 <li class="list-group-item text-right"><span class="pull-left"><strong class="">Shares</strong></span> 125</li>
-                <li class="list-group-item text-right"><span class="pull-left"><strong class="">Likes</strong></span> 13</li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Posts</strong></span> 37</li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong class="">Reviews</strong></span>{{ reviewList }}</li>
+                <li class="list-group-item text-right"><a href="/user/{{ username }}/posts"><span class="pull-left"><strong class="">Posts</strong></span></a>{{ forumList }}</li>
                         <li class="list-group-item text-right"><span class="pull-left"><strong class="">Followers</strong></span> 78</li>
             </ul>
             <div class="panel panel-default">
@@ -124,7 +124,7 @@
                 </div>
             </div>
         </div>
-        {% if username != session['username'] %}
+
             <h2 style="text-align: center;">Review</h2>
         {% for i in range(allList[0] | length) %}
         <div class="col-sm-4" style="text-align: center;" contenteditable="false">
@@ -137,7 +137,7 @@
         </div>
         </div>
         {% endfor %}
-
+        {% if username != session['username'] %}
         <div class="col-sm-9" style="" contenteditable="false">
             <div class="container">
               <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add a review</button>

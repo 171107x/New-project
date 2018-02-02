@@ -315,8 +315,6 @@ def resetpass(token):
 def user(username):
     if 'username' in session:
         form = ReviewForm(request.form)
-        userFire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com')
-        allUser = userFire.get('userInfo', None)
 
         bioList = []
         titleList = []
@@ -330,7 +328,12 @@ def user(username):
             if username == bio[key]['username']:
                 bioList.append(bio[key]['about_me'])
 
-                print(bioList)
+        forumList = []
+        forum = root.child('Forum').get()
+        for key in forum:
+            if username == forum[key]['username']:
+                forumList.append(forum[key]['username'])
+
         review = root.child('review').get()
         if review != None:
             for reviews in review:
@@ -343,6 +346,7 @@ def user(username):
         allList.append(reviewList)
         allList.append(posterList)
         allList.append(timeList)
+
         if request.method == 'POST' and form.validate():
             title = form.title.data
             review = form.review.data
@@ -358,19 +362,25 @@ def user(username):
 
                     })
             return redirect(url_for('user',username=username))
-        '''
-            titleList = []
-            reviewList = []
 
-            bio = root.child('userInfo').get()
-                for key in bio:
-                    print(allUser[key]['about_me'])
-                    if username == bio[key]['username']:
-                        bioList.append(bio[key]['review'])
-                        usernameList.append((bio[key])[''])
-            return redirect(url_for('user'))
-        '''
-        return render_template('userProfile.html', form=form, username=username, bioList=bioList,allList=allList)
+        return render_template('userProfile.html', form=form, username=username, bioList=bioList,allList=allList,reviewList=len(reviewList),forumList=len(forumList))
+
+@app.route('/user/<username>/posts', methods=['GET', 'POST'])
+def posts(username):
+    if 'username' in session:
+        result = root.child('Forum').get()
+        postList = []
+        for key in result:
+            if username == result[key]['username']:
+                keyList = []
+                keyList.append(result[key]['type'])
+                keyList.append(result[key]['text'])
+                keyList.append(result[key]['time'])
+                keyList.append(result[key]['username'])
+                postList.append(keyList)
+        postList.reverse()
+        return render_template('posts.html', postList=postList, username=username)
+
 
 @app.route('/settings/password', methods=["GET", "POST"])
 def password():
@@ -390,7 +400,7 @@ def password():
                 'password': user.get_password()
                 })
 
-            return redirect(url_for('user', username=username))
+        return redirect(url_for('user', username=username))
     return render_template('password.html', form=form)
 
 @app.route('/settings/account', methods=["GET", "POST"])
@@ -414,7 +424,7 @@ def account():
                 'password': about_me
                 })
 
-            return redirect(url_for('user', username=username))
+        return redirect(url_for('user', username=username))
     return render_template('edit.html', form=form)
 
 
