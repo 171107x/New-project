@@ -195,7 +195,7 @@ def signup():
                     'email': user.get_email(),
                     'password': user.get_password(),
                     'about_me': user.get_about_me(),
-                    'region' : region
+                    'region' : region,
                     'token' : 0
                 })
                 token = s.dumps(email, salt='email-confirm')
