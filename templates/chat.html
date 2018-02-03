@@ -36,9 +36,77 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-<body>
+<body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
+<!-- Navigation -->
+<nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+<div class="container">
+	<div class="navbar-header">
+		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
+		<i class="fa fa-bars"></i>
+		</button>
+		<a class="navbar-brand page-scroll" href="/home">
+		SMART KAMPUNG </a>
+	</div>
+	<!-- Collect the nav links, forms, and other content for toggling -->
+	<div class="collapse navbar-collapse navbar-right navbar-main-collapse">
+		<ul class="nav navbar-nav">
+			<li>
+			<a href="/home">Home</a>
+			</li>
+			<li>
+			<a href='/photowall'>Photo Wall</a>
+			</li>
+			<li>
+			<a href="/forum">Forum</a>
+			</li>
+			<li>
+			<a href="/search">Search</a>
+			</li>
+            <li>
+			<a href="/events">Events</a>
+			</li>
+            <li>
+			<a href="/tips">Tips</a>
+			</li>
+            <li>
+			<a href="/recycle">Recycle</a>
+			</li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ session.username }}
+                <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                <li><a href="{{ url_for('user', username=session['username']) }}">User Profile</a></li>
+                <li><a href="/settings/account">Edit profile</a></li>
+                <li><a href="/chat">Chatroom</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+            </li>
+		</ul>
+	</div>
+	<!-- /.navbar-collapse -->
+</div>
+<!-- /.container -->
+</nav>
+<header class="intro">
+<div class="intro-body">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2">
+				<h1 class="brand-heading">THIS IS SMART KAMPUNG</h1>
+				<p class="intro-text">
+					A Website on Smart Living
+				</p>
+				<a href="#about" class="btn btn-circle page-scroll">
+				<i class="fa fa-angle-double-down animated"></i>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+</header>
+<section>
 
-    <div class="text-center well"><b>Welcome to the chatroom!</b></div>
+    <div id="chat" class="text-center well"><b>Welcome to the chatroom!</b></div>
 
     <div class="container">
       <div class="col-sm-8">
@@ -66,10 +134,13 @@
       </div>
     </div>
 
-
+</section>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
+    <script src="../static/js/jquery.easing.min.js"></script>
+    <script src="../static/js/theme.js"></script>
     <script>
       var socket = io.connect( 'http://' + document.domain + ':' + location.port )
       // broadcast a message
