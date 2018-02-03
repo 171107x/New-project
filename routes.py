@@ -103,6 +103,16 @@ class Tipsform(Form):
     housekeeping_tips = TextAreaField('Tips')
     name_tips = StringField("name")
 
+class responseForm(Form):
+    responseText = StringField("Please try to refrain from aggressive responses")
+
+class Response:
+    def __init__(self,response):
+        self.__responseText = response
+
+    def get_response(self):
+        return self.__responseText
+
 class Tips():
     def __init__(self, name, tips):
         self.__name = name
@@ -722,7 +732,7 @@ def forum():
         keyList.append(result[key]['text'])
         keyList.append(result[key]['time'])
         keyList.append(result[key]['username'])
-        keyList.append(result[key]['response']['response'])
+        keyList.append(result[key]['response'])
         keyList.append(result[key]['count'])
         forumList.append(keyList)
     if choice == 'Food':
@@ -765,6 +775,14 @@ def post_forum():
 
         return redirect(url_for('forum'))
     return render_template('postForum.html',form=form)
+
+@app.route('/addResponse',methods=['POST','GET'])
+def post_response():
+    form = responseForm(request.form)
+    if request.method == "POST":
+        text = form.responseText.data
+        newResponse = Response(text)
+    return redirect(url_for('forum',form=form))
 
 @app.route('/form' , methods=['POST','GET'])
 def form():

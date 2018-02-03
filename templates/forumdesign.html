@@ -148,10 +148,17 @@
  													View responses
                                                 </button>
                                                 <div class="collapse" id="demo{{ eachForum[5] }}">
-                                                    {% if eachForum[4] == "empty"  %}
+                                                    {% if (eachForum[4])|length == 1  %}
                                                         <p>This post has no response yet,response now!</p>
 {#                                                    <p> {{ eachForum[4] }}</p>#}
+                                                        {% elif (eachForum[4])|length != 1 %}
+                                                            {% for i in eachForum[4] %}
+{#                                                                {% set j = i + 1 %}#}
+                                                                {% print(i) %}
+                                                            <p>{{ eachForum[4][j] }}</p>
+                                                        {% endfor %}
                                                     {% endif %}
+{#                                                {{ render_field(form.responseText, class_="form-control")}}#}
  											    </div>
                                             </div>
                                         </div>
