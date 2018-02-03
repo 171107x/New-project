@@ -168,8 +168,6 @@ def index():
 
 @app.route("/signup", methods=['GET', 'POST'])
 def signup():
-    if 'username' in session:
-        return redirect(url_for('home'))
     form = SignupForm(request.form)
 
     if request.method == 'POST':
@@ -225,7 +223,7 @@ def confirm_email(token):
         email = s.loads(token, salt='email-confirm', max_age=3600)
     except SignatureExpired:
         return '<h1>The token is expired!</h1>'
-    return render_template('confirm-email.html')
+    return render_template("login.html")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
