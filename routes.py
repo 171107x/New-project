@@ -719,7 +719,7 @@ def post_forum():
             'type' : newForum.get_type(),
             'time' : newForum.get_date(),
             'username' : session['username'],
-            'response' : {'response':1}
+            'response' : {'response':'empty'}
 
         })
 
