@@ -154,9 +154,11 @@
                                                         {% elif (eachForum[4])|length != 1 %}
                                                             {% for i in eachForum[4] %}
 {#                                                                {% set j = i + 1 %}#}
-                                                                {% print(i) %}
+                                                                {% if loop.index > 1 %}
+                                                                    <p>{{ eachForum[4][i] }}</p>
+                                                                {% endif %}
                                                             <p>{{ eachForum[4][j] }}</p>
-                                                        {% endfor %}
+                                                            {% endfor %}
                                                     {% endif %}
 {#                                                {{ render_field(form.responseText, class_="form-control")}}#}
  											    </div>
