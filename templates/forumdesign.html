@@ -148,7 +148,10 @@
  													View responses
                                                 </button>
                                                 <div class="collapse" id="demo{{ eachForum[5] }}">
-                                                    <p> {{ eachForum[4] }}</p>
+                                                    {% if eachForum[4] == "empty"  %}
+                                                        <p>This post has no response yet,response now!</p>
+{#                                                    <p> {{ eachForum[4] }}</p>#}
+                                                    {% endif %}
  											    </div>
                                             </div>
                                         </div>
