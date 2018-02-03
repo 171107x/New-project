@@ -241,6 +241,7 @@ section {
 	color:#333;
     height: 100%;
 	overflow:hidden;
+	overflow-y: auto;
 }
 .done {
 	display:none;

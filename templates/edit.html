@@ -11,6 +11,7 @@
 <link href="../static/css/bootstrap.min.css" rel="stylesheet">
 <!-- Custom CSS -->
 <link href="../static/css/edit.css" rel="stylesheet">
+
 <!-- Custom Fonts -->
 <link href="../static/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700,400italic,700italic" rel="stylesheet" type="text/css">
@@ -61,7 +62,7 @@
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ session.username }}
                 <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                <li><a href="{{ url_for('user', username=session['username']) }}">User Profile</a></li>
+                <li><a href="/user/{{ session.username }}">User Profile</a></li>
                 <li><a href="/settings/account">Edit profile</a></li>
                 <li><a href="/chat">Chatroom</a></li>
                 <li><a href="/logout">Logout</a></li>
@@ -75,7 +76,7 @@
 
 </nav>
 <br /><br /><br /><br />
-<h1 style="text-align: center;">Edit Your Profile</h1>
+<h1 style="text-align: center;">Account Info</h1>
     <div class="container">
     <div class="row profile">
 		<div class="col-md-3">
@@ -89,9 +90,6 @@
 				<div class="profile-usertitle">
 					<div class="profile-usertitle-name">
 						{{ session.username }}
-					</div>
-					<div class="profile-usertitle-job">
-						Developer
 					</div>
 				</div>
                 <div class="profile-usermenu">
@@ -113,15 +111,20 @@
         <div class="col-md-9">
             <div class="profile-content">
                 <div class="container-fluid">
+                    <b>Email: </b>
+                    <p>{{ emailList[0] }}</p>
                     <form action="/settings/account" method="POST">
                     {{ form.hidden_tag() }}
-                    <div class="form-group">
-                      {{ render_field(form.email, class="form-control",placeholder="Email") }}
-                    </div>
                     <div class="form-group">
                       {{ render_field(form.about_me, class="form-control",placeholder="about_me") }}
                     </div>
                     {{ form.submit(class="btn btn-success") }}
+                    </form>
+                    <div class="col-lg-8 col-lg-offset-3">
+                    <form onsubmit="return Validate(this);">
+                    <input type='file' value='upload' id='fileButton' a href="#" class="btnghost" onclick="reload()" />
+                    </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -135,5 +138,68 @@
 <script src="../static/js/jquery.easing.min.js"></script>
 <!-- Custom Theme JavaScript -->
 <script src="../static/js/theme.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCHVUY5JdL1gqZx7juQQlaIAIB8R76A7ZE",
+    authDomain: "oopproject-f5214.firebaseapp.com",
+    databaseURL: "https://oopproject-f5214.firebaseio.com",
+    projectId: "oopproject-f5214",
+    storageBucket: "oopproject-f5214.appspot.com",
+    messagingSenderId: "294439860189"
+
+  };
+  firebase.initializeApp(config);
+
+  //Get Elements
+var uploader = document.getElementById('uploader');
+var fileButton = document.getElementById('fileButton');
+
+//Listen for file selection
+fileButton.addEventListener('change',function(e) {
+//Get file
+    var file = e.target.files[0];
+
+
+    var fileInput = document.getElementById('fileButton');
+    var filePath = fileInput.value;
+    var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+    if(!allowedExtensions.exec(filePath)){
+        alert('Please upload file having jpg, jpeg and png extensions only.');
+        fileInput.value = '';
+        return false;
+    }else{
+
+//Create a storage ref
+    var storageRef = firebase.storage().ref('profilePic/' + file.name);
+    var firebaseRef = firebase.database().ref();
+//Upload file
+    var task = storageRef.put(file);
+
+    function error(err) {
+        console.log('error', err);
+    }
+
+
+//Get a reference to store file at photos/<FILENAME>.jpg
+    task.on('state_changed', null, null, function () {
+
+        //When the image has successfully uploaded we get its download URL
+        var downloadURL = task.snapshot.downloadURL
+        //This is for profile picture
+        {#        document.querySelector('img').src = downloadURL;#}
+           var messageText = downloadURL;
+            firebaseRef.child('profilePic').child('{{ session.username }}').push(messageText);
+            window.location.reload();
+        })
+
+        }
+            });
+
+
+
+
+    </script>
 </body>
 </html>

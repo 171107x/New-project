@@ -115,7 +115,17 @@
     </div>
 </div>
 </section>
-<section>
+<div class="gallery">
+	<ul>
+    <div class="container text-center">
+        <div class="row">
+        <div class="col-lg-8 col-lg-offset-2">
+        {% if pictureList != None %}
+		    <img style="height:700px;width:700px;padding-bottom:50px;box-shadow: 8px 8px 10px #aaa; class:'centered" src={{ pictureList[0] }} >
+                <br>
+        {% endif %}
+        </div>
+        </div>
 {#		<li class="col-md-3">#}
 {#		<a href="portfolio-item.html">#}
 {#		<img src="http://unsplash.it/680/380?random=2" alt="">#}
@@ -126,6 +136,7 @@
 {#		<img src="http://unsplash.it/680/380?random=3" alt="">#}
 {#		</a>#}
 {#		</li>#}
+    </div>
 	</ul>
 </div>
 </section>
@@ -207,7 +218,7 @@ fileButton.addEventListener('change',function(e) {
     }else{
 
 //Create a storage ref
-    var storageRef = firebase.storage().ref('Images/' + file.name);
+    var storageRef = firebase.storage().ref('profilePic/' + file.name);
     var firebaseRef = firebase.database().ref();
 //Upload file
     var task = storageRef.put(file);
@@ -219,18 +230,24 @@ fileButton.addEventListener('change',function(e) {
 
 //Get a reference to store file at photos/<FILENAME>.jpg
     task.on('state_changed', null, null, function () {
+{#        var metadata = {#}
+{#            contentType: 'image',#}
+{#            customMetadata: {#}
+{#                'dogType': 'Lab',#}
+{#                'uploadedBy': '<%= Session["username"] %>'#}
+{#            }#}
+{#        };#}
         //When the image has successfully uploaded we get its download URL
-
         var downloadURL = task.snapshot.downloadURL
         //This is for profile picture
         {#        document.querySelector('img').src = downloadURL;#}
-       var messageText = downloadURL;
-        firebaseRef.child('Images').push(messageText);
-        window.location.reload();
-    })
+           var messageText = downloadURL;
+            firebaseRef.child('profilePic').child('{{ session.username }}').push(messageText);
+            window.location.reload();
+        })
 
-    }
-        });
+        }
+            });
 
 
 

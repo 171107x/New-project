@@ -345,6 +345,16 @@ def user(username):
         allList.append(reviewList)
         allList.append(posterList)
         allList.append(timeList)
+        fire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/')
+        ref = fire.get('/profilePic', None)
+        pictureList = []
+        if ref != None:
+            for key in ref:
+                if key == session['username']:
+                    refer = fire.get('/profilePic', key)
+                    for i in refer:
+                        pictureList.append(refer[i])
+        print(pictureList)
 
         if request.method == 'POST' and form.validate():
             title = form.title.data
@@ -362,9 +372,9 @@ def user(username):
                     })
             return redirect(url_for('user',username=username))
 
-        return render_template('userProfile.html', form=form, username=username, bioList=bioList,allList=allList,reviewList=len(reviewList),forumList=len(forumList))
+        return render_template('userProfile.html', form=form, username=username, bioList=bioList,allList=allList,reviewList=len(reviewList),forumList=len(forumList),pictureList=pictureList)
 
-@app.route('/user/<username>/posts', methods=['GET', 'POST'])
+@app.route('/<username>/posts', methods=['GET', 'POST'])
 def posts(username):
     if 'username' in session:
         result = root.child('Forum').get()
@@ -406,12 +416,19 @@ def password():
 def account():
     form = EditForm(request.form)
 
+    username = session['username']
+    emailList = []
+    allUser = root.child('userInfo').get()
+    for key in allUser:
+        print(allUser[key]['username'])
+        if username == allUser[key]['username']:
+            emailList.append(allUser[key]['email'])
+
     if request.method == 'POST':
         username = session['username']
 
-        email = form.email.data
         about_me = form.about_me.data
-
+        emailList = []
 
         allUser = root.child('userInfo').get()
         for key in allUser:
@@ -419,12 +436,13 @@ def account():
             if username == allUser[key]['username']:
                 user_db = root.child('userInfo/'+key)
                 user_db.update({
-                'email': email,
                 'password': about_me
                 })
+                emailList.append(allUser[key]['email'])
 
-        return redirect(url_for('user', username=username))
-    return render_template('edit.html', form=form)
+
+        return redirect(url_for('user', username=username, emailList=emailList))
+    return render_template('edit.html', form=form, emailList=emailList)
 
 
 @app.route('/logout')
