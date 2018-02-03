@@ -196,6 +196,7 @@ def signup():
                     'password': user.get_password(),
                     'about_me': user.get_about_me(),
                     'region' : region
+                    'token' : 0
                 })
                 token = s.dumps(email, salt='email-confirm')
 
@@ -717,7 +718,8 @@ def post_forum():
             'text' : newForum.get_text(),
             'type' : newForum.get_type(),
             'time' : newForum.get_date(),
-            'username' : session['username']
+            'username' : session['username'],
+            'response' : {'response':1}
 
         })
 
