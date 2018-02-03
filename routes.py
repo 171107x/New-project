@@ -128,6 +128,8 @@ class Tips():
     def set_pubid(self, pubid):
         self.__pubid = pubid
 
+class addForm(Form):
+        contentText = TextAreaField('')
 
 @app.route("/")
 def index():
@@ -528,6 +530,12 @@ def search():
 
 @app.route("/add", methods=['GET','POST'])
 def add():
+    form = addForm(request.method)
+    newContent_db = root.child('Content')
+    newContent_db.push(
+        {
+            'text': newContent.get_text(),
+        })
     if request.method =="POST":
         post = Post(title = request.form['title'], content = request.form['content'])
         db2.session.add(post)
