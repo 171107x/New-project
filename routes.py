@@ -746,14 +746,14 @@ def post_forum():
         text = form.forumText.data
         type = form.forumType.data
         newForum = Forum(text,type)
-        newCount = root.child('forumCount/forumCount')
-        print(newCount)
+        increaseCount = forumCount + 1
+        newCount = root.child('forumCount/forumCount').set(increaseCount)
         newForum_db = root.child('Forum')
         newForum_db.push(
             {
 
 
-
+            'count' : increaseCount,
             'text' : newForum.get_text(),
             'type' : newForum.get_type(),
             'time' : newForum.get_date(),
