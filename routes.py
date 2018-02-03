@@ -723,6 +723,7 @@ def forum():
         keyList.append(result[key]['time'])
         keyList.append(result[key]['username'])
         keyList.append(result[key]['response']['response'])
+        keyList.append(result[key]['count'])
         forumList.append(keyList)
     if choice == 'Food':
         forumList = foodList
