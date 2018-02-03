@@ -129,7 +129,15 @@ class Tips():
         self.__pubid = pubid
 
 class addForm(Form):
-        contentText = TextAreaField('')
+    contentText = TextAreaField('')
+
+class Content:
+    def __init__(self,text):
+        self.__contentText = text
+
+    def get_text(self):
+        return self.__contentText
+
 
 @app.route("/")
 def index():
@@ -530,20 +538,21 @@ def search():
 
 @app.route("/add", methods=['GET','POST'])
 def add():
-    form = addForm(request.method)
-    newContent_db = root.child('Content')
-    newContent_db.push(
-        {
-            'text': newContent.get_text(),
-        })
+    form = addForm(request.form)
     if request.method =="POST":
-        post = Post(title = request.form['title'], content = request.form['content'])
-        db2.session.add(post)
-        db2.session.commit()
-
+        # post = Post(title = request.form['title'], content = request.form['content'])
+        # db2.session.add(post)
+        # db2.session.commit()
+        text = form.contentText.data
+        newContent = Content(text)
+        newContent_db = root.child('Content')
+        newContent_db.push(
+            {
+                'text': newContent.get_text(),
+            })
         return redirect(url_for('search'))
 
-    return render_template("add.html")
+    return render_template("add.html",form=form)
 
 @app.route('/events',methods=['GET','POST'])
 def new():
@@ -731,11 +740,14 @@ def forum():
 @app.route('/postForum',methods=['POST','GET'])
 def post_forum():
     form = forumForm(request.form)
+    retrieve_forum_count = root.child('forumCount').get()
+    forumCount = int(retrieve_forum_count['forumCount'])
     if request.method == 'POST':
         text = form.forumText.data
         type = form.forumType.data
-
         newForum = Forum(text,type)
+        newCount = root.child('forumCount/forumCount')
+        print(newCount)
         newForum_db = root.child('Forum')
         newForum_db.push(
             {
