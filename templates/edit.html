@@ -190,13 +190,13 @@ fileButton.addEventListener('change',function(e) {
         //This is for profile picture
         {#        document.querySelector('img').src = downloadURL;#}
            var messageText = downloadURL;
-            firebaseRef.child('profilePic').child('{{ session.username }}').push(messageText);
+{#            firebaseRef.child('profilePic').child('{{ session.username }}').update(messageText);#}
+            firebase.database().ref('/profilePic/').push({'username': '{{ session.username }}','photo' : messageText});
             window.location.reload();
         })
 
         }
             });
-
 
 
 
