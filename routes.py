@@ -258,8 +258,6 @@ def confirm_email(token):
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    if 'username' in session:
-        return redirect(url_for('home'))
     form = LoginForm()
 
     if request.method == "POST":
