@@ -105,7 +105,7 @@
     {% if searchedItem == 'Null' %}
         <p>Normal content without search</p>
         {% elif searchedItem != 'Null' %}
-            <p>{{ searchedItem['title'] }}</p>
+            <h2>{{ searchedItem['title'] }}</h2>
             <p>{{ searchedItem['contents'] }}</p>
     {% endif %}
 <br /><br />
