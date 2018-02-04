@@ -541,10 +541,11 @@ def home():
         graph_data = line_chart.render_data_uri()
         return render_template("home.html",line_chart=graph_data,userCount=userCount,eventCount=eventCount,recyclecount=recyclecount)
     return redirect(url_for('login'))
+
 @app.route('/photowall', methods=['GET','POST'])
 def upload():
     if 'username' in session:
-        fire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/')
+        allList = []
         bridalList = []
         educationalList = []
         commemorativeList = []
@@ -553,70 +554,68 @@ def upload():
         othersList = []
         photoFilter = PhotoFilter(request.form)
         choice = photoFilter.photoFilter.data
-        print(choice)
-        ref = fire.get('/Images',None)
 
-        for key in ref:
-            photoLink = ref.get(key)
-            # print(photoLink)
-            if choice == 'Bridal':
-                bridalList.append(photoLink)
-                print(bridalList)
-            else:
-                print('choice doesnt work')
-            # if choice == 'Bridal':
-            #      for images in photoLink:
-            #          bridalList.append(images)
 
-        for key in ref:
-            photoLink = ref.get(key)
-            if photoLink == 'Educational':
-                for images in photoLink:
-                    educationalList.append(images)
+        bridal = root.child('Images/Bridal').get()
+        for image in bridal:
+            bridalList.append(bridal[image])
+            allList.append(bridal[image])
 
-        for key in ref:
-            photoLink = ref.get(key)
-            if photoLink == 'Commemorative':
-                for images in photoLink:
-                    commemorativeList.append(images)
+        educational = root.child('Images/Educational').get()
+        for image in educational:
+            educationalList.append(educational[image])
+            allList.append(educational[image])
 
-        for key in ref:
-            photoLink = ref.get(key)
-            if photoLink == 'Charity':
-                for images in photoLink:
-                    charityList.append(images)
+        commemorative = root.child('Images/Commemorative').get()
+        for image in commemorative:
+            commemorativeList.append(commemorative[image])
+            allList.append(commemorative[image])
 
-        for key in ref:
-            photoLink = ref.get(key)
-            if photoLink == 'Food':
-                for images in photoLink:
-                    foodList.append(images)
+        charity = root.child('Images/Charity').get()
+        for image in charity:
+            charityList.append(charity[image])
+            allList.append(charity[image])
 
-        for key in ref:
-            photoLink = ref.get(key)
-            if photoLink == 'Others':
-                for images in photoLink:
-                    othersList.append(images)
+        food = root.child('Images/Food').get()
+        for image in food:
+            foodList.append(food[image])
+            allList.append(food[image])
+
+        others = root.child('Images/Others').get()
+        for image in others:
+            othersList.append(others[image])
+            allList.append(others[image])
 
         pictureList = []
 
-        if choice == 'Bridal':
+        if choice == '':
+            pictureList = allList
+
+        elif choice == 'Bridal':
             pictureList = bridalList
+            pictureList.reverse()
 
         elif choice == 'Educational':
             pictureList = educationalList
+            pictureList.reverse()
 
         elif choice == 'Commemorative':
             pictureList = commemorativeList
+            pictureList.reverse()
 
         elif choice == 'Charity':
             pictureList = charityList
+            pictureList.reverse()
 
         elif choice == 'Food':
             pictureList = foodList
+            pictureList.reverse()
 
         elif choice == 'Others':
             pictureList = othersList
+            pictureList.reverse()
+
+
 
         # for key in ref:
         #     photoLink = ref.get(key)
@@ -625,6 +624,7 @@ def upload():
 
         return render_template('photodesign.html',pictureList = pictureList,photoFilter = photoFilter)
     return redirect(url_for('index'))
+
 
 @app.route('/photoupload', methods=['GET','POST'])
 def uploads():
