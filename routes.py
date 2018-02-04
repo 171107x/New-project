@@ -919,17 +919,33 @@ def post_forum():
 @app.route('/addResponse/<forumNumber>',methods=['POST','GET'])
 def post_response(forumNumber):
     forumPost = forumNumber[5:]
-    # print(forumPost)
-    response = session['response']
-    # print(response)
-    term = request.form["response"]
+    response = request.form["response"]
+    allForumPost = root.child('Forum').get()
+    for post in allForumPost:
+        checkPost = allForumPost[post]['count']
+        responseCount = allForumPost[post]['responseCount']
+        newCount = int(responseCount) + 1
+        print(responseCount)
+        responseString = 'response' + str(newCount)
+        if checkPost == forumPost:
+            postResponse = root.child('Forum/'+post+'/response')
+            postCount = root.child('Forum/'+post)
+            postCount.update({
+                'responseCount' : newCount,
+            })
+            postResponse.update({
+                responseString: {
+            'username': session['username'],
+            'response' :response },
+            })
+            print('CHECK!')
     form = responseForm(request.form)
     if request.method == "POST":
         term = request.form["response"]
-        print(term)
         text = form.responseText.data
         newResponse = Response(text)
     return redirect(url_for('forum'))
+
 
 @app.route('/form' , methods=['POST','GET'])
 def form():
