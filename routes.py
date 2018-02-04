@@ -683,13 +683,25 @@ def search():
     sr = root.child('Content')
     sg = sr.get()
     resultList = []
+    searchedItem = "Null"
     if request.method == 'POST':
         term = request.form["query"]
         for key in sg:
-            if sg[key]['title'] == term:
-                 resultList.append(sg[key]['contents'])
+            term = term.lower()
+            checkTitle = sg[key]['title'].lower()
+            checkContent = sg[key]['contents'].lower()
+            if term in checkTitle:
+                searchedItem = sg[key]
+            elif term in checkContent:
+                searchedItem = sg[key]
+            # if term in sg[key]['title']:
+            # if sg[key]['title'] == term:
+            #     resultList.append(sg[key]['contents'])
+            #     print(resultList)
+            # else:
+            #     print('failed')
 
-    return render_template('search2.html',results = resultList)
+    return render_template('search2.html',results = resultList, searchedItem = searchedItem)
 
 @app.route("/add", methods=['GET','POST'])
 def add():
@@ -706,7 +718,7 @@ def add():
             })
         return redirect(url_for('search'))
 
-    return render_template("add.html",form=form)
+    return render_template("add.html",form=form,searchedItem = searchedItem)
 
 @app.route('/events',methods=['GET','POST'])
 def new():
