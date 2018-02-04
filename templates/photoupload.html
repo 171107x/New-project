@@ -107,16 +107,40 @@
             <p>“Taking pictures is savoring life intensely, every hundredth of a second.”</p>
             <p>― Marc Riboud</p>
             <br>
-            <div class="col-lg-8 col-lg-offset-3">
                 <form method="POST" action="/photoupload">
                 {{ render_field(form.photoFilter)}}
-                <input type="submit" class="btn btn-primary" value="Submit"></input>
+                <input type="submit" class="btn btn-primary" value="Submit" onclick="reload()"/>
                 </form>
-                {% if newToken['Bridal'] == 1 %}
+                <p style="font-size: 13px;" class="text-center">Please reload the page after submitting the category.</p>
+        <div class="col-lg-8 col-lg-offset-3">
+                {% if refy['Select'] == 1 %}
+                <form onsubmit="return Validate(this);">
+                <input type='file' value='upload'a href="#" class="btnghost" onclick="reload()" />
+                </form>
+                {% elif refy['Bridal'] == 1 %}
                 <form onsubmit="return Validate(this);">
                 <input type='file' value='upload' id='fileButton' a href="#" class="btnghost" onclick="reload()" />
                 </form>
-                {% elif newToken['Educational'] == 1 %}
+                {% elif refy['Educational'] == 1 %}
+                    <form onsubmit="return Validate(this);">
+                <input type='file' value='upload' id='fileButton2' a href="#" class="btnghost" onclick="reload()" />
+                </form>
+                {% elif refy['Commemorative'] == 1 %}
+                    <form onsubmit="return Validate(this);">
+                <input type='file' value='upload' id='fileButton3' a href="#" class="btnghost" onclick="reload()" />
+                </form>
+                {% elif refy['Charity'] == 1 %}
+                <form onsubmit="return Validate(this);">
+                <input type='file' value='upload' id='fileButton4' a href="#" class="btnghost" onclick="reload()" />
+                </form>
+                {% elif refy['Food'] == 1 %}
+                <form onsubmit="return Validate(this);">
+                <input type='file' value='upload' id='fileButton5' a href="#" class="btnghost" onclick="reload()" />
+                </form>
+                {% elif refy['Others'] == 1 %}
+                <form onsubmit="return Validate(this);">
+                <input type='file' value='upload' id='fileButton6' a href="#" class="btnghost" onclick="reload()" />
+                </form>
                 {% endif %}
             </div>
 		</div>
@@ -196,52 +220,270 @@
   firebase.initializeApp(config);
 
   //Get Elements
-var uploader = document.getElementById('uploader');
-var fileButton = document.getElementById('fileButton');
+if (id = document.getElementById('fileButton')) {
+    var uploader = document.getElementById('uploader');
+    var fileButton = document.getElementById('fileButton');
 
 //Listen for file selection
-fileButton.addEventListener('change',function(e) {
+    fileButton.addEventListener('change', function (e) {
 //Get file
-    var file = e.target.files[0];
+        var file = e.target.files[0];
 
 
-    var fileInput = document.getElementById('fileButton');
-    var filePath = fileInput.value;
-    var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
-    if(!allowedExtensions.exec(filePath)){
-        alert('Please upload file having jpg, jpeg and png extensions only.');
-        fileInput.value = '';
-        return false;
-    }else{
+        var fileInput = document.getElementById('fileButton');
+        var filePath = fileInput.value;
+        var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+        if (!allowedExtensions.exec(filePath)) {
+            alert('Please upload file having jpg, jpeg and png extensions only.');
+            fileInput.value = '';
+            return false;
+        } else {
 
 //Create a storage ref
-    var storageRef = firebase.storage().ref('Images/' + file.name);
-    var firebaseRef = firebase.database().ref();
+            var storageRef = firebase.storage().ref('Images/' + file.name);
+            var firebaseRef = firebase.database().ref();
 //Upload file
-    var task = storageRef.put(file);
+            var task = storageRef.put(file);
 
-    function error(err) {
-        console.log('error', err);
-    }
+            function error(err) {
+                console.log('error', err);
+            }
 
 //Get a reference to store file at photos/<FILENAME>.jpg
-    task.on('state_changed', null, null, function () {
-        //When the image has successfully uploaded we get its download URL
+            task.on('state_changed', null, null, function () {
+                //When the image has successfully uploaded we get its download URL
 
-        var downloadURL = task.snapshot.downloadURL
-        //This is for profile picture
-        {#        document.querySelector('img').src = downloadURL;#}
-       var messageText = downloadURL;
-        firebaseRef.child('Images/Bridal').push(messageText);
-        window.location.reload();
-    })
+                var downloadURL = task.snapshot.downloadURL
+                //This is for profile picture
+                {#        document.querySelector('img').src = downloadURL;#}
+                var messageText = downloadURL;
+                firebaseRef.child('Images/Bridal').push(messageText);
+                window.location.reload();
+            })
 
-    }
-        });
+        }
+    });
+}
+else if (id = document.getElementById('fileButton2')) {
+    var uploader2 = document.getElementById('uploader');
+    var fileButton2 = document.getElementById('fileButton2');
+
+//Listen for file selection
+    fileButton2.addEventListener('change', function (e) {
+//Get file
+        var file = e.target.files[0];
 
 
+        var fileInput = document.getElementById('fileButton2');
+        var filePath = fileInput.value;
+        var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+        if (!allowedExtensions.exec(filePath)) {
+            alert('Please upload file having jpg, jpeg and png extensions only.');
+            fileInput.value = '';
+            return false;
+        } else {
+
+//Create a storage ref
+            var storageRef = firebase.storage().ref('Images/' + file.name);
+            var firebaseRef = firebase.database().ref();
+//Upload file
+            var task = storageRef.put(file);
+
+            function error(err) {
+                console.log('error', err);
+            }
+
+//Get a reference to store file at photos/<FILENAME>.jpg
+            task.on('state_changed', null, null, function () {
+                //When the image has successfully uploaded we get its download URL
+
+                var downloadURL = task.snapshot.downloadURL
+                //This is for profile picture
+                {#        document.querySelector('img').src = downloadURL;#}
+                var messageText = downloadURL;
+                firebaseRef.child('Images/Educational').push(messageText);
+                window.location.reload();
+            })
+
+        }
+    });
+}
+else if (id = document.getElementById('fileButton3')) {
+    var uploader3 = document.getElementById('uploader');
+    var fileButton3 = document.getElementById('fileButton3');
+
+//Listen for file selection
+    fileButton3.addEventListener('change', function (e) {
+//Get file
+        var file = e.target.files[0];
 
 
-    </script>
+        var fileInput = document.getElementById('fileButton3');
+        var filePath = fileInput.value;
+        var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+        if (!allowedExtensions.exec(filePath)) {
+            alert('Please upload file having jpg, jpeg and png extensions only.');
+            fileInput.value = '';
+            return false;
+        } else {
+
+//Create a storage ref
+            var storageRef = firebase.storage().ref('Images/' + file.name);
+            var firebaseRef = firebase.database().ref();
+//Upload file
+            var task = storageRef.put(file);
+
+            function error(err) {
+                console.log('error', err);
+            }
+
+//Get a reference to store file at photos/<FILENAME>.jpg
+            task.on('state_changed', null, null, function () {
+                //When the image has successfully uploaded we get its download URL
+
+                var downloadURL = task.snapshot.downloadURL
+                //This is for profile picture
+                {#        document.querySelector('img').src = downloadURL;#}
+                var messageText = downloadURL;
+                firebaseRef.child('Images/Commemorative').push(messageText);
+                window.location.reload();
+            })
+
+        }
+    });
+}
+else if (id = document.getElementById('fileButton4')) {
+    var uploader4 = document.getElementById('uploader4');
+    var fileButton4 = document.getElementById('fileButton4');
+
+//Listen for file selection
+    fileButton4.addEventListener('change', function (e) {
+//Get file
+        var file = e.target.files[0];
+
+
+        var fileInput = document.getElementById('fileButton4');
+        var filePath = fileInput.value;
+        var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+        if (!allowedExtensions.exec(filePath)) {
+            alert('Please upload file having jpg, jpeg and png extensions only.');
+            fileInput.value = '';
+            return false;
+        } else {
+
+//Create a storage ref
+            var storageRef = firebase.storage().ref('Images/' + file.name);
+            var firebaseRef = firebase.database().ref();
+//Upload file
+            var task = storageRef.put(file);
+
+            function error(err) {
+                console.log('error', err);
+            }
+
+//Get a reference to store file at photos/<FILENAME>.jpg
+            task.on('state_changed', null, null, function () {
+                //When the image has successfully uploaded we get its download URL
+
+                var downloadURL = task.snapshot.downloadURL
+                //This is for profile picture
+                {#        document.querySelector('img').src = downloadURL;#}
+                var messageText = downloadURL;
+                firebaseRef.child('Images/Charity').push(messageText);
+                window.location.reload();
+            })
+
+        }
+    });
+}
+else if (id = document.getElementById('fileButton5')) {
+    var uploader5 = document.getElementById('uploader5');
+    var fileButton5 = document.getElementById('fileButton5');
+
+//Listen for file selection
+    fileButton5.addEventListener('change', function (e) {
+//Get file
+        var file = e.target.files[0];
+
+
+        var fileInput = document.getElementById('fileButton5');
+        var filePath = fileInput.value;
+        var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+        if (!allowedExtensions.exec(filePath)) {
+            alert('Please upload file having jpg, jpeg and png extensions only.');
+            fileInput.value = '';
+            return false;
+        } else {
+
+//Create a storage ref
+            var storageRef = firebase.storage().ref('Images/' + file.name);
+            var firebaseRef = firebase.database().ref();
+//Upload file
+            var task = storageRef.put(file);
+
+            function error(err) {
+                console.log('error', err);
+            }
+
+//Get a reference to store file at photos/<FILENAME>.jpg
+            task.on('state_changed', null, null, function () {
+                //When the image has successfully uploaded we get its download URL
+
+                var downloadURL = task.snapshot.downloadURL
+                //This is for profile picture
+                {#        document.querySelector('img').src = downloadURL;#}
+                var messageText = downloadURL;
+                firebaseRef.child('Images/Food').push(messageText);
+                window.location.reload();
+            })
+
+        }
+    });
+}
+else if (id = document.getElementById('fileButton6')) {
+    var uploader6 = document.getElementById('uploader6');
+    var fileButton6 = document.getElementById('fileButton6');
+
+//Listen for file selection
+    fileButton6.addEventListener('change', function (e) {
+//Get file
+        var file = e.target.files[0];
+
+
+        var fileInput = document.getElementById('fileButton6');
+        var filePath = fileInput.value;
+        var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+        if (!allowedExtensions.exec(filePath)) {
+            alert('Please upload file having jpg, jpeg and png extensions only.');
+            fileInput.value = '';
+            return false;
+        } else {
+
+//Create a storage ref
+            var storageRef = firebase.storage().ref('Images/' + file.name);
+            var firebaseRef = firebase.database().ref();
+//Upload file
+            var task = storageRef.put(file);
+
+            function error(err) {
+                console.log('error', err);
+            }
+
+//Get a reference to store file at photos/<FILENAME>.jpg
+            task.on('state_changed', null, null, function () {
+                //When the image has successfully uploaded we get its download URL
+
+                var downloadURL = task.snapshot.downloadURL
+                //This is for profile picture
+                {#        document.querySelector('img').src = downloadURL;#}
+                var messageText = downloadURL;
+                firebaseRef.child('Images/Others').push(messageText);
+                window.location.reload();
+            })
+
+        }
+    });
+}
+</script>
 </body>
 </html>

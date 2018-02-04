@@ -22,6 +22,7 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+{% from "./Includes/_formhelper.html" import render_field %}
 </head>
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
 <!-- Navigation -->
@@ -120,6 +121,11 @@
     <div class="container text-center">
         <div class="row">
         <div class="col-lg-8 col-lg-offset-2">
+            <form method="GET" action="/photowall">
+                {{ render_field(form.photoFilter)}}
+                <input type="submit" class="btn btn-primary" value="Submit" onclick="reload()"/>
+                </form>
+                <p style="font-size: 13px;" class="text-center">Please reload the page after submitting the category.</p>
         {% for pics in pictureList %}
 		    <img style="height:700px;width:700px;padding-bottom:50px;box-shadow: 8px 8px 10px #aaa; class:'centered" ; src={{ pics }} >
                 <br>
@@ -136,7 +142,8 @@
 {#		<img src="http://unsplash.it/680/380?random=3" alt="">#}
 {#		</a>#}
 {#		</li>#}
-	</ul>
+    </div>
+    </ul>
 </div>
 </section>
 <!-- Contact Section -->
