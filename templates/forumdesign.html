@@ -158,10 +158,16 @@
                                                             <p>{{ eachForum[4][j] }}</p>
                                                             {% endfor %}
                                                     {% endif %}
-                                                    <form action="/addResponse/forum{{ eachForum[5] }}">
-                                                  {{ render_field(forumFilter.responseText, class_="form-control")}}
-                                                        <input type="submit" class="btn btn-primary" value="Submit your response"></input>
-                                                    </form>
+                                                <form class="form-inline" method="POST" action="/addResponse/forum{{ eachForum[5] }}">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control" name="response" id="response">
+                                                    </div>
+                                                    <button type ="submit" class="btn btn-primary">Post response</button>
+                                                </form>
+{#                                                    <form method="POST" action="/addResponse/forum{{ eachForum[5] }}">#}
+{#                                                  {{ render_field(forumFilter.responseText, class_="form-control")}}#}
+{#                                                        <input type="submit" class="btn btn-primary" value="Submit your response"></input>#}
+{#                                                    </form>#}
  											    </div>
                                             </div>
                                         </div>
