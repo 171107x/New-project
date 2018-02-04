@@ -98,7 +98,11 @@
                 <div class="col-lg-1">
                 </div>
                 <div class="col-lg-10">
+                    Title:
+                    {{ render_field(form.titleText, class="form-control", id_="Status" )}}
+                    Content:
                     {{ render_field(form.contentText, class="form-control", id_="Status" )}}
+                    <br />
                     <input type="submit" class="btn btn-primary" id="submit" value="Submit" onclick="Beep()"></input>
 				</div>
                 </form>
