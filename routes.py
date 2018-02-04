@@ -89,11 +89,13 @@ class eventsForm(Form):
     date = StringField('Date of event',[validators.DataRequired()])
 
 class PhotoFilter(Form):
-    photoFilter = SelectField(
-        choices=[('','Select'),('Bridal','Bridal'),('Educational','Educational'),
-                 ('Commemorative','Commemorative'),('Charity','Charity'),
-                 ('Food','Food'),('Others','Others')]
-    )
+    photoFilter = SelectField(choices=[('','Select'),
+                                       ('Bridal','Bridal'),
+                                       ('Educational','Educational'),
+                                       ('Commemorative','Commemorative'),
+                                       ('Charity','Charity'),
+                                       ('Food','Food'),
+                                       ('Others','Others')])
 
 class forumForm(Form):
         forumText = TextAreaField('')
@@ -105,6 +107,7 @@ class ForumFilter(Form):
         forumFilter = SelectField(
             choices=[('', 'Select'), ('Food', 'Food'), ('Movies', 'Movies'), ('Childcare', 'Childcare'),
                      ('Eldercare', 'Eldercare'), ('Housekeeping', 'Housekeeping')])
+        responseText = StringField('Add a response!','')
 
 class Tipsform(Form):
     housekeeping_tips = TextAreaField('Tips')
@@ -523,21 +526,28 @@ def home():
 def upload():
     if 'username' in session:
         fire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/')
-        form = PhotoFilter(request.form)
-        choice = form.photoFilter.data
         bridalList = []
         educationalList = []
         commemorativeList = []
         charityList = []
         foodList = []
         othersList = []
+        photoFilter = PhotoFilter(request.form)
+        choice = photoFilter.photoFilter.data
+        print(choice)
         ref = fire.get('/Images',None)
 
         for key in ref:
             photoLink = ref.get(key)
-            if photoLink == 'Bridal':
-                for images in photoLink:
-                    bridalList.append(images)
+            # print(photoLink)
+            if choice == 'Bridal':
+                bridalList.append(photoLink)
+                print(bridalList)
+            else:
+                print('choice doesnt work')
+            # if choice == 'Bridal':
+            #      for images in photoLink:
+            #          bridalList.append(images)
 
         for key in ref:
             photoLink = ref.get(key)
@@ -568,7 +578,6 @@ def upload():
             if photoLink == 'Others':
                 for images in photoLink:
                     othersList.append(images)
-        print(othersList)
 
         pictureList = []
 
@@ -595,7 +604,7 @@ def upload():
         #     pictureList.append(photoLink)
         # pictureList.reverse()
 
-        return render_template('photodesign.html',pictureList = pictureList,form = form)
+        return render_template('photodesign.html',pictureList = pictureList,photoFilter = photoFilter)
     return redirect(url_for('index'))
 
 @app.route('/photoupload', methods=['GET','POST'])
@@ -783,6 +792,8 @@ def forum():
     housekeepingList = []
     forumFilter = ForumFilter(request.form)
     choice = forumFilter.forumFilter.data
+    print(choice)
+    response = forumFilter.responseText.data
     fire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/')
     result = fire.get('Forum', None)
 
@@ -882,13 +893,14 @@ def post_forum():
         return redirect(url_for('forum'))
     return render_template('postForum.html',form=form)
 
-@app.route('/addResponse',methods=['POST','GET'])
-def post_response():
+@app.route('/addResponse/<forumNumber>',methods=['POST','GET'])
+def post_response(forumNumber):
+    print('response was here')
     form = responseForm(request.form)
     if request.method == "POST":
         text = form.responseText.data
         newResponse = Response(text)
-    return redirect(url_for('forum',form=form))
+    return redirect(url_for('forum'))
 
 @app.route('/form' , methods=['POST','GET'])
 def form():
