@@ -14,6 +14,7 @@ import pygal
 from flask_socketio import SocketIO, emit
 import random
 import jwt
+from geopy.geocoders import Nominatim
 import datetime
 from werkzeug.utils import secure_filename
 
@@ -704,6 +705,7 @@ def add():
 
     return render_template("add.html",form=form,searchedItem = searchedItem)
 
+
 @app.route('/events',methods=['GET','POST'])
 def new():
     if 'username' in session:
@@ -717,6 +719,13 @@ def new():
             #     xd = allEvent[key]['interested'] + 1
             #     root.child('Events/' + key).update({'interested': xd})
 
+        geolocater = Nominatim()
+        location = geolocater.geocode(Events.get_location())
+
+        events = (
+            locationEvent(Events.get_title(), location.latitude,location.longitude)
+        )
+
         try:
             for key in allEvent:
                 allE.append(allEvent[key])
@@ -728,7 +737,7 @@ def new():
             count = len(allEvent) + 1
         except TypeError:
             count = 1
-        return render_template('showEvent.html', form=form, allE=allE,count=count)
+        return render_template('showEvent.html', form=form, allE=allE,count=count,events=events)
     return redirect(url_for('index'))
 
 @app.route('/showInterest/<eventName>')
