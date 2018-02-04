@@ -380,7 +380,7 @@ def user(username):
         pictureList = []
         if ref != None:
             for key in ref:
-                if ref[key]['username'] == session['username']:
+                if ref[key]['username'] == username:
                     pictureList.append(ref[key]['photo'])
 
         if request.method == 'POST' and form.validate():

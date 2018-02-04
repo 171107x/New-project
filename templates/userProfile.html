@@ -81,7 +81,7 @@
         <div class="col-sm-10">
              <h1>{{ username }}</h1>
         </div>
-            <div class="col-sm-2"><img title="profile image" class="img-circle img-responsive" src="{{ pictureList[0] }}"></div>
+            <div class="col-sm-2"><img title="profile image" class="img-circle img-responsive" width="304" height="304" src="{{ pictureList[0] }}"></div>
 
     </div>
   <br>
@@ -104,7 +104,7 @@
                 </li>
                 <li class="list-group-item text-right"><span class="pull-left"><strong class="">Shares</strong></span> 125</li>
                 <li class="list-group-item text-right"><span class="pull-left"><strong class="">Reviews</strong></span>{{ reviewList }}</li>
-                <li class="list-group-item text-right"><a href="/user/{{ username }}/posts"><span class="pull-left"><strong class="">Posts</strong></span></a>{{ forumList }}</li>
+                <li class="list-group-item text-right"><a href="/{{ username }}/posts"><span class="pull-left"><strong class="">Posts</strong></span></a>{{ forumList }}</li>
                         <li class="list-group-item text-right"><span class="pull-left"><strong class="">Followers</strong></span> 78</li>
             </ul>
             <div class="panel panel-default">
