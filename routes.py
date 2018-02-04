@@ -919,12 +919,13 @@ def post_forum():
             {
 
 
-            'count' : increaseCount,
+            'count' : str(increaseCount),
             'text' : newForum.get_text(),
             'type' : newForum.get_type(),
             'time' : newForum.get_date(),
             'username' : session['username'],
-            'response' : {'response':'empty'}
+            'response' : {'response':'empty'},
+            'responseCount' : 0
 
         })
 
@@ -940,7 +941,6 @@ def post_response(forumNumber):
         checkPost = allForumPost[post]['count']
         responseCount = allForumPost[post]['responseCount']
         newCount = int(responseCount) + 1
-        print(responseCount)
         responseString = 'response' + str(newCount)
         if checkPost == forumPost:
             postResponse = root.child('Forum/'+post+'/response')
@@ -951,7 +951,7 @@ def post_response(forumNumber):
             postResponse.update({
                 responseString: {
             'username': session['username'],
-            'response' :response },
+            'response' : response },
             })
             print('CHECK!')
     form = responseForm(request.form)
