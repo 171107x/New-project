@@ -149,13 +149,18 @@ class Tips():
 
 class addForm(Form):
     contentText = TextAreaField('')
+    titleText = TextAreaField('')
 
 class Content:
-    def __init__(self,text):
+    def __init__(self,tText,text):
+        self.__titleText = tText
         self.__contentText = text
 
     def get_text(self):
         return self.__contentText
+
+    def get_Ttext(self):
+        return self.__titleText
 
 
 @app.route("/")
@@ -673,25 +678,31 @@ def uploads():
         return render_template('photoupload.html',pictureList = pictureList, form = form, refy=refy)
     return redirect(url_for('index'))
 
-@app.route('/search')
+@app.route('/search', methods=['GET','POST'])
 def search():
-    posts = Post.query.whoosh_search(request.args.get('query')).all()
+    sr = root.child('Content')
+    sg = sr.get()
+    resultList = []
+    if request.method == 'POST':
+        term = request.form["query"]
+        for key in sg:
+            if sg[key]['title'] == term:
+                 resultList.append(sg[key]['contents'])
 
-    return render_template('search2.html', posts=posts)
+    return render_template('search2.html',results = resultList)
 
 @app.route("/add", methods=['GET','POST'])
 def add():
     form = addForm(request.form)
     if request.method =="POST":
-        # post = Post(title = request.form['title'], content = request.form['content'])
-        # db2.session.add(post)
-        # db2.session.commit()
+        title= form.titleText.data
         text = form.contentText.data
-        newContent = Content(text)
+        newContent = Content(title,text)
         newContent_db = root.child('Content')
         newContent_db.push(
             {
-                'text': newContent.get_text(),
+                'title': newContent.get_Ttext(),
+                'contents' : newContent.get_text()
             })
         return redirect(url_for('search'))
 
