@@ -109,11 +109,15 @@
             <br>
             <div class="col-lg-8 col-lg-offset-3">
                 <form method="POST" action="/photoupload">
-                {{ render_field(form.form)}}
+                {{ render_field(form.photoFilter)}}
+                <input type="submit" class="btn btn-primary" value="Submit"></input>
                 </form>
+                {% if newToken['Bridal'] == 1 %}
                 <form onsubmit="return Validate(this);">
                 <input type='file' value='upload' id='fileButton' a href="#" class="btnghost" onclick="reload()" />
                 </form>
+                {% elif newToken['Educational'] == 1 %}
+                {% endif %}
             </div>
 		</div>
     </div>
@@ -220,7 +224,6 @@ fileButton.addEventListener('change',function(e) {
         console.log('error', err);
     }
 
-
 //Get a reference to store file at photos/<FILENAME>.jpg
     task.on('state_changed', null, null, function () {
         //When the image has successfully uploaded we get its download URL
@@ -229,7 +232,7 @@ fileButton.addEventListener('change',function(e) {
         //This is for profile picture
         {#        document.querySelector('img').src = downloadURL;#}
        var messageText = downloadURL;
-        firebaseRef.child('Images').push(messageText);
+        firebaseRef.child('Images/Bridal').push(messageText);
         window.location.reload();
     })
 

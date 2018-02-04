@@ -533,7 +533,7 @@ def upload():
         return render_template('photodesign.html',pictureList = pictureList)
     return redirect(url_for('index'))
 
-@app.route('/photoupload')
+@app.route('/photoupload', methods=['GET','POST'])
 def uploads():
     if 'username' in session:
         form = PhotoFilter(request.form)
@@ -545,35 +545,32 @@ def uploads():
         print(refy)
         xd = list(refy)
         if choice == 'Bridal':
-            count = refx['Bridal']
-            refy.set({
-                'Bridal': count+1
+            refx.set({
+                'Bridal': 1
             })
         elif choice == 'Charity':
-            count = refx['Charity']
-            refy.set({
-                'Charity': count+1
+            refx.set({
+                'Charity': 1
             })
         elif choice == 'Commemorative':
-            count = refx['Commemorative']
-            refy.set({
-                'Commemorative': count+1
+            refx.set({
+                'Commemorative': 1
             })
         elif choice == 'Educational':
-            count = refx['Commemorative']
-            refy.set({
-                'Commemorative': count+1
+            refx.set({
+                'Commemorative': 1
             })
         elif choice == 'Food':
-            count = refx['Food']
-            refy.set({
-                'Food': count+1
+            refx.set({
+                'Food': 1
             })
         elif choice == 'Others':
-            count = refx['Others']
-            refy.set({
-                'Others': count+1
+            refx.set({
+                'Others': 1
             })
+
+        for i in refy:
+            newToken = refy[i]
 
         pictureList = []
         for key in ref:
@@ -581,7 +578,7 @@ def uploads():
             pictureList.append(photoLink)
         pictureList.reverse()
 
-        return render_template('photoupload.html',pictureList = pictureList, form = form)
+        return render_template('photoupload.html',pictureList = pictureList, form = form, newToken = newToken)
     return redirect(url_for('index'))
 
 @app.route('/search')
