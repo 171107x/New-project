@@ -9,8 +9,6 @@ from Events import Events
 from forum import Forum
 import firebase_admin
 from firebase_admin import credentials, db
-from flask_sqlalchemy import SQLAlchemy
-import flask_whooshalchemy as wa
 from wtforms import Form, StringField, TextAreaField, RadioField, SelectField, validators
 import pygal
 from flask_socketio import SocketIO, emit
@@ -50,20 +48,6 @@ app.secret_key = "baby123"
 socketio = SocketIO( app )
 
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@localhost/texttest'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS']  = True
-app.config['WHOOSH_BASE']='whoosh'
-
-db2 = SQLAlchemy(app)
-
-class Post(db2.Model):
-    __searchable__ = ['title','content']
-
-    id = db2.Column(db2.Integer, primary_key= True)
-    title = db2.Column(db2.String(100))
-    content = db2.Column(db2.String(1000))
-
-wa.whoosh_index(app,Post)
 
 class eventsForm(Form):
     title = StringField('Title',[validators.Length(min=1, max=150), validators.DataRequired()])
