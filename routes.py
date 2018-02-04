@@ -719,6 +719,12 @@ def new():
             #     xd = allEvent[key]['interested'] + 1
             #     root.child('Events/' + key).update({'interested': xd})
 
+        class locationEvent:
+            def __init__(self,name,lat,lng):
+                self.name = name
+                self.lat = lat
+                self.lng = lng
+
         geolocater = Nominatim()
         location = geolocater.geocode(Events.get_location())
 
