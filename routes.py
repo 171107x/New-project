@@ -107,7 +107,6 @@ class ForumFilter(Form):
         forumFilter = SelectField(
             choices=[('', 'Select'), ('Food', 'Food'), ('Movies', 'Movies'), ('Childcare', 'Childcare'),
                      ('Eldercare', 'Eldercare'), ('Housekeeping', 'Housekeeping')])
-        responseText = StringField('Add a response!','')
 
 class Tipsform(Form):
     housekeeping_tips = TextAreaField('Tips')
@@ -811,8 +810,6 @@ def forum():
     housekeepingList = []
     forumFilter = ForumFilter(request.form)
     choice = forumFilter.forumFilter.data
-    print(choice)
-    response = forumFilter.responseText.data
     fire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/')
     result = fire.get('Forum', None)
 
@@ -914,9 +911,15 @@ def post_forum():
 
 @app.route('/addResponse/<forumNumber>',methods=['POST','GET'])
 def post_response(forumNumber):
-    print('response was here')
+    forumPost = forumNumber[5:]
+    # print(forumPost)
+    response = session['response']
+    # print(response)
+    term = request.form["response"]
     form = responseForm(request.form)
     if request.method == "POST":
+        term = request.form["response"]
+        print(term)
         text = form.responseText.data
         newResponse = Response(text)
     return redirect(url_for('forum'))
