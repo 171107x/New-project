@@ -88,6 +88,13 @@ class eventsForm(Form):
     description = TextAreaField('Description of event',[validators.DataRequired()])
     date = StringField('Date of event',[validators.DataRequired()])
 
+class PhotoFilter(Form):
+    photoFilter = SelectField(
+        choices=[('','Select'),('Bridal','Bridal'),('Educational','Educational'),
+                 ('Commemorative','Commemorative'),('Charity','Charity'),
+                 ('Food','Food'),('Others','Others')]
+    )
+
 class forumForm(Form):
         forumText = TextAreaField('')
         forumType = SelectField(
@@ -529,15 +536,52 @@ def upload():
 @app.route('/photoupload')
 def uploads():
     if 'username' in session:
+        form = PhotoFilter(request.form)
+        choice = form.photoFilter.data
         fire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/')
         ref = fire.get('/Images',None)
+        refx = root.child('ImageFilter')
+        refy = refx.get()
+        print(refy)
+        xd = list(refy)
+        if choice == 'Bridal':
+            count = refx['Bridal']
+            refy.set({
+                'Bridal': count+1
+            })
+        elif choice == 'Charity':
+            count = refx['Charity']
+            refy.set({
+                'Charity': count+1
+            })
+        elif choice == 'Commemorative':
+            count = refx['Commemorative']
+            refy.set({
+                'Commemorative': count+1
+            })
+        elif choice == 'Educational':
+            count = refx['Commemorative']
+            refy.set({
+                'Commemorative': count+1
+            })
+        elif choice == 'Food':
+            count = refx['Food']
+            refy.set({
+                'Food': count+1
+            })
+        elif choice == 'Others':
+            count = refx['Others']
+            refy.set({
+                'Others': count+1
+            })
+
         pictureList = []
         for key in ref:
             photoLink = ref.get(key)
             pictureList.append(photoLink)
         pictureList.reverse()
 
-        return render_template('photoupload.html',pictureList = pictureList)
+        return render_template('photoupload.html',pictureList = pictureList, form = form)
     return redirect(url_for('index'))
 
 @app.route('/search')

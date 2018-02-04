@@ -24,6 +24,7 @@
     <![endif]-->
 </head>
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
+{% from "./Includes/_formhelper.html" import render_field %}
 <!-- Navigation -->
 <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
 <div class="container">
@@ -107,6 +108,9 @@
             <p>― Marc Riboud</p>
             <br>
             <div class="col-lg-8 col-lg-offset-3">
+                <form method="POST" action="/photoupload">
+                {{ render_field(form.form)}}
+                </form>
                 <form onsubmit="return Validate(this);">
                 <input type='file' value='upload' id='fileButton' a href="#" class="btnghost" onclick="reload()" />
                 </form>
