@@ -380,11 +380,8 @@ def user(username):
         pictureList = []
         if ref != None:
             for key in ref:
-                if key == session['username']:
-                    refer = fire.get('/profilePic', key)
-                    for i in refer:
-                        pictureList.append(refer[i])
-        print(pictureList)
+                if ref[key]['username'] == session['username']:
+                    pictureList.append(ref[key]['photo'])
 
         if request.method == 'POST' and form.validate():
             title = form.title.data
@@ -420,6 +417,30 @@ def posts(username):
         postList.reverse()
         return render_template('posts.html', postList=postList, username=username)
 
+@app.route('/settings/profilePic', methods=["GET", "POST"])
+def profilePic():
+
+    username = session['username']
+    emailList = []
+    allUser = root.child('userInfo').get()
+    for key in allUser:
+        if username == allUser[key]['username']:
+            emailList.append(allUser[key]['email'])
+
+    keyPic = []
+    userList = []
+    picKey = ''
+
+    pic = root.child('profilePic').get()
+    for pkey in pic:
+        if username == pic[pkey]['username']:
+            keyPic.append(pic[pkey]['photo'])
+            userList.append(pic[pkey]['username'])
+            picKey = pkey
+    print(keyPic)
+    print(picKey)
+
+    return render_template('test.html', form=form, emailList=emailList, keyPic=keyPic, userList=userList, picKey=picKey)
 
 @app.route('/settings/password', methods=["GET", "POST"])
 def password():
