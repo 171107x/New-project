@@ -375,15 +375,16 @@ def user(username):
         allList.append(reviewList)
         allList.append(posterList)
         allList.append(timeList)
-        print(allList)
+
 
         fire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/')
         ref = fire.get('/profilePic', None)
         pictureList = []
         if ref != None:
             for key in ref:
-                if  username == ref[key]['username'] :
+                if username == ref[key]['username'] :
                     pictureList.append(ref[key]['photo'])
+
 
         if request.method == 'POST' and form.validate():
             title = form.title.data
@@ -432,6 +433,15 @@ def profilePic():
     keyPic = []
     userList = []
     picKey = ''
+    pictureList = []
+    fire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/')
+    ref = fire.get('/profilePic', None)
+    if ref != None:
+        for key in ref:
+            if username == ref[key]['username']:
+                pictureList.append(ref[key]['photo'])
+
+    print(pictureList)
 
     pic = root.child('profilePic').get()
     for pkey in pic:
@@ -442,7 +452,7 @@ def profilePic():
     print(keyPic)
     print(picKey)
 
-    return render_template('test.html', form=form, emailList=emailList, keyPic=keyPic, userList=userList, picKey=picKey)
+    return render_template('test.html', form=form, emailList=emailList, keyPic=keyPic, userList=userList, picKey=picKey, pictureList=pictureList)
 
 @app.route('/settings/password', methods=["GET", "POST"])
 def password():
