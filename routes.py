@@ -1156,7 +1156,7 @@ def recipe():
             "Recipe_Details": recipe.get_recipeDetails(),
     })
         print(user)
-        return redirect('Recipe')
+        return redirect(url_for('Recipe'))
     return render_template('Recipeform.html', form=form)
 
 @app.route('/viewRecipe')
