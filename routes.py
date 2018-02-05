@@ -1068,8 +1068,11 @@ def recycle():
         for i in retrieveToken2:
             if retrieveToken2[i]['username'] == session['username']:
                 newToken = retrieveToken2[i]
+
         form = RecycleForm(request.form)
         if request.method == 'POST':
+            recycleDay = form.recycleDay.data
+            recycleTime = form.recycleTime.data
             recycleCount = int(retrieveCount['recycleCount']) + 1
             recycleCount_db = root.child('recycleCount')
             recycleCount_db.set({'recycleCount': recycleCount})
@@ -1102,7 +1105,7 @@ def recycle():
             client.messages.create(
                 to=myPhone,
                 from_=TwilioNumber,
-                body='Block 649 has requested a recycle request." ' + u'\U0001f680' + 'to accept the request, click this link "smartkampung.herokuapp.com{}'.format(link))
+                body='Block 649 has requested a recycle request.The prefered scheduled day is {},in the {}.To accept the request, click this link "smartkampung.herokuapp.com{}'.format(recycleDay,recycleTime,link))
 
 
             return redirect(url_for('recycle'))
