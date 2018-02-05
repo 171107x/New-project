@@ -36,12 +36,35 @@
 	<!-- Collect the nav links, forms, and other content for toggling -->
 	<div class="collapse navbar-collapse navbar-right navbar-main-collapse">
 		<ul class="nav navbar-nav">
+			<li>
+			<a href="/home">Home</a>
+			</li>
+			<li>
+			<a href='/photowall'>Photo Wall</a>
+			</li>
+			<li>
+			<a href="/forum">Forum</a>
+			</li>
+			<li>
+			<a href="/search">Search</a>
+			</li>
+            <li>
+			<a href="/events">Events</a>
+			</li>
+            <li>
+			<a href="/tips">Tips</a>
+			</li>
+            <li>
+			<a href="/recycle">Recycle</a>
+			</li>
             <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Register/Login
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ session.username }}
                 <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                <li><a href="/signup">Register</a></li>
-                <li><a href="/login">Login</a></li>
+                <li><a href="/user/{{ session.username }}">User Profile</a></li>
+                <li><a href="/settings/account">Edit profile</a></li>
+                <li><a href="/chat">Chatroom</a></li>
+                <li><a href="/logout">Logout</a></li>
             </ul>
             </li>
 		</ul>
@@ -49,7 +72,6 @@
 	<!-- /.navbar-collapse -->
 </div>
 <!-- /.container -->
-</nav>
 <!-- Intro Header -->
 <header class="intro">
 <div class="intro-body">
