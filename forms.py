@@ -8,7 +8,7 @@ class SignupForm(Form):
     password = PasswordField('Password', validators=[DataRequired("Please enter your passwords"),Length(min=6, message="Passwords must be 6 characters or more")])
     region = SelectField(
         choices=[('', 'Select'), ('North', 'North'), ('South', 'South'), ('East', 'East'),
-                 ('West', 'West')])
+                 ('West', 'West')], validators=[DataRequired('Please choose the region you are living in')])
     about_me = TextAreaField('About me', validators=[Length(min=0, max=140)])
     submit = SubmitField('Sign up')
 

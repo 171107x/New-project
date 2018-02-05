@@ -301,6 +301,15 @@ def reset():
                 return render_template('reset2.html')
     return render_template('reset.html', form=form)
 
+def passwordgen():
+    alphabet = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    length = 12
+    password = ''
+    for i in range(length):
+        char = random.randrange(len(alphabet))
+        password = password + alphabet[char]
+    return password
+
 @app.route('/resetpass/<token>', methods=['GET', 'POST'])
 def resetpass(token):
     try:
@@ -308,22 +317,20 @@ def resetpass(token):
     except:
         return render_template('404.html')
 
-    form = PasswordForm()
-    if request.method == 'POST':
+    password = passwordgen()
+    users = root.child('userInfo').get()
+    for i in users:
+        if users[i]['email'] == email:
+            user_db = root.child('userInfo/' + i)
+            user_db.update({
+                'password': password
+            })
 
-        password = form.password.data
+    msg = Message('Password Reseted', sender='nypsmartkampung@gmail.com', recipients=[email])
 
-        users = root.child('userInfo').get()
-        for key in users:
-            if email == users[key]['email']:
-                user_db = root.child('userInfo/'+key)
-                user_db.update({
-                    'password': password
-                })
-
-                return redirect(url_for('login'))
-
-    return render_template('reset_with_token.html', form=form, token=token)
+    msg.body = 'Dear' + users[i]['username'] + 'Your new temporary password is {}'.format(password)
+    mail.send(msg)
+    return render_template('reset_with_token.html', email=email)
 
 
 
@@ -474,7 +481,7 @@ def account():
             if username == allUser[key]['username']:
                 user_db = root.child('userInfo/'+key)
                 user_db.update({
-                'password': about_me
+                'about_me': about_me
                 })
                 emailList.append(allUser[key]['email'])
 
