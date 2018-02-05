@@ -747,6 +747,7 @@ def new():
             genericList.append(location.latitude)
             genericList.append(location.longitude)
             latlongList.append(genericList)
+        print(latlongList)
     #     events = (
     #     locationEvent(latList,lngList)
     # )
@@ -754,15 +755,24 @@ def new():
         try:
             for key in allEvent:
                 allE.append(allEvent[key])
-            allE = reversed(allE)
         except TypeError:
             allE = []
 
+        i = 0
+        for key in allE:
+            key['map'] = latlongList[i][0]
+            i += 1
+
+        revEvent = []
+        for key in allE:
+            revEvent.insert(0,key)
+        print(allE)
+        print(revEvent)
         try:
             count = len(allEvent) + 1
         except TypeError:
             count = 1
-        return render_template('showEvent.html', form=form, allE=allE,count=count,latlongList=latlongList)
+        return render_template('showEvent.html', form=form,count=count,latlongList=latlongList,revEvent=revEvent)
     return redirect(url_for('index'))
 
 @app.route('/showInterest/<eventName>')

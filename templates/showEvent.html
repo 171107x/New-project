@@ -32,14 +32,14 @@
     <![endif]-->
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
 <script type="text/javascript">
-    {% for coordinates in latlongList%}
     function initMap() {
-        new google.maps.Map(document.getElementById('map'), {
-            center: {lat: {{coordinates[0]}}, lng: {{ coordinates[1] }}},
+        {% for i in range(latlongList| length)%}
+        new google.maps.Map(document.getElementById('map{{ latlongList[i][0] }}'), {
+            center: {lat: {{latlongList[i][0]}}, lng: {{ latlongList[i][1] }}},
                 zoom: 16
             });
+            {% endfor %}
     }
-    {% endfor %}
 </script>
 </head>
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top" onload="initMap()">
@@ -139,7 +139,7 @@
 <br>
     <div class="container">
         <div class="row">
-        {% for events in allE %}
+        {% for events in revEvent %}
         <div class="col-md-6">
             <div class="well well-sm">
                 <div class="row">
@@ -155,7 +155,7 @@
                             {{ events['description'] }}</p>
                         <p>Event location:<br>
                             {{ events['location'] }}</p>
-                        <div id="map" style="width:100%; height:250px;"></div>
+                        <div id="map{{ events['map'] }}" style="width:100%; height:250px;"></div>
                         <br>
                         <hr>
                         <div class="row rating-desc">
