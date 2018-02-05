@@ -730,7 +730,7 @@ def new():
         retrieveEvent2 = retrieveEvent.get()
         for key in retrieveEvent2:
             title = retrieveEvent2[key]['title']
-        for key in retrieveEvent2:
+            print("this is title" + title)
             if title == retrieveEvent2[key]['title']:
                 locationList = []
                 l0cation = retrieveEvent2[key]['location']
@@ -1022,51 +1022,53 @@ def hello():
 
 @app.route('/recycle',methods=['POST','GET'])
 def recycle():
-    retrieveCount = fireS.get('recycleCount',None)
-    retrieveToken = root.child('userInfo')
-    retrieveToken2 = retrieveToken.get()
-    for i in retrieveToken2:
-        if retrieveToken2[i]['username'] == session['username']:
-            newToken = retrieveToken2[i]
-    form = forumForm(request.form)
-    if request.method == 'POST':
-        recycleCount = int(retrieveCount['recycleCount']) + 1
-        recycleCount_db = root.child('recycleCount')
-        recycleCount_db.set({'recycleCount': recycleCount})
-        tokenChange_db = root.child('userInfo')
-        tokenChange_db2 = tokenChange_db.get()
-        for i in tokenChange_db2:
-            if tokenChange_db2[i]['username'] == session['username']:
-                tokenGet = root.child('userInfo/'+i)
-                tokenGet.update({'token':1})
-        print(tokenChange_db.get())
-        # for i in tokenChange_db:
+    if 'username' in session:
+        retrieveCount = fireS.get('recycleCount',None)
+        retrieveToken = root.child('userInfo')
+        retrieveToken2 = retrieveToken.get()
+        for i in retrieveToken2:
+            if retrieveToken2[i]['username'] == session['username']:
+                newToken = retrieveToken2[i]
+        form = forumForm(request.form)
+        if request.method == 'POST':
+            recycleCount = int(retrieveCount['recycleCount']) + 1
+            recycleCount_db = root.child('recycleCount')
+            recycleCount_db.set({'recycleCount': recycleCount})
+            tokenChange_db = root.child('userInfo')
+            tokenChange_db2 = tokenChange_db.get()
+            for i in tokenChange_db2:
+                if tokenChange_db2[i]['username'] == session['username']:
+                    tokenGet = root.child('userInfo/'+i)
+                    tokenGet.update({'token':1})
+            print(tokenChange_db.get())
+            # for i in tokenChange_db:
 
 
-        # tokenChange_db.set({
-        #     'token':1,
-        #     })
-        from twilio.rest import Client
-        account_sid = 'AC798a929fa5a8424d5b82eab38819d3a5'  # Found on Twilio Console Dashboard
-        auth_token = 'ab795e9a119792b38a02fd96c597cce7'  # Found on Twilio Console Dashboard
-        #'+6592351480
-        #'+6591783904
-        phoneList = ['+6591783904'] #'+6592351480' add sol's number laaaater,
-        myPhone = random.choice(phoneList)# Phone number you used to verify your Twilio account+
-        myToken = jwt.encode({'Request': 'Test'}, 'thisismysecret')
-        TwilioNumber = '12169301225'  # Phone number given to you by Twilio
-        print(myToken)
-        link = url_for('confirm_request', myToken=myToken)
-        client = Client(account_sid, auth_token)
+            # tokenChange_db.set({
+            #     'token':1,
+            #     })
+            from twilio.rest import Client
+            account_sid = 'AC798a929fa5a8424d5b82eab38819d3a5'  # Found on Twilio Console Dashboard
+            auth_token = 'ab795e9a119792b38a02fd96c597cce7'  # Found on Twilio Console Dashboard
+            #'+6592351480
+            #'+6591783904
+            phoneList = ['+6591783904'] #'+6592351480' add sol's number laaaater,
+            myPhone = random.choice(phoneList)# Phone number you used to verify your Twilio account+
+            myToken = jwt.encode({'Request': 'Test'}, 'thisismysecret')
+            TwilioNumber = '12169301225'  # Phone number given to you by Twilio
+            print(myToken)
+            link = url_for('confirm_request', myToken=myToken)
+            client = Client(account_sid, auth_token)
 
-        # client.messages.create(
-        #     to=myPhone,
-        #     from_=TwilioNumber,
-        #     body='Block 649 has requested a recycle request." ' + u'\U0001f680' + 'to accept the request, click this link "smartkampung.herokuapp.com{}'.format(link))
+            # client.messages.create(
+            #     to=myPhone,
+            #     from_=TwilioNumber,
+            #     body='Block 649 has requested a recycle request." ' + u'\U0001f680' + 'to accept the request, click this link "smartkampung.herokuapp.com{}'.format(link))
 
 
-        return redirect(url_for('recycle'))
-    return render_template('recycle.html',form=form, newToken = newToken)
+            return redirect(url_for('recycle'))
+        return render_template('recycle.html',form=form, newToken = newToken)
+    return redirect(url_for('index'))
 #
 @app.route('/confirm/<myToken>')
 def confirm_request(myToken):
