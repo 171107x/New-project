@@ -51,10 +51,7 @@ div {
 
 </head>
 <body>
-    <div class="container-fluid">
-        {% include 'Includes/_messages.html' %}
-    </div>
-  <form method="POST" onsubmit="this.submit();this.reset(); return false;">
+  <form method="POST" >
             {% from "formhelper.html" import render_field%}
 
 

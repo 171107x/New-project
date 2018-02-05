@@ -109,15 +109,15 @@
             <col style="background-color: #1ba39c">
             <col style="background-color: #5b9bd1">
         </colgroup>
-                 <thead style="border:1px solid black;">
-                  <tr style="border:1px solid black;">
+                 <thead>
+                  <tr>
                     <th>name</th>
                     <th> tips</th>
 
                   </tr>
                 </thead>
 
-                <tr style="border:1px solid black;">
+                <tr>
                 {% for i in tip %}
                 <td>{{ i.get_name() }}</td>
                 <td>{{ i.get_tip() }}</td>

@@ -1112,9 +1112,7 @@ def form():
             "type": tip.get_type(),
             "tip": tip.get_tip()
         })
-        flash('you have submitted your tips, thanks for sharing', 'success')
-    return render_template("entryform.html" ,form=entryform)
-
+        return render_template("entryform.html")
 @app.route('/tips/elder')
 def elder():
     eldertip = root.child("Tips").get()
@@ -1166,7 +1164,6 @@ def recipe():
             "Recipe_name": recipe.get_recipeName(),
             "Recipe_Details": recipe.get_recipeDetails(),
     })
-        flash('you have submitted your recipe, thanks for sharing', 'success')
         print(user)
         return redirect(url_for('Recipe'))
     return render_template('Recipeform.html', form=form)
