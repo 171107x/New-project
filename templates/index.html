@@ -13,8 +13,8 @@
 <link href="../static/css/theme.css" rel="stylesheet">
 <!-- Custom Fonts -->
 <link href="../static/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-<link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700,400italic,700italic" rel="stylesheet" type="text/css">
-<link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700,400italic,700italic" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>
@@ -102,8 +102,16 @@
 </div>
         </li>
 <li class="col-md-5">
-    <p>We are proud to have {{ userCount }} users using our website!</p>
-    <p>{{ recyclecount }} services used daily | {{ eventCount }} events we have enlisted on the website</p>
+   <span id="logoone" class="glyphicon glyphicon-user"></span>
+    <p id="one"> We are proud to have <b>{{ userCount }}</b> users using our website!</p>
+    <div id="hold2">
+    <span id="logotwo" class="glyphicon glyphicon-globe"></span>
+        <p id="two"> <b>{{ recyclecount }}</b> services used daily </p>
+    </div>
+    <div id="hold3">
+    <span id="logothree" class="glyphicon glyphicon-book"></span>
+        <p id="three">  <b>{{ eventCount }}</b> events we have enlisted on the website</p>
+    </div>
 </li>
 	</ul>
 </div>

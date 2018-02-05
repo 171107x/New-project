@@ -303,6 +303,15 @@ def reset():
                 return render_template('reset2.html')
     return render_template('reset.html', form=form)
 
+def passwordgen():
+    alphabet = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    length = 12
+    password = ''
+    for i in range(length):
+        char = random.randrange(len(alphabet))
+        password = password + alphabet[char]
+    return password
+
 @app.route('/resetpass/<token>', methods=['GET', 'POST'])
 def resetpass(token):
     try:
@@ -310,22 +319,20 @@ def resetpass(token):
     except:
         return render_template('404.html')
 
-    form = PasswordForm()
-    if request.method == 'POST':
+    password = passwordgen()
+    users = root.child('userInfo').get()
+    for i in users:
+        if users[i]['email'] == email:
+            user_db = root.child('userInfo/' + i)
+            user_db.update({
+                'password': password
+            })
 
-        password = form.password.data
+    msg = Message('Password Reseted', sender='nypsmartkampung@gmail.com', recipients=[email])
 
-        users = root.child('userInfo').get()
-        for key in users:
-            if email == users[key]['email']:
-                user_db = root.child('userInfo/'+key)
-                user_db.update({
-                    'password': password
-                })
-
-                return redirect(url_for('login'))
-
-    return render_template('reset_with_token.html', form=form, token=token)
+    msg.body = 'Dear' + users[i]['username'] + 'Your new temporary password is {}'.format(password)
+    mail.send(msg)
+    return render_template('reset_with_token.html', email=email)
 
 
 
@@ -476,7 +483,7 @@ def account():
             if username == allUser[key]['username']:
                 user_db = root.child('userInfo/'+key)
                 user_db.update({
-                'password': about_me
+                'about_me': about_me
                 })
                 emailList.append(allUser[key]['email'])
 
@@ -734,33 +741,40 @@ def new():
             l0cation = retrieveEvent2[key]['location']
             locationList.append(l0cation)
 
-        latList = []
-        lngList = []
+        latlongList = []
         geolocater = Nominatim()
         for places in locationList:
             location = geolocater.geocode(places)
-            print(location)
-            latList.append(location.latitude)
-            lngList.append(location.longitude)
-
-        print(latList)
-        print(lngList)
-        events = (
-        locationEvent(latList,lngList)
-    )
+            genericList = []
+            genericList.append(location.latitude)
+            genericList.append(location.longitude)
+            latlongList.append(genericList)
+        print(latlongList)
+    #     events = (
+    #     locationEvent(latList,lngList)
+    # )
 
         try:
             for key in allEvent:
                 allE.append(allEvent[key])
-            allE = reversed(allE)
         except TypeError:
             allE = []
 
+        i = 0
+        for key in allE:
+            key['map'] = latlongList[i][0]
+            i += 1
+
+        revEvent = []
+        for key in allE:
+            revEvent.insert(0,key)
+        print(allE)
+        print(revEvent)
         try:
             count = len(allEvent) + 1
         except TypeError:
             count = 1
-        return render_template('showEvent.html', form=form, allE=allE,count=count,events=events)
+        return render_template('showEvent.html', form=form,count=count,latlongList=latlongList,revEvent=revEvent)
     return redirect(url_for('index'))
 
 @app.route('/showInterest/<eventName>')
@@ -859,6 +873,8 @@ def forum():
             foodPlaceholder.append(result[i]['text'])
             foodPlaceholder.append(result[i]['time'])
             foodPlaceholder.append(result[i]['username'])
+            foodPlaceholder.append(result[i]['response'])
+            foodPlaceholder.append(result[i]['count'])
             foodList.append(foodPlaceholder)
 
     for i in result:
@@ -868,6 +884,8 @@ def forum():
             moviePlaceholder.append(result[i]['text'])
             moviePlaceholder.append(result[i]['time'])
             moviePlaceholder.append(result[i]['username'])
+            moviePlaceholder.append(result[i]['response'])
+            moviePlaceholder.append(result[i]['count'])
             movieList.append(moviePlaceholder)
 
     for i in result:
@@ -877,6 +895,8 @@ def forum():
             elderPlaceholder.append(result[i]['text'])
             elderPlaceholder.append(result[i]['time'])
             elderPlaceholder.append(result[i]['username'])
+            elderPlaceholder.append(result[i]['response'])
+            elderPlaceholder.append(result[i]['count'])
             elderList.append(elderPlaceholder)
 
     for i in result:
@@ -886,6 +906,8 @@ def forum():
             housePlaceholder.append(result[i]['text'])
             housePlaceholder.append(result[i]['time'])
             housePlaceholder.append(result[i]['username'])
+            housePlaceholder.append(result[i]['response'])
+            housePlaceholder.append(result[i]['count'])
             housekeepingList.append(housePlaceholder)
 
     for i in result:
@@ -895,6 +917,8 @@ def forum():
             childPlaceholder.append(result[i]['text'])
             childPlaceholder.append(result[i]['time'])
             childPlaceholder.append(result[i]['username'])
+            childPlaceholder.append(result[i]['response'])
+            childPlaceholder.append(result[i]['count'])
             childList.append(childPlaceholder)
 
     forumList = []
@@ -919,6 +943,7 @@ def forum():
         forumList = housekeepingList
     forumList.reverse()
     return render_template('forumdesign.html',forumList = forumList ,forumFilter = forumFilter)
+
 
 @app.route('/postForum',methods=['POST','GET'])
 def post_forum():
@@ -1053,22 +1078,22 @@ def recycle():
             #     'token':1,
             #     })
             from twilio.rest import Client
-            account_sid = 'AC798a929fa5a8424d5b82eab38819d3a5'  # Found on Twilio Console Dashboard
-            auth_token = 'ab795e9a119792b38a02fd96c597cce7'  # Found on Twilio Console Dashboard
+            account_sid = 'AC5091b5762fe17449d4910cb2239e0d5d'  # Found on Twilio Console Dashboard
+            auth_token = '122d88ff6abe6566752ddb4b032c72a6'  # Found on Twilio Console Dashboard
             #'+6592351480
             #'+6591783904
             phoneList = ['+6591783904'] #'+6592351480' add sol's number laaaater,
             myPhone = random.choice(phoneList)# Phone number you used to verify your Twilio account+
             myToken = jwt.encode({'Request': 'Test'}, 'thisismysecret')
-            TwilioNumber = '12169301225'  # Phone number given to you by Twilio
+            TwilioNumber = '+18568884772'  # Phone number given to you by Twilio
             print(myToken)
             link = url_for('confirm_request', myToken=myToken)
             client = Client(account_sid, auth_token)
 
-            # client.messages.create(
-            #     to=myPhone,
-            #     from_=TwilioNumber,
-            #     body='Block 649 has requested a recycle request." ' + u'\U0001f680' + 'to accept the request, click this link "smartkampung.herokuapp.com{}'.format(link))
+            client.messages.create(
+                to=myPhone,
+                from_=TwilioNumber,
+                body='Block 649 has requested a recycle request." ' + u'\U0001f680' + 'to accept the request, click this link "smartkampung.herokuapp.com{}'.format(link))
 
 
             return redirect(url_for('recycle'))

@@ -22,8 +22,8 @@
 </style>
 <!-- Custom Fonts -->
 <link href="../static/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-<link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700,400italic,700italic" rel="stylesheet" type="text/css">
-<link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700,400italic,700italic" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>
@@ -32,16 +32,14 @@
     <![endif]-->
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
 <script type="text/javascript">
-    {% for bullshit in events.latList%}
-    {% for dogshit in events.lngList %}
     function initMap() {
-        new google.maps.Map(document.getElementById('map'), {
-            center: {lat: {{bullshit}}, lng: {{ dogshit }}},
+        {% for i in range(latlongList| length)%}
+        new google.maps.Map(document.getElementById('map{{ latlongList[i][0] }}'), {
+            center: {lat: {{latlongList[i][0]}}, lng: {{ latlongList[i][1] }}},
                 zoom: 16
             });
+            {% endfor %}
     }
-    {% endfor %}
-    {% endfor %}
 </script>
 </head>
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top" onload="initMap()">
@@ -141,7 +139,7 @@
 <br>
     <div class="container">
         <div class="row">
-        {% for events in allE %}
+        {% for events in revEvent %}
         <div class="col-md-6">
             <div class="well well-sm">
                 <div class="row">
@@ -157,7 +155,7 @@
                             {{ events['description'] }}</p>
                         <p>Event location:<br>
                             {{ events['location'] }}</p>
-                        <div id="map" style="width:100%; height:250px;"></div>
+                        <div id="map{{ events['map'] }}" style="width:100%; height:250px;"></div>
                         <br>
                         <hr>
                         <div class="row rating-desc">
