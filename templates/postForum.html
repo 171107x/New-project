@@ -103,8 +103,8 @@
 				<div class="col-lg-1">
 				</div>
 				<div class="col-lg-10">
+                    {{ render_field(form.forumType, class_="form-control statusType", id_="status-type" )}}
 					{{ render_field(form.forumText, class_="form-control", id_="Status" )}}
-					{{ render_field(form.forumType, class_="form-control statusType", id_="status-type" )}}
 					<input type="submit" class="btn btn-primary" id="submit" value="Submit" onclick="Beep()"></input>
 				</div>
                 </form>
