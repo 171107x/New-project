@@ -1108,7 +1108,7 @@ def recycle():
             client.messages.create(
                 to=myPhone,
                 from_=TwilioNumber,
-                body='Block 649 has requested a recycle request.The prefered scheduled day is {},in the {}. To accept the request, click this link "smartkampung.herokuapp.com{}'.format(recycleDay,recycleTime,link))
+                body='Block 649 has requested a recycle request to be on{},{}. To accept the request, click this link "smartkampung.herokuapp.com{}'.format(recycleDay,recycleTime,link))
 
 
             return redirect(url_for('recycle'))
