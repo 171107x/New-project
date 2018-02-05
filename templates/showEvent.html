@@ -33,8 +33,8 @@
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
 <script type="text/javascript">
     function initMap() {
-        new google.maps.Map(document.getElementbyId('map'), {
-            center: {lat: {{location.lat}}, lng: {{ location.lng }},
+        new google.maps.Map(document.getElementById('map'), {
+            center: {lat: {{events.lat}}, lng: {{ events.lng }}},
                 zoom: 16
             });
     }
@@ -153,8 +153,9 @@
                             {{ events['description'] }}</p>
                         <p>Event location:<br>
                             {{ events['location'] }}</p>
-                        <div id="map" style="width:100%; height:900px;"</div>
-                        <hr />
+                        <div id="map" style="width:100%; height:250px;"></div>
+                        <br>
+                        <hr>
                         <div class="row rating-desc">
                             <div class="col-md-12">
                                 <p>Date of event: {{ events['date'] }}<br>Time of event: {{ events['timeStart'] }} to {{ events['timeEnd'] }}</p>

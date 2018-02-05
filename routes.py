@@ -725,11 +725,23 @@ def new():
                 self.lat = lat
                 self.lng = lng
 
+
+        retrieveEvent = root.child('Events')
+        retrieveEvent2 = retrieveEvent.get()
+        for key in retrieveEvent2:
+            title = retrieveEvent2[key]['title']
+        for key in retrieveEvent2:
+            if title == retrieveEvent2[key]['title']:
+                locationList = []
+                l0cation = retrieveEvent2[key]['location']
+                locationList.append(l0cation)
+                print(locationList)
+
         geolocater = Nominatim()
-        location = geolocater.geocode(Events.get_location())
+        location = geolocater.geocode(locationList)
 
         events = (
-            locationEvent(Events.get_title(), location.latitude,location.longitude)
+            locationEvent(title, location.latitude,location.longitude)
         )
 
         try:
