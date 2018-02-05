@@ -1068,7 +1068,7 @@ def recycle():
         for i in retrieveToken2:
             if retrieveToken2[i]['username'] == session['username']:
                 newToken = retrieveToken2[i]
-        form = forumForm(request.form)
+        form = RecycleForm(request.form)
         if request.method == 'POST':
             recycleCount = int(retrieveCount['recycleCount']) + 1
             recycleCount_db = root.child('recycleCount')
