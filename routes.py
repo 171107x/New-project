@@ -1018,7 +1018,7 @@ def retrieveTip():
     list2=[]
     for i in fire.get('Tips',None):
         firedat=fire.get('Tips',i)
-        t=Tips(firedat["name"], firedat["tip"])
+        t=Tips(firedat["name"], firedat["tips"])
         list.append(t.get_name())
         list2.append(t.get_tips())
 
