@@ -166,7 +166,7 @@
                                     <button class="btn btn-info btn-lg" ><span class="glyphicon glyphicon-ok-sign"></span><a href="/showInterest/{{ events['title'] }}">Show interest</a></button>
                                     <p> {{ events['interested'] }} users have shown interest in the event!</p>
                                 {%  elif session['username'] in events['going'] %}
-                                    <button class="btn btn-info btn-lg disabled" ><span class="glyphicon glyphicon-ok-sign disabled"></span><a class='disabled'>Show interest</a></button>
+                                    <button class="btn btn-success btn-lg disabled" ><span class="glyphicon glyphicon-ok-sign disabled"></span><a class='disabled'>Interest Shown!</a></button>
                                 <p> {{ events['interested'] }} users have shown interest in the event!</p>
                                 {% endif %}
                                 <p style="font-size:16px">Posted by {{ events['username'] }} at {{ events['datetime'] }}</p>

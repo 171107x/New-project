@@ -101,24 +101,15 @@
 			<p>
 				To bond every families in hdb flats harmoniously and to keep the kampung spirit alive!
 			</p>
-			<p>
-				<a href="#" class="btnghost"><i class="fa fa-download"></i> Curriculum Vitae</a>
-			</p>
 		</div>
 	</div>
 </div>
 </section>
 <section>
-<div class="gallery">
-	<ul>
+<div class="ontainer content-section text-center">
+    <div class="gallery">
         <li class="col-md-5">
-<!-- Don't forget the "|safe"! -->
-<div id="chart">
-    <embed type="image/svg+xml" src= {{ line_chart|safe }} ></embed>
-</div>
-        </li>
-<li class="col-md-5">
-    <span id="logoone" class="glyphicon glyphicon-user"></span>
+	    <span id="logoone" class="glyphicon glyphicon-user"></span>
     <p id="one"> We are proud to have <b>{{ userCount }}</b> users using our website!</p>
     <div id="hold2">
     <span id="logotwo" class="glyphicon glyphicon-globe"></span>
@@ -128,8 +119,17 @@
     <span id="logothree" class="glyphicon glyphicon-book"></span>
         <p id="three">  <b>{{ eventCount }}</b> events we have enlisted on the website</p>
     </div>
-</li>
-	</ul>
+        </li>
+    </div>
+
+        <div class="gallery">
+<!-- Don't forget the "|safe"! -->
+
+            <div id="chart">
+    <embed type="image/svg+xml" src= {{ line_chart|safe }} ></embed>
+</div>
+        </div>
+    </div>
 </div>
 </section>
 <!-- Contact Section -->
