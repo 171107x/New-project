@@ -37,59 +37,21 @@
 	<!-- Collect the nav links, forms, and other content for toggling -->
 	<div class="collapse navbar-collapse navbar-right navbar-main-collapse">
 		<ul class="nav navbar-nav">
-			<li>
-			<a href="/home">Home</a>
-			</li>
-			<li>
-			<a href='/photowall'>Photo Wall</a>
-			</li>
-			<li>
-			<a href="/forum">Forum</a>
-			</li>
-			<li>
-			<a href="/search">Search</a>
-			</li>
-            <li>
-			<a href="/events">Events</a>
-			</li>
-           <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">tips
-                <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                <li><a href="/tips/child">Childcare tips</a></li>
-                 <li><a href="/tips/elder">Eldercare tips</a></li>
-                 <li><a href="/tips/house">Housekeeping tips</a></li>
-            </ul>
-            </li>
 
             <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">forms
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Register/Login
                 <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                <li><a href="/form" target="_blank">Tip form</a></li>
-                 <li><a href="/Recipe" target="_blank">Recipe form</a></li>
-
-            </ul>
-            </li>
-
-            <li>
-			<a href="/recycle">Recycle</a>
-			</li>
-
-
-            <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ session.username }}
-                <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                <li><a href="{{ url_for('user', username=session['username']) }}">User Profile</a></li>
-                <li><a href="/edit">Edit profile</a></li>
-                <li><a href="/logout">Logout</a></li>
+                <li><a href="/signup">Register</a></li>
+                <li><a href="/login">Log In</a></li>
             </ul>
             </li>
 		</ul>
 	</div>
 	<!-- /.navbar-collapse -->
 </div>
+<!-- /.container -->
+</nav>
 <br><br><br><br><br><br>
 
 <div class="container">

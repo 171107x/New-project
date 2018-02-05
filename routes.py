@@ -19,6 +19,7 @@ import jwt
 from geopy.geocoders import Nominatim
 import datetime
 from werkzeug.utils import secure_filename
+from geopy.exc import GeocoderTimedOut
 
 fireS = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/')
 cred = credentials.Certificate('./cred/oopproject-f5214-firebase-adminsdk-vkzv0-5ab9f1da25.json')
@@ -383,15 +384,16 @@ def user(username):
         allList.append(reviewList)
         allList.append(posterList)
         allList.append(timeList)
-        print(allList)
+
 
         fire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/')
         ref = fire.get('/profilePic', None)
         pictureList = []
         if ref != None:
             for key in ref:
-                if  username == ref[key]['username'] :
+                if username == ref[key]['username'] :
                     pictureList.append(ref[key]['photo'])
+
 
         if request.method == 'POST' and form.validate():
             title = form.title.data
@@ -440,6 +442,15 @@ def profilePic():
     keyPic = []
     userList = []
     picKey = ''
+    pictureList = []
+    fire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/')
+    ref = fire.get('/profilePic', None)
+    if ref != None:
+        for key in ref:
+            if username == ref[key]['username']:
+                pictureList.append(ref[key]['photo'])
+
+    print(pictureList)
 
     pic = root.child('profilePic').get()
     for pkey in pic:
@@ -450,7 +461,7 @@ def profilePic():
     print(keyPic)
     print(picKey)
 
-    return render_template('test.html', form=form, emailList=emailList, keyPic=keyPic, userList=userList, picKey=picKey)
+    return render_template('test.html', form=form, emailList=emailList, keyPic=keyPic, userList=userList, picKey=picKey, pictureList=pictureList)
 
 @app.route('/settings/password', methods=["GET", "POST"])
 def password():
@@ -755,15 +766,18 @@ def new():
             l0cation = retrieveEvent2[key]['location']
             locationList.append(l0cation)
 
+
         latlongList = []
-        geolocater = Nominatim()
-        for places in locationList:
-            location = geolocater.geocode(places)
-            genericList = []
-            genericList.append(location.latitude)
-            genericList.append(location.longitude)
-            latlongList.append(genericList)
-        print(latlongList)
+        geolocater = Nominatim(timeout=60)
+        for niggers in locationList:
+            try:
+                location = geolocater.geocode(niggers)
+                genericList = []
+                genericList.append(location.latitude)
+                genericList.append(location.longitude)
+                latlongList.append(genericList)
+            except GeocoderTimedOut as e:
+                print("Error: geocode failed on input %s with message %s" % (niggers, e.msg))
     #     events = (
     #     locationEvent(latList,lngList)
     # )
@@ -793,32 +807,31 @@ def new():
 
 @app.route('/showInterest/<eventName>')
 def asdasd(eventName):
-    if 'username' in session:
-        eventName = eventName
-        currEventr = root.child('Events')
-        currEventg = currEventr.get()
-        for key in currEventg:
-            if currEventg[key]['title'] == eventName:
-                intEventr = root.child('Events/'+ key)
-                intEventg = intEventr.get()
-                count = intEventg['interested']
-                intEventr.update({
-                    'interested': count+1
-                })
-                eventid = key
+    eventName = eventName
+    currEventr = root.child('Events')
+    currEventg = currEventr.get()
+    for key in currEventg:
+        if currEventg[key]['title'] == eventName:
+            intEventr = root.child('Events/'+ key)
+            intEventg = intEventr.get()
+            count = intEventg['interested']
+            intEventr.update({
+                'interested': count+1
+            })
 
-        theEventr = root.child('Events/' + eventid + '/going')
-        theEventg = theEventr.get()
-        try:
-            count = len(theEventg)
-        except:
-            count = 0
 
-        theEventr.update({
-            count: session['username']
-        })
+    for key in currEventg:
+        if currEventg[key]['title'] == eventName:
+            intEventr = root.child('Events/'+ key)
+            intEventg = intEventr.get()
+            xd = intEventg['going']
+            xd.append(session['username'])
+            intEventr.update({'going': xd})
 
-        return render_template('showInterest.html/')
+
+
+    return render_template('showInterest.html/')
+
 
 @app.route('/createEvent',methods=['POST','GET'])
 def create_event():
@@ -1112,7 +1125,9 @@ def form():
             "type": tip.get_type(),
             "tip": tip.get_tip()
         })
-        return render_template("entryform.html")
+        flash('you have submitted your tips, thanks for sharing', 'success')
+    return render_template("entryform.html" ,form=entryform)
+
 @app.route('/tips/elder')
 def elder():
     eldertip = root.child("Tips").get()
@@ -1164,6 +1179,7 @@ def recipe():
             "Recipe_name": recipe.get_recipeName(),
             "Recipe_Details": recipe.get_recipeDetails(),
     })
+        flash('you have submitted your recipe, thanks for sharing', 'success')
         print(user)
         return redirect(url_for('Recipe'))
     return render_template('Recipeform.html', form=form)

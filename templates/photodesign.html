@@ -22,6 +22,8 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+<style>
+</style>
 {% from "./Includes/_formhelper.html" import render_field %}
 </head>
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
@@ -53,37 +55,19 @@
             <li>
 			<a href="/events">Events</a>
 			</li>
-           <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">tips
-                <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                <li><a href="/tips/child">Childcare tips</a></li>
-                 <li><a href="/tips/elder">Eldercare tips</a></li>
-                 <li><a href="/tips/house">Housekeeping tips</a></li>
-            </ul>
-            </li>
-
-            <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">forms
-                <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                <li><a href="/form" target="_blank">Tip form</a></li>
-                 <li><a href="/Recipe" target="_blank">Recipe form</a></li>
-
-            </ul>
-            </li>
-
+            <li>
+			<a href="/tips">Tips</a>
+			</li>
             <li>
 			<a href="/recycle">Recycle</a>
 			</li>
-
-
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ session.username }}
                 <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                <li><a href="{{ url_for('user', username=session['username']) }}">User Profile</a></li>
-                <li><a href="/edit">Edit profile</a></li>
+                <li><a href="/user/{{ session.username }}">User Profile</a></li>
+                <li><a href="/settings/account">Edit profile</a></li>
+                <li><a href="/chat">Chatroom</a></li>
                 <li><a href="/logout">Logout</a></li>
             </ul>
             </li>
@@ -91,6 +75,8 @@
 	</div>
 	<!-- /.navbar-collapse -->
 </div>
+<!-- /.container -->
+</nav>
 <!-- Intro Header -->
 <header class="intro">
 <div class="intro-body">
@@ -134,18 +120,22 @@
 <section>
 <div class="gallery">
 	<ul>
-    <div class="container text-center">
+    <div class="container-fluid text-center">
         <div class="row">
-        <div class="col-lg-8 col-lg-offset-2">
+
             <form method="POST" action="/photowall">
                 {{ render_field(photoFilter.photoFilter)}}
                 <input type="submit" class="btn btn-primary" value="Submit" onclick="reload()"/>
-                </form>
+            </form>
+        <p style="font-size:13px;">Submit select if you want to see every photo.</p>
         {% for pics in pictureList %}
-		    <img style="height:700px;width:700px;padding-bottom:50px;box-shadow: 8px 8px 10px #aaa; class:'centered" ; src={{ pics }} >
+
+            <div class="col-lg-4">
+		    <img style="height:350px;width:450px;box-shadow: 8px 8px 10px #aaa;margin-bottom: 20%" src='{{ pics }}' >
                 <br>
+            </div>
+
         {% endfor %}
-        </div>
         </div>
 {#		<li class="col-md-3">#}
 {#		<a href="portfolio-item.html">#}
@@ -158,6 +148,7 @@
 {#		</a>#}
 {#		</li>#}
     </div>
+
     </ul>
 </div>
 </section>

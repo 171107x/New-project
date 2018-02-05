@@ -39,8 +39,8 @@
 		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
 		<i class="fa fa-bars"></i>
 		</button>
-		<a class="navbar-brand page-scroll" href="/home">
-		SMART KAMPUNG </a>
+		<a class="navbar-brand page-scroll" href="index.html">
+		SMART LIVING </a>
 	</div>
 	<!-- Collect the nav links, forms, and other content for toggling -->
 	<div class="collapse navbar-collapse navbar-right navbar-main-collapse">
@@ -60,17 +60,33 @@
             <li>
 			<a href="/events">Events</a>
 			</li>
-            <li>
-			<a href="/tips">Tips</a>
-			</li>
-            <li>
+			<li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">tips
+                <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                <li><a href="/tips/child">Childcare tips</a></li>
+                 <li><a href="/tips/elder">Eldercare tips</a></li>
+                 <li><a href="/tips/house">Housekeeping tips</a></li>
+            </ul>
+            </li>
+
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">forms
+                <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                <li><a href="/form" target="_blank">Tip form</a></li>
+                 <li><a href="/Recipe" target="_blank">Recipe form</a></li>
+
+            </ul>
+            </li>
+
 			<a href="/recycle">Recycle</a>
 			</li>
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ session.username }}
                 <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                <li><a href="/user/{{ session.username }}">User Profile</a></li>
+                <li><a href="{{ url_for('user', username=session['username']) }}">User Profile</a></li>
                 <li><a href="/settings/account">Edit profile</a></li>
                 <li><a href="/chat">Chatroom</a></li>
                 <li><a href="/logout">Logout</a></li>
@@ -81,7 +97,7 @@
 	<!-- /.navbar-collapse -->
 </div>
 <!-- /.container -->
-
+</nav>
 <!-- Intro Header -->
 <header class="intro">
 <div class="intro-body">
@@ -109,15 +125,15 @@
             <col style="background-color: #1ba39c">
             <col style="background-color: #5b9bd1">
         </colgroup>
-                 <thead>
-                  <tr>
+                 <thead style="border:1px solid black;">
+                  <tr style="border:1px solid black;">
                     <th>name</th>
                     <th> tips</th>
 
                   </tr>
                 </thead>
 
-                <tr>
+                <tr style="border:1px solid black;">
                 {% for i in tip %}
                 <td>{{ i.get_name() }}</td>
                 <td>{{ i.get_tip() }}</td>
