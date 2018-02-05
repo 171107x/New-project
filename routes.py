@@ -975,32 +975,35 @@ def forum():
 
 @app.route('/postForum',methods=['POST','GET'])
 def post_forum():
-    form = forumForm(request.form)
-    retrieve_forum_count = root.child('forumCount').get()
-    forumCount = int(retrieve_forum_count['forumCount'])
-    if request.method == 'POST':
-        text = form.forumText.data
-        type = form.forumType.data
-        newForum = Forum(text,type)
-        increaseCount = forumCount + 1
-        newCount = root.child('forumCount/forumCount').set(increaseCount)
-        newForum_db = root.child('Forum')
-        newForum_db.push(
-            {
+    if 'username' in session:
+        form = forumForm(request.form)
+        retrieve_forum_count = root.child('forumCount').get()
+        forumCount = int(retrieve_forum_count['forumCount'])
+        if request.method == 'POST':
+            text = form.forumText.data
+            type = form.forumType.data
+            newForum = Forum(text,type)
+            increaseCount = forumCount + 1
+            newCount = root.child('forumCount/forumCount').set(increaseCount)
+            newForum_db = root.child('Forum')
+            newForum_db.push(
+                {
 
 
-            'count' : str(increaseCount),
-            'text' : newForum.get_text(),
-            'type' : newForum.get_type(),
-            'time' : newForum.get_date(),
-            'username' : session['username'],
-            'response' : {'response':'empty'},
-            'responseCount' : 0
+                'count' : str(increaseCount),
+                'text' : newForum.get_text(),
+                'type' : newForum.get_type(),
+                'time' : newForum.get_date(),
+                'username' : session['username'],
+                'response' : {'response':'empty'},
+                'responseCount' : 0
 
-        })
+            })
 
-        return redirect(url_for('forum'))
-    return render_template('postForum.html',form=form)
+            return redirect(url_for('forum'))
+        return render_template('postForum.html',form=form)
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/addResponse/<forumNumber>',methods=['POST','GET'])
 def post_response(forumNumber):
@@ -1068,8 +1071,11 @@ def recycle():
         for i in retrieveToken2:
             if retrieveToken2[i]['username'] == session['username']:
                 newToken = retrieveToken2[i]
+
         form = RecycleForm(request.form)
         if request.method == 'POST':
+            recycleDay = form.recycleDay.data
+            recycleTime = form.recycleTime.data
             recycleCount = int(retrieveCount['recycleCount']) + 1
             recycleCount_db = root.child('recycleCount')
             recycleCount_db.set({'recycleCount': recycleCount})
@@ -1102,12 +1108,14 @@ def recycle():
             client.messages.create(
                 to=myPhone,
                 from_=TwilioNumber,
-                body='Block 649 has requested a recycle request." ' + u'\U0001f680' + 'to accept the request, click this link "smartkampung.herokuapp.com{}'.format(link))
+                body='Block 649 has requested a recycle request.The prefered scheduled day is {},in the {}. To accept the request, click this link "smartkampung.herokuapp.com{}'.format(recycleDay,recycleTime,link))
 
 
             return redirect(url_for('recycle'))
         return render_template('recycle.html',form=form, newToken = newToken)
-    return redirect(url_for('index'))
+    else:
+        return redirect(url_for('login'))
+
 #
 @app.route('/form', methods=['POST', 'GET'])
 def form():
