@@ -245,7 +245,7 @@ def confirm_email(token):
         email = s.loads(token, salt='email-confirm', max_age=3600)
     except SignatureExpired:
         return '<h1>The token is expired!</h1>'
-    return render_template("login.html")
+    return render_template("confirm-email.html")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
