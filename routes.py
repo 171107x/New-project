@@ -882,6 +882,97 @@ def create_event():
         return render_template('createEvent.html',form=form,username='username')
     return redirect(url_for('index'))
 
+@app.route('/forum', methods=['POST','GET'])
+def forum():
+    foodList = []
+    movieList = []
+    elderList = []
+    childList = []
+    housekeepingList = []
+    forumFilter = ForumFilter(request.form)
+    choice = forumFilter.forumFilter.data
+    fire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/')
+    result = fire.get('Forum', None)
+
+    for i in result:
+        if result[i]['type'] == 'Food':
+            foodPlaceholder = []
+            foodPlaceholder.append(result[i]['type'])
+            foodPlaceholder.append(result[i]['text'])
+            foodPlaceholder.append(result[i]['time'])
+            foodPlaceholder.append(result[i]['username'])
+            foodPlaceholder.append(result[i]['response'])
+            foodPlaceholder.append(result[i]['count'])
+            foodList.append(foodPlaceholder)
+
+    for i in result:
+        if result[i]['type'] == 'Movies':
+            moviePlaceholder= []
+            moviePlaceholder.append(result[i]['type'])
+            moviePlaceholder.append(result[i]['text'])
+            moviePlaceholder.append(result[i]['time'])
+            moviePlaceholder.append(result[i]['username'])
+            moviePlaceholder.append(result[i]['response'])
+            moviePlaceholder.append(result[i]['count'])
+            movieList.append(moviePlaceholder)
+
+    for i in result:
+        if result[i]['type'] == 'Eldercare':
+            elderPlaceholder = []
+            elderPlaceholder.append(result[i]['type'])
+            elderPlaceholder.append(result[i]['text'])
+            elderPlaceholder.append(result[i]['time'])
+            elderPlaceholder.append(result[i]['username'])
+            elderPlaceholder.append(result[i]['response'])
+            elderPlaceholder.append(result[i]['count'])
+            elderList.append(elderPlaceholder)
+
+    for i in result:
+        if result[i]['type'] == 'Housekeeping':
+            housePlaceholder = []
+            housePlaceholder.append(result[i]['type'])
+            housePlaceholder.append(result[i]['text'])
+            housePlaceholder.append(result[i]['time'])
+            housePlaceholder.append(result[i]['username'])
+            housePlaceholder.append(result[i]['response'])
+            housePlaceholder.append(result[i]['count'])
+            housekeepingList.append(housePlaceholder)
+
+    for i in result:
+        if result[i]['type'] == 'Childcare':
+            childPlaceholder = []
+            childPlaceholder.append(result[i]['type'])
+            childPlaceholder.append(result[i]['text'])
+            childPlaceholder.append(result[i]['time'])
+            childPlaceholder.append(result[i]['username'])
+            childPlaceholder.append(result[i]['response'])
+            childPlaceholder.append(result[i]['count'])
+            childList.append(childPlaceholder)
+
+    forumList = []
+    for key in result:
+        keyList = []
+        keyList.append(result[key]['type'])
+        keyList.append(result[key]['text'])
+        keyList.append(result[key]['time'])
+        keyList.append(result[key]['username'])
+        keyList.append(result[key]['response'])
+        keyList.append(result[key]['count'])
+        forumList.append(keyList)
+    if choice == 'Food':
+        forumList = foodList
+    elif choice == 'Movies':
+        forumList = movieList
+    elif choice == 'Childcare':
+        forumList = childList
+    elif choice == 'Eldercare':
+        forumList = elderList
+    elif choice == 'Housekeeping':
+        forumList = housekeepingList
+    forumList.reverse()
+    return render_template('forumdesign.html',forumList = forumList ,forumFilter = forumFilter)
+
+
 @app.route('/postForum',methods=['POST','GET'])
 def post_forum():
     if 'username' in session:
@@ -913,36 +1004,6 @@ def post_forum():
         return render_template('postForum.html',form=form)
     else:
         return redirect(url_for('login'))
-
-
-@app.route('/postForum',methods=['POST','GET'])
-def post_forum():
-    form = forumForm(request.form)
-    retrieve_forum_count = root.child('forumCount').get()
-    forumCount = int(retrieve_forum_count['forumCount'])
-    if request.method == 'POST':
-        text = form.forumText.data
-        type = form.forumType.data
-        newForum = Forum(text,type)
-        increaseCount = forumCount + 1
-        newCount = root.child('forumCount/forumCount').set(increaseCount)
-        newForum_db = root.child('Forum')
-        newForum_db.push(
-            {
-
-
-            'count' : str(increaseCount),
-            'text' : newForum.get_text(),
-            'type' : newForum.get_type(),
-            'time' : newForum.get_date(),
-            'username' : session['username'],
-            'response' : {'response':'empty'},
-            'responseCount' : 0
-
-        })
-
-        return redirect(url_for('forum'))
-    return render_template('postForum.html',form=form)
 
 @app.route('/addResponse/<forumNumber>',methods=['POST','GET'])
 def post_response(forumNumber):
