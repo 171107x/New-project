@@ -32,15 +32,13 @@
     <![endif]-->
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
 <script type="text/javascript">
-    {% for bullshit in events.latList%}
-    {% for dogshit in events.lngList %}
+    {% for coordinates in latlongList%}
     function initMap() {
         new google.maps.Map(document.getElementById('map'), {
-            center: {lat: {{bullshit}}, lng: {{ dogshit }}},
+            center: {lat: {{coordinates[0]}}, lng: {{ coordinates[1] }}},
                 zoom: 16
             });
     }
-    {% endfor %}
     {% endfor %}
 </script>
 </head>
