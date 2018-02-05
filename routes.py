@@ -807,31 +807,32 @@ def new():
 
 @app.route('/showInterest/<eventName>')
 def asdasd(eventName):
-    eventName = eventName
-    currEventr = root.child('Events')
-    currEventg = currEventr.get()
-    for key in currEventg:
-        if currEventg[key]['title'] == eventName:
-            intEventr = root.child('Events/'+ key)
-            intEventg = intEventr.get()
-            count = intEventg['interested']
-            intEventr.update({
-                'interested': count+1
-            })
+    if 'username' in session:
+        eventName = eventName
+        currEventr = root.child('Events')
+        currEventg = currEventr.get()
+        for key in currEventg:
+            if currEventg[key]['title'] == eventName:
+                intEventr = root.child('Events/'+ key)
+                intEventg = intEventr.get()
+                count = intEventg['interested']
+                intEventr.update({
+                    'interested': count+1
+                })
+                eventid = key
 
+        theEventr = root.child('Events/' + eventid + '/going')
+        theEventg = theEventr.get()
+        try:
+            count = len(theEventg)
+        except:
+            count = 0
 
-    for key in currEventg:
-        if currEventg[key]['title'] == eventName:
-            intEventr = root.child('Events/'+ key)
-            intEventg = intEventr.get()
-            xd = intEventg['going']
-            xd.append(session['username'])
-            intEventr.update({'going': xd})
+        theEventr.update({
+            count: session['username']
+        })
 
-
-
-    return render_template('showInterest.html/')
-
+        return render_template('showInterest.html/')
 
 @app.route('/createEvent',methods=['POST','GET'])
 def create_event():
