@@ -290,13 +290,11 @@ footer p.credits {
 }
 ::-moz-selection {
 	text-shadow:none;
-	background:#fcfcfc;
-	background:rgba(255,255,255,.2);
+	background:#ffb7b7;
 }
 ::selection {
 	text-shadow:none;
-	background:#fcfcfc;
-	background:rgba(255,255,255,.2);
+	background:#ffb7b7;
 }
 img::selection {
 	background:0 0;
