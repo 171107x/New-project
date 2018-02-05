@@ -103,6 +103,14 @@ class Tipsform(Form):
 class responseForm(Form):
     responseText = StringField("Please try to refrain from aggressive responses")
 
+class RecycleForm(Form):
+    recycleDay = SelectField('',
+        choices=[('Monday','Monday'),('Tuesday','Tuesday'),('Wednesday','Wednesday'),('Thursday','Thursday'),
+                 ('Friday','Friday'),('Saturday','Saturday'),('Sunday','Sunday') ])
+    recycleTime = SelectField('' ,
+        choices=[('Morning','Morning'),('Afternoon','Afternoon'),('Evening','Evening')]
+    )
+
 class Response:
     def __init__(self,response):
         self.__responseText = response

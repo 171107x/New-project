@@ -23,6 +23,7 @@
     <![endif]-->
 </head>
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
+{% from "./Includes/_formhelper.html" import render_field %}
 <!-- Navigation -->
 <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
 <div class="container">
@@ -86,6 +87,9 @@
                 {% if newToken['token'] == 0 %}
                 <div class="container tab-content text-center">
 				    <form action=/recycle method="POST">
+                        <p>{{ render_field(form.recycleDay, id_='recycle-date') }}</p>
+                        <p>{{ render_field(form.recycleTime, id_='recycle-time') }}</p>
+                        <br/>
                         <button id="home" type="submit" class="btn btn-success" style="width:200px;">Request</button>
                     </form>
                 </div>
