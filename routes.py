@@ -732,20 +732,17 @@ def new():
             l0cation = retrieveEvent2[key]['location']
             locationList.append(l0cation)
 
-        latList = []
-        lngList = []
+        latlongList = []
         geolocater = Nominatim()
         for places in locationList:
             location = geolocater.geocode(places)
-            print(location)
-            latList.append(location.latitude)
-            lngList.append(location.longitude)
-
-        print(latList)
-        print(lngList)
-        events = (
-        locationEvent(latList,lngList)
-    )
+            genericList = []
+            genericList.append(location.latitude)
+            genericList.append(location.longitude)
+            latlongList.append(genericList)
+    #     events = (
+    #     locationEvent(latList,lngList)
+    # )
 
         try:
             for key in allEvent:
@@ -758,7 +755,7 @@ def new():
             count = len(allEvent) + 1
         except TypeError:
             count = 1
-        return render_template('showEvent.html', form=form, allE=allE,count=count,events=events)
+        return render_template('showEvent.html', form=form, allE=allE,count=count,latlongList=latlongList)
     return redirect(url_for('index'))
 
 @app.route('/showInterest/<eventName>')
