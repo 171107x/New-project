@@ -79,7 +79,7 @@
                 <h2 class="display-5 text-center">Choose a profile picture</h2>
                     <br>
                     <br>
-                    <img id = 'img' class="img-responsive" style="width: 275px; height: 275px;" src="{{ driverImage }}">
+                    <img id = 'img' class="img-responsive" style="width: 275px; height: 275px;" src="{{ profilePic }}">
 
                     <br>
                     <br>
@@ -159,7 +159,7 @@
     $("#file2").on("change",function (event) {
         selectedFile2=event.target.files[0];
     });
-    console.log({{ session.username }});
+    console.log('{{ session.username }}');
     fileButton.addEventListener('click',function(e) {
         var elem = document.getElementById("myBar");
         username = "{{ session.username }}";
