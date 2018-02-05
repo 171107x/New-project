@@ -6,6 +6,8 @@ from forms import SignupForm, LoginForm, EditForm, ReviewForm, EmailForm, Passwo
 from user import User, Edit, Review
 from firebase import firebase
 from Events import Events
+from tipv2 import  Tip, Entry
+from recipeform import  Details, Recipe
 from forum import Forum
 import firebase_admin
 from firebase_admin import credentials, db
@@ -965,7 +967,7 @@ def post_response(forumNumber):
             })
             postResponse.update({
                 responseString: {
-            'username': session['username'],
+           'username': session['username'],
             'response' : response },
             })
             print('CHECK!')
@@ -1073,6 +1075,93 @@ def recycle():
         return render_template('recycle.html',form=form, newToken = newToken)
     return redirect(url_for('index'))
 #
+@app.route('/form', methods=['POST', 'GET'])
+def form():
+    entryform = Entry(request.form)
+    if request.method == 'POST' and entryform.validate():
+        name = entryform.username.data
+        tiptype = entryform.tiptype.data
+        tip = entryform.tip.data
+
+        tip = Tip(name, tiptype, tip)
+
+        tip_db = root.child('Tips')
+        tip_db.push({
+            "name": tip.get_name(),
+            "type": tip.get_type(),
+            "tip": tip.get_tip()
+        })
+
+@app.route('/tips/elder')
+def elder():
+    eldertip = root.child("Tips").get()
+    list = []
+    for i in eldertip:
+        eldertips = eldertip[i]  # just add in only, won't die either way1
+        if eldertips["type"] == "elder":
+            tip = Tip(eldertips["name"], eldertips["type"],eldertips["tip"])
+            tip.set_tipid(i)
+            list.append(tip)
+    return render_template("elder.html", tip=list)
+
+@app.route('/tips/house')
+def house():
+    housetip = root.child("Tips").get()
+    list = []
+    for i in housetip:
+        housetips = housetip[i]  # just add in only, won't die either way
+        if housetips["type"] == "house":
+            tip = Tip(housetips["name"], housetips["type"],housetips["tip"])
+            tip.set_tipid(i)
+            list.append(tip)
+    return render_template("house.html", tip=list)
+
+@app.route('/tips/child')
+def child():
+    childtip = root.child("Tips").get()
+    list = []
+    for i in childtip:
+        childtips = childtip[i]  # just add in only, won't die either way
+        if childtips["type"] == "child":
+            tip = Tip(childtips["name"], childtips["type"],childtips["tip"])
+            tip.set_tipid(i)
+            list.append(tip)
+    return render_template("child.html", tip=list)
+
+@app.route('/Recipe' , methods=['POST','GET'])
+def form():
+    form = Recipe(request.form)
+    if request.method == 'POST' and form.validate():
+        user = form.username.data
+        recipeName = form.recipeName.data
+        recipeDetails = form.recipeDetails.data
+
+        recipe = Details(user,recipeName,recipeDetails)
+        recipe_db = root.child('Details')
+        recipe_db.push({
+            "name": recipe.get_user(),
+            "Recipe_name": recipe.get_recipeName(),
+            "Recipe_Details": recipe.get_recipeDetails(),
+    })
+        print(user)
+        return redirect('Recipe')
+    return render_template('Recipeform.html', form=form)
+
+@app.route('/viewRecipe')
+def retrieveDetails():
+
+    retrival = root.child('Details').get()
+    list = []
+    list2 = []
+    list3 = []
+    for i in retrival:
+
+        t = Details(retrival[i]['name'], retrival[i]['Recipe_name'], retrival[i]['Recipe_Details'])
+        list.append(t.get_user())
+        list2.append(t.get_recipeName())
+        list3.append(t.get_recipeDetails())
+    return render_template("viewRecipe.html", retrival=list, retrival2=list2, retrival3=list3)
+
 @app.route('/confirm/<myToken>')
 def confirm_request(myToken):
     check_dict = jwt.decode(myToken,'thisismysecret')

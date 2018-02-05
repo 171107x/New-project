@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+    <div class="container">
+
+    <table style="width:100%">
+                 <thead>
+                  <tr>
+                    <th>name</th>
+                    <th>Recipe Name</th>
+                    <th>Recipe Details</th>
+                  </tr>
+                </thead>
+
+                <tr>
+                {% for i in range(retrival | length) %}
+                <td>{{ retrival[i] }}</td>
+                <td>{{ retrival2[i] }}</td>
+                <td>{{ retrival3[i] }}</td>
+                    </tr>
+                    <br>
+                 {% endfor %}
+
+            </table>
+
+        </div>
+</body>
+</html>
