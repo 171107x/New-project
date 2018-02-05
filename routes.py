@@ -19,6 +19,7 @@ import jwt
 from geopy.geocoders import Nominatim
 import datetime
 from werkzeug.utils import secure_filename
+from geopy.exc import GeocoderTimedOut
 
 fireS = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/')
 cred = credentials.Certificate('./cred/oopproject-f5214-firebase-adminsdk-vkzv0-5ab9f1da25.json')
@@ -757,15 +758,18 @@ def new():
             l0cation = retrieveEvent2[key]['location']
             locationList.append(l0cation)
 
+
         latlongList = []
-        geolocater = Nominatim()
-        for places in locationList:
-            location = geolocater.geocode(places)
-            genericList = []
-            genericList.append(location.latitude)
-            genericList.append(location.longitude)
-            latlongList.append(genericList)
-        print(latlongList)
+        geolocater = Nominatim(timeout=60)
+        for niggers in locationList:
+            try:
+                location = geolocater.geocode(niggers)
+                genericList = []
+                genericList.append(location.latitude)
+                genericList.append(location.longitude)
+                latlongList.append(genericList)
+            except GeocoderTimedOut as e:
+                print("Error: geocode failed on input %s with message %s" % (niggers, e.msg))
     #     events = (
     #     locationEvent(latList,lngList)
     # )
