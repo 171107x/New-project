@@ -720,29 +720,32 @@ def new():
             #     root.child('Events/' + key).update({'interested': xd})
 
         class locationEvent:
-            def __init__(self,name,lat,lng):
-                self.name = name
-                self.lat = lat
-                self.lng = lng
-
+            def __init__(self,latList,lngList):
+                self.latList = latList
+                self.lngList = lngList
 
         retrieveEvent = root.child('Events')
         retrieveEvent2 = retrieveEvent.get()
+        locationList = []
         for key in retrieveEvent2:
-            title = retrieveEvent2[key]['title']
-            print("this is title" + title)
-            if title == retrieveEvent2[key]['title']:
-                locationList = []
-                l0cation = retrieveEvent2[key]['location']
-                locationList.append(l0cation)
-                print(locationList)
+            # print("this is title" + title)
+            l0cation = retrieveEvent2[key]['location']
+            locationList.append(l0cation)
 
+        latList = []
+        lngList = []
         geolocater = Nominatim()
-        location = geolocater.geocode(locationList)
+        for places in locationList:
+            location = geolocater.geocode(places)
+            print(location)
+            latList.append(location.latitude)
+            lngList.append(location.longitude)
 
+        print(latList)
+        print(lngList)
         events = (
-            locationEvent(title, location.latitude,location.longitude)
-        )
+        locationEvent(latList,lngList)
+    )
 
         try:
             for key in allEvent:

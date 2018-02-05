@@ -32,12 +32,16 @@
     <![endif]-->
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
 <script type="text/javascript">
+    {% for bullshit in events.latList%}
+    {% for dogshit in events.lngList %}
     function initMap() {
         new google.maps.Map(document.getElementById('map'), {
-            center: {lat: {{events.lat}}, lng: {{ events.lng }}},
+            center: {lat: {{bullshit}}, lng: {{ dogshit }}},
                 zoom: 16
             });
     }
+    {% endfor %}
+    {% endfor %}
 </script>
 </head>
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top" onload="initMap()">
