@@ -363,14 +363,18 @@ def user(username):
         if review != None:
             for reviews in review:
                 if username == review[reviews]['username']:
-                    titleList.append(review[reviews]['title'])
                     timeList.append(review[reviews]['time'])
                     reviewList.append(review[reviews]['review'])
                     posterList.append(review[reviews]['poster'])
+        titleList.reverse()
+        timeList.reverse()
+        reviewList.reverse()
+        posterList.reverse()
         allList.append(titleList)
         allList.append(reviewList)
         allList.append(posterList)
         allList.append(timeList)
+
         fire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/')
         ref = fire.get('/profilePic', None)
         pictureList = []
@@ -391,7 +395,6 @@ def user(username):
                 'review' : review.get_review(),
                 'time' : review.get_date(),
                 'poster' : session['username']
-
                     })
             return redirect(url_for('user',username=username))
 
@@ -1003,25 +1006,6 @@ def post_response(forumNumber):
         newResponse = Response(text)
     return redirect(url_for('forum'))
 
-
-@app.route('/form' , methods=['POST','GET'])
-def form():
-    form = Tipsform(request.form)
-    if request.method == 'POST' and form.validate():
-        name = form.name_tips.data
-        tips = form.housekeeping_tips.data
-
-        tip = Tips(name,tips)
-
-        tip_db =root.child('Tips')
-        tip_db.push({
-            "name": tip.get_name(),
-            "tips": tip.get_tips()
-        })
-        print(name)
-        return redirect('form')
-    return render_template('form.html', form=form)
-
 @app.route('/tips')
 def retrieveTip():
     fire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/')
@@ -1116,7 +1100,7 @@ def form():
             "type": tip.get_type(),
             "tip": tip.get_tip()
         })
-
+        return render_template("entryform.html")
 @app.route('/tips/elder')
 def elder():
     eldertip = root.child("Tips").get()
@@ -1154,7 +1138,7 @@ def child():
     return render_template("child.html", tip=list)
 
 @app.route('/Recipe' , methods=['POST','GET'])
-def form():
+def recipe():
     form = Recipe(request.form)
     if request.method == 'POST' and form.validate():
         user = form.username.data

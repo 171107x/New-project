@@ -11,7 +11,7 @@ from firebase_admin import credentials, db
 #    'databaseURL': 'https://oopproject-f5214.firebaseio.com/'
 #})
 
-root = db.reference()
+
 
 
 app = Flask(__name__)

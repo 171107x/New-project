@@ -13,8 +13,8 @@
 <link href="../static/css/profile.css" rel="stylesheet">
 <!-- Custom Fonts -->
 <link href="../static/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700,400italic,700italic" rel="stylesheet" type="text/css">
-<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700,400italic,700italic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>
@@ -141,11 +141,16 @@
                         <div class="modal-body">
 
                             {{ form.hidden_tag() }}
+                        <div class="form-group">
+                          {{ render_field(form.title, class="form-control") }}
+                        </div>
+                        <div class="form-group">
                           {{ render_field(form.review, class="form-control") }}
                         </div>
                           <div class="modal-footer">
                             {{ form.submit(class="btn btn-success")}}
                           </div>
+                        </div>
                       </form>
 
                   </div>

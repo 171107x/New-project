@@ -12,7 +12,7 @@ from firebase_admin import credentials, db
 #})
 
 
-root = db.reference()
+
 
 
 app = Flask(__name__)

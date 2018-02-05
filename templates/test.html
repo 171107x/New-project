@@ -37,31 +37,22 @@
                     margin-left: 15%;
         }
         #myBar {
-          width: 0;
-          height: 30px;
-          background-color: #4CAF50;
-          text-align: center;
-          line-height: 30px;
-          color: white;
-        }#myProgress2 {
-                  width: 70%;
-                  background-color: #ddd;
-                  text-align: center;
-                    margin-left: 15%;
+            width: 0;
+            height: 30px;
+            background-color: #4CAF50;
+            text-align: center;
+            line-height: 30px;
+            color: white;
         }
-        #myBar2 {
-          width: 0;
-          height: 30px;
-          background-color: #4CAF50;
-          text-align: center;
-          line-height: 30px;
-          color: white;
-        }
-        #file, #file2{
+
+        #file{
             margin:0;
         }
         #everything{
             margin-left:25%;
+        }
+        img{
+            border-radius: 50%;
         }
         @media only screen and (max-width: 500px) {
             #everything {
@@ -165,7 +156,7 @@
                     <h2 class="display-5 text-center">Choose a profile picture</h2>
                     <br>
                     <br>
-                    <img id = 'img' class="img-responsive text-center" style="width: 275px; height: 275px;" src="{{ driverImage }}">
+                    <img id = 'img' class="text-center" style="width: 275px; height: 275px;" src="{{ profilePic }}">
 
                     <br>
                     <br>
@@ -199,7 +190,7 @@
 <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
 <script>
    function myFunction() {
-    window.location = "/test"
+    window.location = "/user/{{ session.username }}"
 }
      $("#file").change(function() {
       readURL(this);
