@@ -252,27 +252,15 @@
              elem.innerHTML=parseInt(percentage)+'%';
         }, function (error) {
         }, function () {
-            {% if  pictureList != []%}
-                var postKey = '{{ picKey }}';
-                var downloadURL = uploadTask.snapshot.downloadURL;
-                var updates = {};
-                var postData = {
-                    photo: downloadURL
-                };
-                updates['profilePic/' + postKey] = postData;
-                console.log('enters');
-                firebase.database().ref('profilePic/' + postKey).update(postData);
-            {% else %}
-                var postKey = firebase.database().ref('profilePic/').push().key;
-                var downloadURL = uploadTask.snapshot.downloadURL;
-                var updates = {};
-                var postdata = {
-                    username: username,
-                    photo: downloadURL
-                };
-                updates['profilePic/' + postKey] = postdata;
-                firebase.database().ref().update(updates);
-            {% endif %}
+            var postKey = '{{ picKey }}';
+            var downloadURL = uploadTask.snapshot.downloadURL;
+            var updates = {};
+            var postData = {
+                photo: downloadURL
+            };
+            updates['profilePic/' + postKey] = postData;
+            console.log('enters');
+            firebase.database().ref('profilePic/' + postKey).update(postData);
         });
     })
         </script>
