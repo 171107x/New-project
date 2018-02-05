@@ -669,24 +669,24 @@ def search():
     sg = sr.get()
     resultList = []
     searchedItem = "Null"
+    resultList.append(searchedItem)
     if request.method == 'POST':
+        resultList.pop()
         term = request.form["query"]
         for key in sg:
             term = term.lower()
             checkTitle = sg[key]['title'].lower()
             checkContent = sg[key]['contents'].lower()
-            if term in checkTitle:
-                searchedItem = sg[key]
-            elif term in checkContent:
-                searchedItem = sg[key]
-            # if term in sg[key]['title']:
-            # if sg[key]['title'] == term:
-            #     resultList.append(sg[key]['contents'])
-            #     print(resultList)
-            # else:
-            #     print('failed')
-
-    return render_template('search2.html',results = resultList, searchedItem = searchedItem)
+            if term in checkTitle or term in checkContent:
+                containerList = []
+                searchedTitle = sg[key]['title']
+                searchedContent = sg[key]['contents']
+                containerList.append(searchedTitle)
+                containerList.append(searchedContent)
+                resultList.append(containerList)
+            elif term not in checkContent and term not in checkTitle:
+                searchedItem = "Empty"
+    return render_template('search2.html',resultList = resultList)
 
 @app.route("/add", methods=['GET','POST'])
 def add():
@@ -703,7 +703,7 @@ def add():
             })
         return redirect(url_for('search'))
 
-    return render_template("add.html",form=form,searchedItem = searchedItem)
+    return render_template("add.html",form=form)
 
 
 @app.route('/events',methods=['GET','POST'])

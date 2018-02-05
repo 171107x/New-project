@@ -102,12 +102,14 @@
         <button type ="submit" class="btn btn-primary">Search</button>
     </form>
     <h1>This is your result:</h1>
-    {% if searchedItem == 'Null' %}
+    {% for i in resultList %}
+        {% if resultList == ['Null'] %}
         <p>Normal content without search</p>
-        {% elif searchedItem != 'Null' %}
-            <h2>{{ searchedItem['title'] }}</h2>
-            <p>{{ searchedItem['contents'] }}</p>
-    {% endif %}
+        {% elif resultList != ['Null'] %}
+            <h2>{{ i[0] }}</h2>
+            <p>{{ i[1] }}</p>
+        {% endif %}
+    {% endfor %}
 <br /><br />
 </section>
 <!-- Footer -->
