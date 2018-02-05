@@ -7,7 +7,14 @@ body {
 	background-color:dimgray;
 	font-weight:300;
 }
-
+b
+{
+	color:white;
+}
+#username
+{
+	color:white;
+}
 .well
 {
 	background-color: rebeccapurple;
