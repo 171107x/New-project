@@ -363,6 +363,7 @@ def user(username):
         if review != None:
             for reviews in review:
                 if username == review[reviews]['username']:
+                    titleList.append(review[reviews]['title'])
                     timeList.append(review[reviews]['time'])
                     reviewList.append(review[reviews]['review'])
                     posterList.append(review[reviews]['poster'])
@@ -374,6 +375,7 @@ def user(username):
         allList.append(reviewList)
         allList.append(posterList)
         allList.append(timeList)
+        print(allList)
 
         fire = firebase.FirebaseApplication('https://oopproject-f5214.firebaseio.com/')
         ref = fire.get('/profilePic', None)
@@ -395,6 +397,7 @@ def user(username):
                 'review' : review.get_review(),
                 'time' : review.get_date(),
                 'poster' : session['username']
+
                     })
             return redirect(url_for('user',username=username))
 
