@@ -1194,7 +1194,7 @@ def recipe():
         flash('you have submitted your recipe, thanks for sharing', 'success')
         print(user)
         return redirect(url_for('Recipe'))
-    return render_template('Recipeform.html', form=form)
+    return render_template('RecipeForm.html', form=form)
 
 @app.route('/viewRecipe')
 def retrieveDetails():
