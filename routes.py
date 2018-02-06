@@ -230,7 +230,7 @@ def signup():
                 })
                 token = s.dumps(email, salt='email-confirm')
 
-                msg = Message('Confirm Email', sender='nypsmartkampung@gmail.com', recipients=[email])
+                msg = Message('Confirm Email', sender='omgnooopython@gmail.com', recipients=[email])
 
                 link = url_for('confirm_email', token=token, _external=True)
 
@@ -301,7 +301,7 @@ def reset():
 
                 token = s.dumps(email, salt='recover-key')
 
-                msg = Message('Reset Password', sender='nypsmartkampung@gmail.com', recipients=[email])
+                msg = Message('Reset Password', sender='omgnooopython@gmail.com', recipients=[email])
 
                 link = url_for('resetpass', token=token, _external=True)
 
@@ -337,7 +337,7 @@ def resetpass(token):
                 'password': password
             })
 
-    msg = Message('Password Reseted', sender='nypsmartkampung@gmail.com', recipients=[email])
+    msg = Message('Password Reseted', sender='omgnooopython@gmail.com', recipients=[email])
 
     msg.body = 'Dear' + users[i]['username'] + 'Your new temporary password is {}'.format(password)
     mail.send(msg)
