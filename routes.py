@@ -1058,9 +1058,13 @@ def camera():
 def error404(error):
     return render_template('404.html'), 404
 
+@app.route('/contact')
+def contatpage():
+    return render_template('contact.html')
+
 @app.route('/chat')
 def hello():
-  return render_template( '/chat.html' )
+  return render_template( 'chat.html' )
 
 @app.route('/recycle',methods=['POST','GET'])
 def recycle():

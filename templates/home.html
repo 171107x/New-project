@@ -101,15 +101,27 @@
 			<p>
 				To bond every families in hdb flats harmoniously and to keep the kampung spirit alive!
 			</p>
+			<p>
+				Smart Kampung is an online platform that provides services ranging from public mediums to organizations of activities.
+                We aim to provide a fully minimalist, simplistic and easy-to-use platform for everyone to interact and have fun together.
+			</p>
 		</div>
 	</div>
 </div>
 </section>
 <section>
-<div class="ontainer content-section text-center">
-    <div class="gallery">
-        <li class="col-md-5">
-	    <span id="logoone" class="glyphicon glyphicon-user"></span>
+<div class="page-header text-center">
+    <div class="container tab-content text-center">
+        <h2 style="text-align:center">Statistics</h2>
+    </div>
+</div>
+</section>
+<section>
+<div class="gallery">
+	<ul>
+        <li class="col-md-6">
+            <h4 style="text-align:center;">Statistics count on platform services</h4>
+   <span id="logoone" class="glyphicon glyphicon-user"></span>
     <p id="one"> We are proud to have <b>{{ userCount }}</b> users using our website!</p>
     <div id="hold2">
     <span id="logotwo" class="glyphicon glyphicon-globe"></span>
@@ -117,19 +129,17 @@
     </div>
     <div id="hold3">
     <span id="logothree" class="glyphicon glyphicon-book"></span>
-        <p id="three">  <b>{{ eventCount }}</b> events we have enlisted on the website</p>
+        <p id="three">  <b>{{ eventCount }}</b> events enlisted on the website</p>
     </div>
-        </li>
-    </div>
-
-        <div class="gallery">
+</li>
+        <li class="col-md-4" style="margin-right:250px;">
+            <h4 style="text-align:center;">Bar graph on registered users</h4>
 <!-- Don't forget the "|safe"! -->
-
-            <div id="chart">
+<div id="chart">
     <embed type="image/svg+xml" src= {{ line_chart|safe }} ></embed>
 </div>
-        </div>
-    </div>
+        </li>
+	</ul>
 </div>
 </section>
 <!-- Contact Section -->
