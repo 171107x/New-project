@@ -131,13 +131,15 @@
 								</div>
 								<br/>
                                 {% for eachForum in postList %}
-									<div class="panel-heading">
+									<div class="panel panel-primary" style="border-radius:5px; border:solid">
+                                        <div class="panel-heading">
 										<p style="display:inline">{{ eachForum[0] }}</p>
                                         <br>
                                         <br>
                                         <p style="display:inline">created on {{ eachForum[2] }}</p>
                                         <p style="display:inline;float:right;">created by <a href="/user/{{ eachForum[3] }}">{{ eachForum[3] }}</a></p>
 									</div>
+                                    </div>
 									<div class="panel-body">
 										{{ eachForum[1] }}
 									</div>
