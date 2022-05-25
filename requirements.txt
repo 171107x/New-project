@@ -48,7 +48,7 @@ pyasn1-modules==0.2.1
 pycparser==2.18
 pycryptodome==3.4.3
 pygal==2.4.0
-PyJWT==1.5.3
+PyJWT==2.4.0
 pyparsing==2.2.0
 pyreadline==2.1
 Pyrebase==3.0.27
